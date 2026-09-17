@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <!-- iOS master is square with no mask; Apple applies the squircle. White field, black B. -->
+  <rect width="1024" height="1024" fill="#ffffff"/>
+  <g fill="#000000" transform="translate(147.91111 147.91111) scale(2.275556)">
+    <rect x="0" y="6" width="120" height="120"/>
+    <path d="M120 6h60a60 60 0 0 1 0 120H120z"/>
+    <rect x="0" y="142" width="200" height="16"/>
+    <rect x="0" y="174" width="140" height="140"/>
+    <path d="M140 174h70a70 70 0 0 1 0 140H140z"/>
+  </g>
+</svg>

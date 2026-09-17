@@ -3,6 +3,8 @@ import Foundation
 enum BrickError: LocalizedError, Equatable {
     case iCloudUnavailable
     case notSignedIn
+    case appleSignInCancelled
+    case appleSignInFailed
     case missingDisplayName
     case invalidInviteCode
     case missingStravaConfiguration
@@ -12,6 +14,7 @@ enum BrickError: LocalizedError, Equatable {
     case network
     case keychain
     case missingProfile
+    case accountDeletionFailed
 
     var errorDescription: String? {
         switch self {
@@ -19,6 +22,10 @@ enum BrickError: LocalizedError, Equatable {
             "Brick & Brew stores the crew board in iCloud. Sign in to iCloud in Settings, then come back."
         case .notSignedIn:
             "Sign in with Apple to join the crew."
+        case .appleSignInCancelled:
+            "Sign in was cancelled. Try again when you're ready."
+        case .appleSignInFailed:
+            "Apple couldn't complete sign in. Use a physical iPhone signed into iCloud, then try again."
         case .missingDisplayName:
             "Pick a name your teammates will recognize."
         case .invalidInviteCode:
@@ -37,6 +44,8 @@ enum BrickError: LocalizedError, Equatable {
             "We couldn't store your session securely. Restart the app and try again."
         case .missingProfile:
             "We couldn't find your crew profile. Sign in again."
+        case .accountDeletionFailed:
+            "We couldn't delete your account. Check your connection and iCloud, then try again."
         }
     }
 }

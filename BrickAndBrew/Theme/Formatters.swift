@@ -31,4 +31,12 @@ enum Formatters {
     static func beerCount(_ count: Int) -> String {
         count == 1 ? "1 beer" : "\(count) beers"
     }
+
+    /// Whole numbers stay compact; fractions keep one decimal for the scoring guide.
+    static func compactNumber(_ value: Double) -> String {
+        if value == value.rounded() {
+            return String(format: "%.0f", value)
+        }
+        return String(format: "%.1f", value)
+    }
 }

@@ -9,7 +9,9 @@ const WEIGHTS = Object.freeze({
   swim: 10,
   run: 3,
   ride: 1,
-  beer: 2,
+  beer: 12,
+  coveragePerBeer: 20,
+  uncoveredPenaltyRate: 0.25,
 });
 
 const CREW = Object.freeze([
@@ -34,9 +36,20 @@ function pointsFor(entry) {
   };
 }
 
+function trainingLoad(entry) {
+  const pts = pointsFor(entry);
+  return pts.swim + pts.ride + pts.run;
+}
+
+function grindTax(entry) {
+  const covered = Math.max(0, entry.beers) * WEIGHTS.coveragePerBeer;
+  const uncovered = Math.max(0, trainingLoad(entry) - covered);
+  return uncovered * (1 + WEIGHTS.uncoveredPenaltyRate);
+}
+
 function totalIndex(entry) {
   const pts = pointsFor(entry);
-  return pts.swim + pts.ride + pts.run + pts.beers;
+  return pts.swim + pts.ride + pts.run + pts.beers - grindTax(entry);
 }
 
 function boardPoints(entry, board) {
@@ -51,6 +64,13 @@ function formatPoints(value) {
     return `${value} pts`;
   }
   return `${value.toFixed(1)} pts`;
+}
+
+function formatTax(value) {
+  if (value <= 0) {
+    return formatPoints(0);
+  }
+  return `−${formatPoints(value)}`;
 }
 
 function formatKilometers(km) {
@@ -175,6 +195,7 @@ function updateCalculator() {
     return;
   }
   const pts = pointsFor(state);
+  const tax = grindTax(state);
   const total = totalIndex(state);
 
   setText('swim-km-value', formatKilometers(state.swimKm));
@@ -186,8 +207,14 @@ function updateCalculator() {
   setText('receipt-ride', formatPoints(pts.ride));
   setText('receipt-run', formatPoints(pts.run));
   setText('receipt-beer', formatPoints(pts.beers));
+  setText('receipt-tax', formatTax(tax));
   setText('receipt-total', formatPoints(total));
   setText('index-hero', total.toFixed(total % 1 === 0 ? 0 : 1));
+
+  const taxRow = document.querySelector('.receipt .tax');
+  if (taxRow) {
+    taxRow.classList.toggle('is-active', tax > 0);
+  }
 }
 
 function setText(id, value) {

@@ -26,8 +26,21 @@ struct LeaderboardEntry: Identifiable, Sendable, Codable, Hashable {
         Scoring.beerPoints(count: beerCount)
     }
 
+    var trainingLoad: Double {
+        swimPoints + runPoints + ridePoints
+    }
+
+    var grindTax: Double {
+        Scoring.grindTax(trainingPoints: trainingLoad, beerCount: beerCount)
+    }
+
     var totalIndex: Double {
-        swimPoints + runPoints + ridePoints + beerPoints
+        Scoring.totalIndex(
+            swimMeters: swimMeters,
+            runMeters: runMeters,
+            rideMeters: rideMeters,
+            beerCount: beerCount
+        )
     }
 
     func points(for board: LeaderboardBoard) -> Double {

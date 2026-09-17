@@ -3,6 +3,7 @@ import SwiftUI
 struct CrewView: View {
     @Environment(AppSession.self) private var session
     @State private var viewModel: CrewViewModel?
+    @State private var isScoringGuidePresented = false
 
     var body: some View {
         NavigationStack {
@@ -16,11 +17,24 @@ struct CrewView: View {
             .background(Palette.background.ignoresSafeArea())
             .navigationTitle("Crew")
             .toolbarBackground(Palette.background, for: .navigationBar)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("How points are calculated", systemImage: "info.circle", action: showScoringGuide)
+                }
+            }
+            .sheet(isPresented: $isScoringGuidePresented) {
+                ScoringGuideView()
+            }
         }
         .onAppear(perform: ensureViewModel)
         .task(id: viewModel != nil) {
             await viewModel?.load(forceSync: true)
         }
+    }
+
+    private func showScoringGuide() {
+        Haptics.light()
+        isScoringGuidePresented = true
     }
 
     private func ensureViewModel() {
@@ -117,12 +131,13 @@ private struct BoardChip: View {
     var body: some View {
         Button(action: action) {
             Text(title)
-                .font(.subheadline.weight(.semibold))
+                .font(Typography.caption)
+                .fontWeight(.semibold)
                 .padding(.horizontal, Spacing.md)
                 .padding(.vertical, Spacing.xs)
                 .foregroundStyle(isSelected ? Palette.background : Palette.cream)
                 .background(isSelected ? Palette.amber : Palette.surface)
-                .clipShape(Capsule())
+                .clipShape(RoundedRectangle(cornerRadius: Radius.object, style: .continuous))
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(isSelected ? .isSelected : [])

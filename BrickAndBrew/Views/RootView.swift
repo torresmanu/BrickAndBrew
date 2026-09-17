@@ -27,6 +27,7 @@ struct RootView: View {
             }
         }
         .background(Palette.background.ignoresSafeArea())
+        .tint(Palette.amber)
         .alert(
             "Heads up",
             isPresented: bannerBinding,
@@ -71,5 +72,7 @@ struct MainTabView: View {
             }
         }
         .tint(Palette.amber)
+        .toolbarBackground(Palette.background, for: .tabBar)
+        .toolbarBackground(.visible, for: .tabBar)
     }
 }

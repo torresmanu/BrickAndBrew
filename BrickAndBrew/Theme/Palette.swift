@@ -1,15 +1,29 @@
 import SwiftUI
 
-/// Brand colors for the athletic + pub look. Prefer these over ad-hoc Color values.
+/// Colors from Brand Labs Finalist B only (Figma `35:809`). 100% monochrome.
 enum Palette {
-    static let background = Color(red: 0.10, green: 0.08, blue: 0.06)
-    static let surface = Color(red: 0.16, green: 0.13, blue: 0.11)
-    static let surfaceElevated = Color(red: 0.21, green: 0.17, blue: 0.14)
-    static let amber = Color(red: 0.91, green: 0.66, blue: 0.22)
-    static let copper = Color(red: 0.77, green: 0.36, blue: 0.15)
-    static let cream = Color(red: 0.96, green: 0.93, blue: 0.89)
-    static let muted = Color(red: 0.66, green: 0.60, blue: 0.53)
-    static let danger = Color(red: 0.86, green: 0.35, blue: 0.28)
+    static let black = Color.black
+    static let white = Color.white
+    /// Negative-state ground used for the app-icon stage and kit silhouettes.
+    static let ground = Color(red: 17 / 255, green: 17 / 255, blue: 17 / 255)
+    /// Light specimen field behind the mark on paper.
+    static let paper = Color(red: 245 / 255, green: 245 / 255, blue: 247 / 255)
+    static let placeholder = Color(red: 229 / 255, green: 229 / 255, blue: 229 / 255)
+    /// Caption / meta on light (`#777`) and dark (`#888`).
+    static let meta = Color(red: 136 / 255, green: 136 / 255, blue: 136 / 255)
+    static let hairline = Color.white.opacity(0.12)
+
+    static let background = ground
+    static let surface = black
+    static let surfaceElevated = Color(red: 26 / 255, green: 26 / 255, blue: 26 / 255)
+    /// Primary copy on negative ground.
+    static let cream = white
+    static let muted = meta
+    /// Selected controls invert: white fill, ground type.
+    static let amber = white
+    static let copper = placeholder
+    /// Errors stay system red so they are not mistaken for brand color.
+    static let danger = Color(red: 1, green: 59 / 255, blue: 48 / 255)
+    static let success = Color(red: 52 / 255, green: 199 / 255, blue: 89 / 255)
     static let stravaOrange = Color(red: 0.99, green: 0.30, blue: 0.01)
-    static let success = Color(red: 0.45, green: 0.72, blue: 0.40)
 }

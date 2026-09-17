@@ -10,10 +10,10 @@ struct ConnectStravaView: View {
                 .font(.system(size: 44, weight: .semibold))
                 .foregroundStyle(Palette.stravaOrange)
             Text("Connect with Strava")
-                .font(.largeTitle.bold())
+                .font(Typography.heading1)
                 .foregroundStyle(Palette.cream)
             Text("We read your swim, bike, and run so they land on the crew board. Brick & Brew never posts to Strava.")
-                .font(.body)
+                .font(Typography.body)
                 .foregroundStyle(Palette.muted)
 
             if session.isBusy {

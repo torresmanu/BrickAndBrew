@@ -6,7 +6,7 @@
   <title>Brick &amp; Brew — Train hard. Drink well. Rank honestly.</title>
   <meta name="description" content="A private iPhone scoreboard for a triathlon crew. Sync swim, bike, and run from Strava, log beers, and rank everyone on one Total Index." />
   <link rel="canonical" href="https://torresmanu.github.io/BrickAndBrew/" />
-  <meta name="theme-color" content="#1A140F" />
+  <meta name="theme-color" content="#111111" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Brick &amp; Brew" />
   <meta property="og:description" content="The crew scoreboard for triathlon training and well-earned beers." />
@@ -18,7 +18,7 @@
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=Fraunces:ital,opsz,wght@1,9..144,500&family=IBM+Plex+Mono:wght@400;600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/site.css" />
 </head>
 <body>
@@ -30,7 +30,7 @@
   <header class="site-header">
     <div class="nav-bar">
       <a class="brand" href="index.html">
-        <img src="assets/app-icon.png" width="36" height="36" alt="" />
+        <span class="brand-mark" aria-hidden="true"></span>
         Brick &amp; Brew
       </a>
       <input class="nav-toggle" id="nav-toggle" type="checkbox" />
@@ -40,7 +40,7 @@
         <a href="#how">How it works</a>
         <a href="#board">Board</a>
         <a href="privacy.html">Privacy</a>
-          <a class="btn btn-primary" href="https://github.com/torresmanu/BrickAndBrew" rel="noopener noreferrer">GitHub</a>
+        <a class="btn btn-ghost" href="https://github.com/torresmanu/BrickAndBrew" rel="noopener noreferrer">GitHub</a>
       </nav>
     </div>
   </header>
@@ -50,7 +50,7 @@
       <div>
         <img class="hero-icon" src="assets/app-icon.png" width="128" height="128" alt="Brick &amp; Brew app icon" />
         <p class="eyebrow">Private triathlon crew</p>
-        <h1 class="hero-title">Brick <span class="amp">&amp;</span> Brew</h1>
+        <h1 class="hero-title">Brick &amp; Brew</h1>
         <p class="lede">The crew scoreboard for triathlon training and well-earned beers. Sign in with Apple, sync Strava, log pints, and settle the season on one board.</p>
         <div class="hero-actions">
           <a class="btn btn-primary" href="#board">See a live board</a>
@@ -60,7 +60,7 @@
           <div class="weight"><dt>Swim</dt><dd>×10</dd></div>
           <div class="weight"><dt>Run</dt><dd>×3</dd></div>
           <div class="weight"><dt>Bike</dt><dd>×1</dd></div>
-          <div class="weight"><dt>Beer</dt><dd>×2</dd></div>
+          <div class="weight"><dt>Beer</dt><dd>×12</dd></div>
         </dl>
       </div>
 
@@ -85,9 +85,9 @@
 
     <div class="marquee" aria-hidden="true">
       <div class="marquee-track">
-        <span>Swim <b>×10</b></span><span>Bike <b>×1</b></span><span>Run <b>×3</b></span><span>Beer <b>×2</b></span>
+        <span>Swim <b>×10</b></span><span>Bike <b>×1</b></span><span>Run <b>×3</b></span><span>Beer <b>×12</b></span><span>Grind tax on uncovered km</span>
         <span>Sign in with Apple</span><span>Strava sync</span><span>CloudKit crew board</span><span>No ads. No feed. Just the crew.</span>
-        <span>Swim <b>×10</b></span><span>Bike <b>×1</b></span><span>Run <b>×3</b></span><span>Beer <b>×2</b></span>
+        <span>Swim <b>×10</b></span><span>Bike <b>×1</b></span><span>Run <b>×3</b></span><span>Beer <b>×12</b></span><span>Grind tax on uncovered km</span>
         <span>Sign in with Apple</span><span>Strava sync</span><span>CloudKit crew board</span><span>No ads. No feed. Just the crew.</span>
       </div>
     </div>
@@ -95,12 +95,12 @@
     <section class="section wrap" id="formula">
       <div class="section-head">
         <p class="kicker">01 — Total Index</p>
-        <h2>One number. Four honest inputs.</h2>
-        <p>Swim kilometers count hardest. Beers still count. The formula lives in the app so the board never argues with itself.</p>
+        <h2>Pints cover bricks. Excess kilometers get taxed.</h2>
+        <p>Beers are worth 12. Each pint covers 20 training points. Swim, bike, and run still score on their own boards — stack all three past your beers and the Index takes a grind tax.</p>
       </div>
       <div class="formula-grid">
         <form class="panel" aria-describedby="formula-copy">
-          <p id="formula-copy" class="lede">Drag a season onto the sliders. The tab on the right is the same math the iPhone uses.</p>
+          <p id="formula-copy" class="lede">Drag a season onto the sliders. Add beers to cover training. The tab on the right is the same math the iPhone uses.</p>
           <div class="calc-row">
             <label for="swim-km">Swim <strong id="swim-km-value">5.0 km</strong></label>
             <input class="calc-range" id="swim-km" type="range" min="0" max="20" step="0.1" value="5" />
@@ -129,10 +129,11 @@
             <div><dt>Swim × 10</dt><dd id="receipt-swim">50 pts</dd></div>
             <div><dt>Bike × 1</dt><dd id="receipt-ride">80 pts</dd></div>
             <div><dt>Run × 3</dt><dd id="receipt-run">60 pts</dd></div>
-            <div><dt>Beers × 2</dt><dd id="receipt-beer">8 pts</dd></div>
-            <div class="total"><dt>Due</dt><dd id="receipt-total">198 pts</dd></div>
+            <div><dt>Beers × 12</dt><dd id="receipt-beer">48 pts</dd></div>
+            <div class="tax is-active"><dt>Grind tax</dt><dd id="receipt-tax">−137.5 pts</dd></div>
+            <div class="total"><dt>Due</dt><dd id="receipt-total">100.5 pts</dd></div>
           </dl>
-          <p class="index-blowup" id="index-hero">198</p>
+          <p class="index-blowup" id="index-hero">100.5</p>
         </aside>
       </div>
     </section>
@@ -162,7 +163,7 @@
         <article class="step">
           <span class="step-num">04</span>
           <h3>Log the beer</h3>
-          <p>Tap plus, optional note, done. Recovery pints count toward the same Total Index.</p>
+          <p>Tap plus, optional note, done. Pints cover training and add extra points. Skip the round and the grind tax shows up.</p>
         </article>
       </div>
     </section>
@@ -171,7 +172,7 @@
       <div class="section-head">
         <p class="kicker">03 — The board</p>
         <h2>Flip the sport. Keep the heat.</h2>
-        <p>Overall, swim, bike, run, or beers. Same crew, different bragging rights. Sample names, real formula.</p>
+        <p>Overall, swim, bike, run, or beers. Same crew, different bragging rights. Sport boards are raw volume. Index is the pub rule.</p>
       </div>
       <div class="panel board-panel">
         <div class="chips" role="group" aria-label="Full leaderboard filters">

@@ -111,6 +111,24 @@ final class CloudKitService {
         return beer
     }
 
+    /// Removes this user's profile, activities, and beers. Does not delete the Team record.
+    func deleteAccountRecords(for profile: Profile) async throws {
+        let teamId = profile.teamId.isEmpty ? nil : profile.teamId
+        async let activityIDs = ownedRecordIDs(
+            recordType: CloudKitKey.RecordType.activity,
+            userId: profile.id,
+            teamId: teamId
+        )
+        async let beerIDs = ownedRecordIDs(
+            recordType: CloudKitKey.RecordType.beer,
+            userId: profile.id,
+            teamId: teamId
+        )
+        var recordIDs = try await activityIDs + beerIDs
+        recordIDs.append(profile.recordID)
+        try await delete(recordIDs)
+    }
+
     private func save(_ record: CKRecord) async throws {
         try await modify([record])
     }
@@ -125,6 +143,48 @@ final class CloudKitService {
                 operation.modifyRecordsResultBlock = { result in
                     switch result {
                     case .success:
+                        continuation.resume()
+                    case .failure(let error):
+                        continuation.resume(throwing: CloudKitService.mapError(error))
+                    }
+                }
+                database.add(operation)
+            }
+        }
+    }
+
+    /// Activity and Beer both store ownership in `userId` / `teamId`.
+    private func ownedRecordIDs(recordType: String, userId: String, teamId: String?) async throws -> [CKRecord.ID] {
+        let predicate: NSPredicate
+        if let teamId {
+            predicate = NSPredicate(
+                format: "%K == %@ AND %K == %@",
+                CloudKitKey.Activity.userId,
+                userId,
+                CloudKitKey.Activity.teamId,
+                teamId
+            )
+        } else {
+            predicate = NSPredicate(format: "%K == %@", CloudKitKey.Activity.userId, userId)
+        }
+        let records = try await query(recordType: recordType, predicate: predicate)
+        return records.map(\.recordID)
+    }
+
+    private func delete(_ recordIDs: [CKRecord.ID]) async throws {
+        guard recordIDs.isEmpty == false else { return }
+        for chunk in stride(from: 0, to: recordIDs.count, by: 400) {
+            let slice = Array(recordIDs[chunk..<min(chunk + 400, recordIDs.count)])
+            try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+                let operation = CKModifyRecordsOperation(recordsToSave: nil, recordIDsToDelete: slice)
+                // Allow already-deleted rows so a retry can finish the rest of the account.
+                operation.isAtomic = false
+                operation.qualityOfService = .userInitiated
+                operation.modifyRecordsResultBlock = { result in
+                    switch result {
+                    case .success:
+                        continuation.resume()
+                    case .failure(let error) where Self.isAlreadyDeleted(error):
                         continuation.resume()
                     case .failure(let error):
                         continuation.resume(throwing: CloudKitService.mapError(error))
@@ -158,6 +218,9 @@ final class CloudKitService {
                 cursor = page.queryCursor
             } while cursor != nil
             return results
+        } catch let error as CKError where Self.isMissingRecordType(error) {
+            // No rows of this type exist yet, so CloudKit has not created the record type.
+            return []
         } catch {
             throw mapped(error)
         }
@@ -174,10 +237,38 @@ final class CloudKitService {
                 return .network
             case .notAuthenticated:
                 return .iCloudUnavailable
+            case .invalidArguments:
+                return .cloudKit("iCloud indexes are missing. In CloudKit Console, mark teamId, startDate, and loggedAt as Queryable, then pull to refresh.")
             default:
                 return .cloudKit("We couldn't update the crew board. Pull to refresh and try again.")
             }
         }
         return .cloudKit(error.localizedDescription)
+    }
+
+    /// CloudKit only materializes a record type after the first save. A query before that
+    /// should look like an empty list, not a failed board.
+    nonisolated private static func isMissingRecordType(_ error: CKError) -> Bool {
+        if error.code == .unknownItem {
+            return true
+        }
+        if error.code == .invalidArguments {
+            let text = error.localizedDescription.lowercased()
+            return text.contains("did not find record type") || text.contains("unknown record type")
+        }
+        return false
+    }
+
+    nonisolated private static func isAlreadyDeleted(_ error: Error) -> Bool {
+        guard let ckError = error as? CKError else { return false }
+        if ckError.code == .unknownItem {
+            return true
+        }
+        guard ckError.code == .partialFailure, let partial = ckError.partialErrorsByItemID else {
+            return false
+        }
+        return partial.values.allSatisfy { item in
+            (item as? CKError)?.code == .unknownItem
+        }
     }
 }

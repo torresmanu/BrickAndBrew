@@ -1,3 +1,4 @@
+import AuthenticationServices
 import Foundation
 import Testing
 @testable import BrickAndBrew
@@ -23,15 +24,20 @@ struct ScoringTests {
         #expect(points == 0)
     }
 
-    @Test func beerAddsTwoPointsEach() {
-        #expect(Scoring.beerPoints(count: 3) == 6)
+    @Test func beerAddsTwelvePointsEach() {
+        #expect(Scoring.beerPoints(count: 3) == 36)
     }
 
     @Test func negativeBeersDoNotScore() {
         #expect(Scoring.beerPoints(count: -2) == 0)
     }
 
-    @Test func totalIndexAddsTrainingAndBeers() {
+    @Test func coveredTrainingMatchesBeersTimesCoverage() {
+        #expect(Scoring.coveredTrainingPoints(beerCount: 2) == 40)
+        #expect(Scoring.coveredTrainingPoints(beerCount: -1) == 0)
+    }
+
+    @Test func totalIndexAddsTrainingAndBeersWhenPintsCoverTheLoad() {
         let entry = LeaderboardEntry(
             userId: "1",
             displayName: "Alex",
@@ -40,8 +46,55 @@ struct ScoringTests {
             rideMeters: 1000,
             beerCount: 2
         )
-        // 10 + 3 + 1 + 4
-        #expect(entry.totalIndex == 18)
+        // Training 14 is inside 40 covered points, so no grind tax: 10 + 3 + 1 + 24.
+        #expect(entry.grindTax == 0)
+        #expect(entry.totalIndex == 38)
+    }
+
+    @Test func grindTaxHitsUncoveredTraining() {
+        let tax = Scoring.grindTax(trainingPoints: 100, beerCount: 2)
+        // 40 points covered; 60 uncovered; tax = 60 × 1.25.
+        #expect(tax == 75)
+    }
+
+    @Test func trainingWithoutBeersGoesNegative() {
+        let index = Scoring.totalIndex(
+            swimMeters: 10_000,
+            runMeters: 0,
+            rideMeters: 0,
+            beerCount: 0
+        )
+        // 100 training points, no coverage, tax 125 → −25.
+        #expect(index == -25)
+    }
+
+    @Test func extraBeersBeatExtraKilometersOnTheIndex() {
+        let grinder = LeaderboardEntry(
+            userId: "g",
+            displayName: "Grinder",
+            swimMeters: 10_000,
+            runMeters: 10_000,
+            rideMeters: 80_000,
+            beerCount: 2
+        )
+        let drinker = LeaderboardEntry(
+            userId: "d",
+            displayName: "Drinker",
+            swimMeters: 1_000,
+            runMeters: 1_000,
+            rideMeters: 8_000,
+            beerCount: 20
+        )
+        #expect(drinker.totalIndex > grinder.totalIndex)
+    }
+
+    @Test func uncoveredPenaltyPercentMatchesRate() {
+        #expect(Scoring.uncoveredTrainingPenaltyPercent == 25)
+    }
+
+    @Test func compactNumberKeepsGuideCopyReadable() {
+        #expect(Formatters.compactNumber(12) == "12")
+        #expect(Formatters.compactNumber(Scoring.trainingPointsCoveredPerBeer / Scoring.runPointsPerKilometer) == "6.7")
     }
 }
 
@@ -163,7 +216,12 @@ struct LeaderboardBuilderTests {
         #expect(entries.count == 1)
         #expect(entries[0].runMeters == 1_000)
         #expect(entries[0].beerCount == 2)
-        #expect(entries[0].totalIndex == Scoring.trainingPoints(meters: 1_000, sport: .run) + Scoring.beerPoints(count: 2))
+        #expect(entries[0].totalIndex == Scoring.totalIndex(
+            swimMeters: 0,
+            runMeters: 1_000,
+            rideMeters: 0,
+            beerCount: 2
+        ))
     }
 
     @Test func ranksBySelectedBoard() {
@@ -180,5 +238,25 @@ struct InviteCodeTests {
         #expect(InviteCode.isValid("CREW"))
         #expect(InviteCode.isValid("AB") == false)
         #expect(InviteCode.isValid("CREW-1") == false)
+    }
+}
+
+struct AppleSignInErrorMappingTests {
+    @Test func cancelledSignInShowsCancelledMessage() {
+        let error = ASAuthorizationError(.canceled)
+        #expect(AuthService.userMessage(forSignInError: error) == BrickError.appleSignInCancelled.localizedDescription)
+    }
+
+    @Test func unknownAuthorizationErrorIsNotTreatedAsCancel() {
+        // Apple reports Code=1000 (.unknown) when the Sign in with Apple entitlement is missing.
+        let error = ASAuthorizationError(.unknown)
+        #expect(AuthService.userMessage(forSignInError: error) == BrickError.appleSignInFailed.localizedDescription)
+    }
+}
+
+struct AccountDeletionTests {
+    @Test func accountDeletionErrorAsksTheUserToRetry() {
+        let message = BrickError.accountDeletionFailed.localizedDescription ?? ""
+        #expect(message.contains("couldn't delete your account"))
     }
 }

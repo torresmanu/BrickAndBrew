@@ -4,6 +4,7 @@ import Foundation
 @Observable
 final class MeViewModel {
     var isSyncing = false
+    var isDeletingAccount = false
     var lastSyncText: String
     var bannerMessage: String?
 
@@ -61,5 +62,16 @@ final class MeViewModel {
     func disconnectStrava() async {
         await session.disconnectStrava()
         lastSyncText = "No Strava sync yet"
+    }
+
+    func deleteAccount() async {
+        guard isDeletingAccount == false else { return }
+        isDeletingAccount = true
+        defer { isDeletingAccount = false }
+        await session.deleteAccount()
+        if session.phase != .needsAppleSignIn {
+            bannerMessage = session.bannerMessage
+            session.clearBanner()
+        }
     }
 }

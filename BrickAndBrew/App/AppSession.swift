@@ -84,8 +84,8 @@ final class AppSession {
             } catch {
                 bannerMessage = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
             }
-        case .failure:
-            bannerMessage = "Sign in was cancelled. Try again when you're ready."
+        case .failure(let error):
+            bannerMessage = AuthService.userMessage(forSignInError: error)
         }
     }
 
@@ -207,6 +207,24 @@ final class AppSession {
         team = nil
         suggestedName = ""
         phase = .needsAppleSignIn
+    }
+
+    /// Deletes CloudKit data for this user, then clears the local session.
+    /// The Team record is left in place for remaining crew members.
+    func deleteAccount() async {
+        isBusy = true
+        defer { isBusy = false }
+        do {
+            guard let current = profile else { throw BrickError.missingProfile }
+            try await cloudKit.requireICloud()
+            try await cloudKit.deleteAccountRecords(for: current)
+            try? strava.disconnect()
+            signOut()
+        } catch let error as BrickError where error == .network || error == .iCloudUnavailable {
+            bannerMessage = error.localizedDescription
+        } catch {
+            bannerMessage = BrickError.accountDeletionFailed.localizedDescription
+        }
     }
 
     func clearBanner() {

@@ -1,6 +1,6 @@
 # Privacy Policy for Brick & Brew
 
-Last updated: 16 September 2026
+Last updated: 17 September 2026
 
 Brick & Brew is a private crew app for friends training for a triathlon. It is not a public social network.
 
@@ -38,14 +38,16 @@ We do not share your crew board with advertisers.
 
 ## Retention
 
-You can disconnect Strava in the Me tab, which deletes tokens from the Keychain and clears the Strava athlete id on your profile. Training already written to the crew board stays unless the crew owner asks the developer to delete records. Sign out removes the local session. To delete your CloudKit profile and logs, email the developer from the Apple ID you used to sign in.
+Disconnect Strava in the Me tab to delete tokens from the Keychain and clear the Strava athlete id on your profile. Sign out removes the local session only.
+
+To delete your account, open the Me tab and choose **Delete account**. That removes your CloudKit profile, activities, and beers from the crew board and signs you out. The crew itself stays for teammates. Deletion is immediate.
 
 ## Your choices
 
 - Skip Strava and only log beers.
 - Disconnect Strava at any time.
 - Sign out at any time.
-- Delete the app. Local tokens are removed with the app; CloudKit records remain until you request deletion.
+- Delete your account at any time from the Me tab.
 
 ## Children
 

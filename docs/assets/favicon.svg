@@ -1,8 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Brick & Brew">
-  <rect width="64" height="64" rx="14" fill="#1A140F"/>
-  <circle cx="28" cy="28" r="16" fill="none" stroke="#F5EDE3" stroke-width="2.4"/>
-  <circle cx="38" cy="36" r="16" fill="none" stroke="#F5EDE3" stroke-width="2.4"/>
-  <path fill="#E8A838" d="M24 22h16c1.2 0 2 1 2 2.2v18.4c0 4.2-3.4 6.4-10 6.4s-10-2.2-10-6.4V24.2c0-1.2.8-2.2 2-2.2z"/>
-  <path fill="#F5EDE3" d="M25 20.5c0-2 3.2-3.5 7-3.5s7 1.5 7 3.5c0 .6-.4 1-2 1.3H27c-1.6-.3-2-.7-2-1.3z"/>
-  <path fill="none" stroke="#C45C26" stroke-width="2.6" stroke-linecap="round" d="M42 26c4 0 6 2.4 6 6.2S46 38.4 42 38.4"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Brick &amp; Brew">
+  <!-- App-icon master: white field, black mark, 26/180 padding from Figma 35:923. -->
+  <rect width="64" height="64" rx="14.4" fill="#ffffff"/>
+  <g fill="#000000" transform="translate(9.24444 9.24444) scale(0.142222)">
+    <rect x="0" y="6" width="120" height="120"/>
+    <path d="M120 6h60a60 60 0 0 1 0 120H120z"/>
+    <rect x="0" y="142" width="200" height="16"/>
+    <rect x="0" y="174" width="140" height="140"/>
+    <path d="M140 174h70a70 70 0 0 1 0 140H140z"/>
+  </g>
 </svg>

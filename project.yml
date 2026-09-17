@@ -29,11 +29,13 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.brickandbrew.app
         PRODUCT_NAME: BrickAndBrew
         MARKETING_VERSION: "1.0.0"
-        CURRENT_PROJECT_VERSION: "1"
+        CURRENT_PROJECT_VERSION: "2"
+        DEVELOPMENT_TEAM: DTF4NR87GG
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_FILE: BrickAndBrew/Info.plist
         INFOPLIST_KEY_CFBundleDisplayName: "Brick & Brew"
         INFOPLIST_KEY_LSRequiresIPhoneOS: YES
+        INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
         INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents: YES
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
         INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
@@ -54,11 +56,31 @@ targets:
           SWIFT_OPTIMIZATION_LEVEL: "-O"
     entitlements:
       path: BrickAndBrew/BrickAndBrew.entitlements
+      properties:
+        aps-environment: production
+        com.apple.developer.applesignin:
+          - Default
+        com.apple.developer.icloud-container-identifiers:
+          - iCloud.com.brickandbrew.app
+        com.apple.developer.icloud-services:
+          - CloudKit
     info:
       path: BrickAndBrew/Info.plist
       properties:
         UILaunchScreen: {}
         CFBundleDisplayName: "Brick & Brew"
+        ITSAppUsesNonExemptEncryption: false
+        STRAVA_CLIENT_ID: "280004"
+        STRAVA_OAUTH_WORKER_URL: "https://brickandbrew-strava.brickandbrew.workers.dev"
+        CFBundleURLTypes:
+          - CFBundleTypeRole: Editor
+            CFBundleURLName: com.brickandbrew.app
+            CFBundleURLSchemes:
+              - brickandbrew
+        UIAppFonts:
+          - IBMPlexSans-Regular.ttf
+          - IBMPlexSans-Medium.ttf
+          - IBMPlexSans-Bold.ttf
     scheme:
       testTargets:
         - BrickAndBrewTests

@@ -8,10 +8,10 @@ struct JoinCrewView: View {
         VStack(alignment: .leading, spacing: Spacing.lg) {
             Spacer()
             Text("Join the crew")
-                .font(.largeTitle.bold())
+                .font(Typography.heading1)
                 .foregroundStyle(Palette.cream)
             Text("Ask a teammate for the invite code. If you're first, pick one and share it.")
-                .font(.body)
+                .font(Typography.body)
                 .foregroundStyle(Palette.muted)
             TextField("Invite code", text: $code)
                 .textInputAutocapitalization(.characters)
@@ -19,7 +19,7 @@ struct JoinCrewView: View {
                 .submitLabel(.join)
                 .padding(Spacing.md)
                 .background(Palette.surface)
-                .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+                .clipShape(RoundedRectangle(cornerRadius: Radius.object, style: .continuous))
                 .foregroundStyle(Palette.cream)
                 .onSubmit(join)
 

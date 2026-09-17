@@ -2,7 +2,7 @@
 
 iPhone app for a private triathlon crew: Sign in with Apple, sync swim / bike / run from Strava, log beers, and rank everyone on one board.
 
-**Total Index** = swim km × 10 + run km × 3 + bike km × 1 + beers × 2.
+**Total Index** = training + beers × 12 − grind tax. Each beer covers 20 training points; uncovered swim / bike / run is stripped and taxed at 25%.
 
 There is no paid backend. CloudKit holds the crew board. A free Cloudflare Worker exists only so the Strava client secret never ships in the iOS app.
 
@@ -77,12 +77,21 @@ The public site is GitHub Pages from the `docs/` folder:
 
 ## Scoring
 
-Weights live in `Scoring` so you can tweak them in one file:
+Weights live in `Scoring` so you can tweak them in one file.
+
+Sport boards (swim / bike / run / beers) still rank raw volume:
 
 - Swim: 10 points / km
 - Run: 3 points / km
 - Bike: 1 point / km
-- Beer: 2 points each
+- Beer: 12 points each
+
+The overall **Total Index** is the pub rule, not a sum of those boards:
+
+1. Add training the same way as the sport boards.
+2. Add beers at 12 points each.
+3. Each beer covers 20 training points at full value.
+4. Uncovered training is removed from the Index, then taxed another 25% (grind tax). Train past your pints and the number drops — even below zero.
 
 Season start is the date the crew is created. Activities and beers before that date do not score.
 

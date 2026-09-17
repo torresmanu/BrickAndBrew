@@ -21,6 +21,7 @@ xcuserdata/
 
 # Secrets (copy from examples, never commit real values)
 worker/strava-oauth/.dev.vars
+worker/strava-oauth/.wrangler/
 *.local.xcconfig
 
 # Fastlane

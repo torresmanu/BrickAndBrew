@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" fill="#000000" role="img" aria-label="Brick &amp; Brew">
+  <!-- Architectural B-monogram from Brand Labs Finalist B (Figma 35:821), 320 unit grid. -->
+  <rect x="0" y="6" width="120" height="120"/>
+  <path d="M120 6h60a60 60 0 0 1 0 120H120z"/>
+  <rect x="0" y="142" width="200" height="16"/>
+  <rect x="0" y="174" width="140" height="140"/>
+  <path d="M140 174h70a70 70 0 0 1 0 140H140z"/>
+</svg>

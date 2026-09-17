@@ -30,9 +30,9 @@ struct RankRowView: View {
         }
         .padding(Spacing.md)
         .background(isCurrentUser ? Palette.surfaceElevated : Palette.surface)
-        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .clipShape(RoundedRectangle(cornerRadius: Radius.object, style: .continuous))
         .overlay {
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
+            RoundedRectangle(cornerRadius: Radius.object, style: .continuous)
                 .stroke(isCurrentUser ? Palette.amber.opacity(0.45) : Color.clear, lineWidth: 1)
         }
         .accessibilityElement(children: .combine)

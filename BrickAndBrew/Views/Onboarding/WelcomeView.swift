@@ -7,14 +7,16 @@ struct WelcomeView: View {
     var body: some View {
         VStack(spacing: Spacing.lg) {
             Spacer()
-            Image(systemName: "mug.fill")
-                .font(.system(size: 56, weight: .semibold))
-                .foregroundStyle(Palette.amber)
+            BrandMark()
+                .foregroundStyle(Palette.white)
+                .frame(width: 96, height: 96)
+                .accessibilityHidden(true)
             Text("Brick & Brew")
-                .font(.largeTitle.bold())
+                .font(Typography.wordmark)
+                .tracking(-1)
                 .foregroundStyle(Palette.cream)
             Text("The crew scoreboard for triathlon training and well-earned beers.")
-                .font(.body)
+                .font(Typography.body)
                 .foregroundStyle(Palette.muted)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, Spacing.xl)
@@ -25,8 +27,8 @@ struct WelcomeView: View {
             } else {
                 SignInWithAppleButton(.signIn, onRequest: configure, onCompletion: complete)
                     .signInWithAppleButtonStyle(.white)
-                    .frame(height: 54)
-                    .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+                    .frame(height: 52)
+                    .clipShape(RoundedRectangle(cornerRadius: Radius.object, style: .continuous))
                     .accessibilityLabel("Sign in with Apple")
             }
         }

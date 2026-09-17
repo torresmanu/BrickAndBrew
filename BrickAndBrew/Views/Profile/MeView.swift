@@ -5,6 +5,7 @@ struct MeView: View {
     @State private var viewModel: MeViewModel?
     @State private var confirmDisconnect = false
     @State private var confirmSignOut = false
+    @State private var confirmDeleteAccount = false
 
     var body: some View {
         NavigationStack {
@@ -13,7 +14,8 @@ struct MeView: View {
                     MeLoadedView(
                         viewModel: viewModel,
                         confirmDisconnect: $confirmDisconnect,
-                        confirmSignOut: $confirmSignOut
+                        confirmSignOut: $confirmSignOut,
+                        confirmDeleteAccount: $confirmDeleteAccount
                     )
                 } else {
                     LoadingView(message: "Loading your profile…")
@@ -37,6 +39,7 @@ private struct MeLoadedView: View {
     @Bindable var viewModel: MeViewModel
     @Binding var confirmDisconnect: Bool
     @Binding var confirmSignOut: Bool
+    @Binding var confirmDeleteAccount: Bool
 
     var body: some View {
         List {
@@ -45,8 +48,17 @@ private struct MeLoadedView: View {
             sessionSection
         }
         .scrollContentBackground(.hidden)
+        .disabled(viewModel.isDeletingAccount)
+        .overlay {
+            if viewModel.isDeletingAccount {
+                LoadingView(message: "Deleting your account…")
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Palette.background.opacity(0.92))
+                    .allowsHitTesting(true)
+            }
+        }
         .alert(
-            "Strava",
+            "Heads up",
             isPresented: bannerBinding,
             actions: {
                 Button("OK", action: dismissBanner)
@@ -64,6 +76,12 @@ private struct MeLoadedView: View {
         .confirmationDialog("Sign out?", isPresented: $confirmSignOut, titleVisibility: .visible) {
             Button("Sign out", role: .destructive, action: session.signOut)
             Button("Cancel", role: .cancel) {}
+        }
+        .confirmationDialog("Delete account?", isPresented: $confirmDeleteAccount, titleVisibility: .visible) {
+            Button("Delete account", role: .destructive, action: deleteAccount)
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("This removes you from the crew board and deletes your training and beers. The crew stays. You will be signed out.")
         }
     }
 
@@ -118,6 +136,10 @@ private struct MeLoadedView: View {
     private var sessionSection: some View {
         Section {
             Button("Sign out", role: .destructive, action: showSignOut)
+            Button("Delete account", role: .destructive, action: showDeleteAccount)
+        } footer: {
+            Text("Delete account removes your profile, activities, and beers from the crew board.")
+                .foregroundStyle(Palette.muted)
         }
         .listRowBackground(Palette.surface)
     }
@@ -166,5 +188,15 @@ private struct MeLoadedView: View {
 
     private func showSignOut() {
         confirmSignOut = true
+    }
+
+    private func showDeleteAccount() {
+        confirmDeleteAccount = true
+    }
+
+    private func deleteAccount() {
+        Task {
+            await viewModel.deleteAccount()
+        }
     }
 }

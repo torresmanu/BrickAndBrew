@@ -7,21 +7,28 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		06C8B40C9F48A224D8CD51E5 /* IBMPlexSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 23A0DA57412E0CD4B971FA1C /* IBMPlexSans-Regular.ttf */; };
 		098426BE0EB93043C7356392 /* StravaService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C4B9D1152FEB69DACBA90B5 /* StravaService.swift */; };
 		1604995998A495BCB0D0A231 /* BrickAndBrewApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB57C1DCA7489AF627DADED1 /* BrickAndBrewApp.swift */; };
 		1FDA567FEDD806FC39DAF9EF /* LocalCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E2F3E7AEC7E70CCD5C2A476 /* LocalCache.swift */; };
 		258F7A72B84091AD569E3932 /* BrickError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48424ACA259D26F27E396730 /* BrickError.swift */; };
 		26F34EA41448A05FD14CBF69 /* MeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB08807539B38BC5440CFD5 /* MeViewModel.swift */; };
 		337E9C867F3F747D833F22AB /* KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17CBB348F47D17E5C46926BF /* KeychainStore.swift */; };
+		45C0AE8FBB86FE3B12FB9E29 /* IBMPlexSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DE004EA0D822885EDF115F91 /* IBMPlexSans-Bold.ttf */; };
 		4C386F4CC11760658EE779ED /* RankRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98D6671B92FB677A3D788F7B /* RankRowView.swift */; };
+		4CA92D858116F5822BD33B67 /* IBMPlexSans-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 19ECD8717D5734574FF84422 /* IBMPlexSans-Medium.ttf */; };
 		4E100A9CE2B88FEDBE21E3F8 /* SportKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26FD736A73D294D70AFC5B60 /* SportKind.swift */; };
 		54098D23AFDA8F934334CC9E /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38715438007CA11646217FBF /* RootView.swift */; };
 		59C44A2BBA0DE03D31EFD6E8 /* Scoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9B8C48E4958C4CE0B632E5 /* Scoring.swift */; };
 		5A234EA80C18A041BCC96D2E /* ScoringAndMappingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE403F61D143D8C5964D1545 /* ScoringAndMappingTests.swift */; };
 		5A805A27AE1A3B33AB620086 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A257A121611FD3C8D1938DF1 /* Profile.swift */; };
 		5DFA723DEF63AECA5955A328 /* StravaModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC10980F8868435C54B133D8 /* StravaModels.swift */; };
+		640D3EDDE786EBE1C70777AC /* Radius.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B0CE8B2DCB4BEE364BC4010 /* Radius.swift */; };
+		67F888D6C536A33F06D5B3D2 /* BrandChrome.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3DFECE5A2B31B1A4974AE62 /* BrandChrome.swift */; };
 		6864D97F781558246AF54950 /* CloudKitKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = E36ADEE30FF86916B6772F42 /* CloudKitKey.swift */; };
+		6E3AC34B879F2D85F909510C /* ScoringGuideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D61EA27F179ECA7FD2746A1 /* ScoringGuideView.swift */; };
 		6F23C195F85F100AB1DFD2C6 /* LogBeerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45D3AECB67528A84E384189 /* LogBeerViewModel.swift */; };
+		7561E904A8DA9030256E433C /* OFL.txt in Resources */ = {isa = PBXBuildFile; fileRef = 14FBE5BAFFE1B85A111F41B9 /* OFL.txt */; };
 		78A867C803CEC5B4D4DF53A4 /* Team.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB0F07DC830D22FDCD04E87 /* Team.swift */; };
 		7E61488C04879DAF74E92CD1 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59FA86769D451FD129E893D8 /* AppConfig.swift */; };
 		8195A977B45AED00FB51120C /* CrewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9311672746C5C464080BC4 /* CrewView.swift */; };
@@ -42,6 +49,7 @@
 		D838F89CB298C5BC24E484B0 /* DisplayNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87484693F47BC3D18E16A346 /* DisplayNameView.swift */; };
 		DEA437B5ED7EE209AEA83076 /* CloudKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D741E3AF542F0C73F289A3 /* CloudKitService.swift */; };
 		E166F922C7ACAB79DFDD8DC0 /* LoadState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AD0C341EABD3298204B4659 /* LoadState.swift */; };
+		E2578D7CCD302F780FA47DAB /* BrandMark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E171A9D1DD175CDABFB7381 /* BrandMark.swift */; };
 		E3BB75DEA0DC8D45DDA86A1B /* ActivityMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9734F65635040C3DDA78303 /* ActivityMapper.swift */; };
 		E4FFE262A7DE68BF034208AF /* Spacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2EFBC78E7C9AD1F95FA7935 /* Spacing.swift */; };
 		E7B9B97330EA3C10314C14B7 /* LaunchEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAF6737883C6B0C1D7754359 /* LaunchEnvironment.swift */; };
@@ -49,6 +57,7 @@
 		E8E21AC6D04831B7642737AF /* JoinCrewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799324DE9E35F0ECFF9D0A74 /* JoinCrewView.swift */; };
 		EF447A3256E019E04CE48A62 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B16721A4C03E76E56822295 /* WelcomeView.swift */; };
 		F21820811E3067C30BC02763 /* CrewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13A44AE3EC69BD259636FADF /* CrewViewModel.swift */; };
+		F381804A45C1064C454D62C7 /* Typography.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8764D94CD8DA9BA77BB65DA7 /* Typography.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,14 +72,18 @@
 
 /* Begin PBXFileReference section */
 		0161265B8818923E829382EB /* Beer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Beer.swift; sourceTree = "<group>"; };
+		0B0CE8B2DCB4BEE364BC4010 /* Radius.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Radius.swift; sourceTree = "<group>"; };
 		0C4B9D1152FEB69DACBA90B5 /* StravaService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StravaService.swift; sourceTree = "<group>"; };
 		0D0AD74F28286970F3E785BF /* BrickAndBrewTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = BrickAndBrewTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0DB0F07DC830D22FDCD04E87 /* Team.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Team.swift; sourceTree = "<group>"; };
 		0FE7265F4DA12D3168A40085 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		11D741E3AF542F0C73F289A3 /* CloudKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitService.swift; sourceTree = "<group>"; };
 		13A44AE3EC69BD259636FADF /* CrewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrewViewModel.swift; sourceTree = "<group>"; };
+		14FBE5BAFFE1B85A111F41B9 /* OFL.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = OFL.txt; sourceTree = "<group>"; };
 		17CBB348F47D17E5C46926BF /* KeychainStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStore.swift; sourceTree = "<group>"; };
 		1801B024FF3988C1A9AB6A40 /* Leaderboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Leaderboard.swift; sourceTree = "<group>"; };
+		19ECD8717D5734574FF84422 /* IBMPlexSans-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "IBMPlexSans-Medium.ttf"; sourceTree = "<group>"; };
+		23A0DA57412E0CD4B971FA1C /* IBMPlexSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "IBMPlexSans-Regular.ttf"; sourceTree = "<group>"; };
 		26FD736A73D294D70AFC5B60 /* SportKind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportKind.swift; sourceTree = "<group>"; };
 		2AF5F86EE2104BA25271D32A /* StateViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateViews.swift; sourceTree = "<group>"; };
 		38715438007CA11646217FBF /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
@@ -85,10 +98,13 @@
 		59FA86769D451FD129E893D8 /* AppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
 		5A9311672746C5C464080BC4 /* CrewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrewView.swift; sourceTree = "<group>"; };
 		5B16721A4C03E76E56822295 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
+		5D61EA27F179ECA7FD2746A1 /* ScoringGuideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoringGuideView.swift; sourceTree = "<group>"; };
 		5DAB64D740BF140720C8F4F4 /* Haptics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Haptics.swift; sourceTree = "<group>"; };
+		6E171A9D1DD175CDABFB7381 /* BrandMark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandMark.swift; sourceTree = "<group>"; };
 		71C314D02949F264D26C7B39 /* LogBeerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogBeerView.swift; sourceTree = "<group>"; };
 		799324DE9E35F0ECFF9D0A74 /* JoinCrewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinCrewView.swift; sourceTree = "<group>"; };
 		87484693F47BC3D18E16A346 /* DisplayNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayNameView.swift; sourceTree = "<group>"; };
+		8764D94CD8DA9BA77BB65DA7 /* Typography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typography.swift; sourceTree = "<group>"; };
 		94477C1C6330F5F39820C9EC /* Activity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Activity.swift; sourceTree = "<group>"; };
 		94B041C6F12A2813D170867B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		98D6671B92FB677A3D788F7B /* RankRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankRowView.swift; sourceTree = "<group>"; };
@@ -99,8 +115,10 @@
 		B9734F65635040C3DDA78303 /* ActivityMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityMapper.swift; sourceTree = "<group>"; };
 		C86C8E7CA564490531582340 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		D2EFBC78E7C9AD1F95FA7935 /* Spacing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spacing.swift; sourceTree = "<group>"; };
+		D3DFECE5A2B31B1A4974AE62 /* BrandChrome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandChrome.swift; sourceTree = "<group>"; };
 		DA9B8C48E4958C4CE0B632E5 /* Scoring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scoring.swift; sourceTree = "<group>"; };
 		DB57C1DCA7489AF627DADED1 /* BrickAndBrewApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrickAndBrewApp.swift; sourceTree = "<group>"; };
+		DE004EA0D822885EDF115F91 /* IBMPlexSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "IBMPlexSans-Bold.ttf"; sourceTree = "<group>"; };
 		E36ADEE30FF86916B6772F42 /* CloudKitKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitKey.swift; sourceTree = "<group>"; };
 		EADF2F6A20DE4307A72B0892 /* BrickAndBrew.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = BrickAndBrew.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EAF6737883C6B0C1D7754359 /* LaunchEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchEnvironment.swift; sourceTree = "<group>"; };
@@ -131,9 +149,13 @@
 		2AFE9F553AA60F03CF487D4F /* Theme */ = {
 			isa = PBXGroup;
 			children = (
+				D3DFECE5A2B31B1A4974AE62 /* BrandChrome.swift */,
+				6E171A9D1DD175CDABFB7381 /* BrandMark.swift */,
 				F2A7185DB2F4BC3CA83795AB /* Formatters.swift */,
 				A991E7995A0F9FB5795BC795 /* Palette.swift */,
+				0B0CE8B2DCB4BEE364BC4010 /* Radius.swift */,
 				D2EFBC78E7C9AD1F95FA7935 /* Spacing.swift */,
+				8764D94CD8DA9BA77BB65DA7 /* Typography.swift */,
 			);
 			path = Theme;
 			sourceTree = "<group>";
@@ -209,6 +231,7 @@
 		6E0722FDA678D75751DABAB0 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				984D08A0D7EDD5994A5D6AC0 /* Fonts */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -217,8 +240,20 @@
 			isa = PBXGroup;
 			children = (
 				5A9311672746C5C464080BC4 /* CrewView.swift */,
+				5D61EA27F179ECA7FD2746A1 /* ScoringGuideView.swift */,
 			);
 			path = Crew;
+			sourceTree = "<group>";
+		};
+		984D08A0D7EDD5994A5D6AC0 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				DE004EA0D822885EDF115F91 /* IBMPlexSans-Bold.ttf */,
+				19ECD8717D5734574FF84422 /* IBMPlexSans-Medium.ttf */,
+				23A0DA57412E0CD4B971FA1C /* IBMPlexSans-Regular.ttf */,
+				14FBE5BAFFE1B85A111F41B9 /* OFL.txt */,
+			);
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 		9FAA2D27DEE5773F9C28D879 /* Models */ = {
@@ -335,6 +370,7 @@
 						ProvisioningStyle = Automatic;
 					};
 					A254BC818889B10C64640809 = {
+						DevelopmentTeam = DTF4NR87GG;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -365,6 +401,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				C77FF6E30898792287F65D08 /* Assets.xcassets in Resources */,
+				45C0AE8FBB86FE3B12FB9E29 /* IBMPlexSans-Bold.ttf in Resources */,
+				4CA92D858116F5822BD33B67 /* IBMPlexSans-Medium.ttf in Resources */,
+				06C8B40C9F48A224D8CD51E5 /* IBMPlexSans-Regular.ttf in Resources */,
+				7561E904A8DA9030256E433C /* OFL.txt in Resources */,
 				B668FD885D32DC327DB8DF10 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -382,6 +422,8 @@
 				9C8BA1C141FA3A5A42DFB46A /* AppSession.swift in Sources */,
 				8D7A78698DAC1C3A7F32E07D /* AuthService.swift in Sources */,
 				B85AF03B71729B30A28AC13B /* Beer.swift in Sources */,
+				67F888D6C536A33F06D5B3D2 /* BrandChrome.swift in Sources */,
+				E2578D7CCD302F780FA47DAB /* BrandMark.swift in Sources */,
 				1604995998A495BCB0D0A231 /* BrickAndBrewApp.swift in Sources */,
 				258F7A72B84091AD569E3932 /* BrickError.swift in Sources */,
 				6864D97F781558246AF54950 /* CloudKitKey.swift in Sources */,
@@ -405,15 +447,18 @@
 				26F34EA41448A05FD14CBF69 /* MeViewModel.swift in Sources */,
 				AB48B069A52A0A3ADECB8A5E /* Palette.swift in Sources */,
 				5A805A27AE1A3B33AB620086 /* Profile.swift in Sources */,
+				640D3EDDE786EBE1C70777AC /* Radius.swift in Sources */,
 				4C386F4CC11760658EE779ED /* RankRowView.swift in Sources */,
 				54098D23AFDA8F934334CC9E /* RootView.swift in Sources */,
 				59C44A2BBA0DE03D31EFD6E8 /* Scoring.swift in Sources */,
+				6E3AC34B879F2D85F909510C /* ScoringGuideView.swift in Sources */,
 				E4FFE262A7DE68BF034208AF /* Spacing.swift in Sources */,
 				4E100A9CE2B88FEDBE21E3F8 /* SportKind.swift in Sources */,
 				C24A94D98A0E1E505D7BB562 /* StateViews.swift in Sources */,
 				5DFA723DEF63AECA5955A328 /* StravaModels.swift in Sources */,
 				098426BE0EB93043C7356392 /* StravaService.swift in Sources */,
 				78A867C803CEC5B4D4DF53A4 /* Team.swift in Sources */,
+				F381804A45C1064C454D62C7 /* Typography.swift in Sources */,
 				EF447A3256E019E04CE48A62 /* WelcomeView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -445,11 +490,13 @@
 				CODE_SIGN_ENTITLEMENTS = BrickAndBrew/BrickAndBrew.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = DTF4NR87GG;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BrickAndBrew/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Brick & Brew";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSRequiresIPhoneOS = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -565,12 +612,14 @@
 				CODE_SIGN_ENTITLEMENTS = BrickAndBrew/BrickAndBrew.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = DTF4NR87GG;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_TESTABILITY = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BrickAndBrew/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Brick & Brew";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSRequiresIPhoneOS = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
