@@ -210,9 +210,33 @@ main,
 }
 
 .brand img {
-  width: 36px;
-  height: 36px;
-  border-radius: 9px;
+  width: 40px;
+  height: 40px;
+  border-radius: 22.5%;
+  box-shadow: 0 0 0 1px rgba(245, 237, 227, 0.12);
+}
+
+/* 22.5% radius approximates the iOS app-icon squircle at any size. */
+.hero-icon,
+.cta-icon {
+  display: block;
+  border-radius: 22.5%;
+  box-shadow:
+    0 24px 50px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(245, 237, 227, 0.1);
+}
+
+.hero-icon {
+  width: 120px;
+  height: 120px;
+  margin-bottom: 1.15rem;
+}
+
+.cta-icon {
+  width: min(100%, 220px);
+  height: auto;
+  justify-self: end;
+  align-self: center;
 }
 
 .nav-toggle {
@@ -813,19 +837,6 @@ main,
   margin-top: 1.4rem;
 }
 
-.cta-mark {
-  margin: 0;
-  align-self: end;
-  justify-self: end;
-  font-family: var(--font-display);
-  font-size: clamp(2.2rem, 4vw, 3.4rem);
-  line-height: 0.95;
-  letter-spacing: 0.04em;
-  color: rgba(232, 168, 56, 0.72);
-  max-width: 8ch;
-  text-align: right;
-}
-
 .site-footer {
   padding: 2.4rem 0 3rem;
   border-top: 1px solid var(--line);
@@ -932,6 +943,16 @@ main,
 
   .hero-title {
     font-size: clamp(3.1rem, 16vw, 4.6rem);
+  }
+
+  .hero-icon {
+    width: 96px;
+    height: 96px;
+  }
+
+  .cta-icon {
+    justify-self: start;
+    width: 140px;
   }
 
   .device {
