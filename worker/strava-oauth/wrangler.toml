@@ -1,0 +1,6 @@
+name = "brickandbrew-strava"
+main = "src/index.js"
+compatibility_date = "2026-09-16"
+
+[vars]
+# STRAVA_CLIENT_ID and STRAVA_CLIENT_SECRET must be set with `wrangler secret put`.

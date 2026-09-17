@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Brick &amp; Brew — Train hard. Drink well. Rank honestly.</title>
+  <meta name="description" content="A private iPhone scoreboard for a triathlon crew. Sync swim, bike, and run from Strava, log beers, and rank everyone on one Total Index." />
+  <link rel="canonical" href="https://torresmanu.github.io/BrickAndBrew/" />
+  <meta name="theme-color" content="#1A140F" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Brick &amp; Brew" />
+  <meta property="og:description" content="The crew scoreboard for triathlon training and well-earned beers." />
+  <meta property="og:url" content="https://torresmanu.github.io/BrickAndBrew/" />
+  <meta property="og:image" content="https://torresmanu.github.io/BrickAndBrew/assets/app-icon.png" />
+  <meta name="twitter:card" content="summary" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="assets/app-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=Fraunces:ital,opsz,wght@1,9..144,500&family=IBM+Plex+Mono:wght@400;600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/site.css" />
+</head>
+<body>
+  <a class="skip-link" href="#content">Skip to content</a>
+  <div class="atmosphere" aria-hidden="true">
+    <div class="rings"></div>
+  </div>
+
+  <header class="site-header">
+    <div class="nav-bar">
+      <a class="brand" href="index.html">
+        <img src="assets/app-icon.png" width="36" height="36" alt="" />
+        Brick &amp; Brew
+      </a>
+      <input class="nav-toggle" id="nav-toggle" type="checkbox" />
+      <label class="nav-burger" for="nav-toggle" aria-label="Open menu"><span></span></label>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#formula">Formula</a>
+        <a href="#how">How it works</a>
+        <a href="#board">Board</a>
+        <a href="privacy.html">Privacy</a>
+          <a class="btn btn-primary" href="https://github.com/torresmanu/BrickAndBrew" rel="noopener noreferrer">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="content">
+    <section class="hero wrap">
+      <div>
+        <p class="eyebrow">Private triathlon crew</p>
+        <h1 class="hero-title">Brick <span class="amp">&amp;</span> Brew</h1>
+        <p class="lede">The crew scoreboard for triathlon training and well-earned beers. Sign in with Apple, sync Strava, log pints, and settle the season on one board.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#board">See a live board</a>
+          <a class="btn btn-ghost" href="#formula">Crunch your index</a>
+        </div>
+        <dl class="hero-weights">
+          <div class="weight"><dt>Swim</dt><dd>×10</dd></div>
+          <div class="weight"><dt>Run</dt><dd>×3</dd></div>
+          <div class="weight"><dt>Bike</dt><dd>×1</dd></div>
+          <div class="weight"><dt>Beer</dt><dd>×2</dd></div>
+        </dl>
+      </div>
+
+      <aside class="device" aria-label="Preview of the crew board">
+        <div class="device-screen">
+          <div class="notch"></div>
+          <div class="device-title">
+            <h2>Crew</h2>
+            <span>Season open</span>
+          </div>
+          <div class="chips" role="group" aria-label="Leaderboard filters">
+            <button class="chip is-active" type="button" data-board="overall" aria-pressed="true">Index</button>
+            <button class="chip" type="button" data-board="swim" aria-pressed="false">Swim</button>
+            <button class="chip" type="button" data-board="ride" aria-pressed="false">Bike</button>
+            <button class="chip" type="button" data-board="run" aria-pressed="false">Run</button>
+            <button class="chip" type="button" data-board="beers" aria-pressed="false">Beers</button>
+          </div>
+          <div class="rank-list" id="hero-board"></div>
+        </div>
+      </aside>
+    </section>
+
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span>Swim <b>×10</b></span><span>Bike <b>×1</b></span><span>Run <b>×3</b></span><span>Beer <b>×2</b></span>
+        <span>Sign in with Apple</span><span>Strava sync</span><span>CloudKit crew board</span><span>No ads. No feed. Just the crew.</span>
+        <span>Swim <b>×10</b></span><span>Bike <b>×1</b></span><span>Run <b>×3</b></span><span>Beer <b>×2</b></span>
+        <span>Sign in with Apple</span><span>Strava sync</span><span>CloudKit crew board</span><span>No ads. No feed. Just the crew.</span>
+      </div>
+    </div>
+
+    <section class="section wrap" id="formula">
+      <div class="section-head">
+        <p class="kicker">01 — Total Index</p>
+        <h2>One number. Four honest inputs.</h2>
+        <p>Swim kilometers count hardest. Beers still count. The formula lives in the app so the board never argues with itself.</p>
+      </div>
+      <div class="formula-grid">
+        <form class="panel" aria-describedby="formula-copy">
+          <p id="formula-copy" class="lede">Drag a season onto the sliders. The tab on the right is the same math the iPhone uses.</p>
+          <div class="calc-row">
+            <label for="swim-km">Swim <strong id="swim-km-value">5.0 km</strong></label>
+            <input class="calc-range" id="swim-km" type="range" min="0" max="20" step="0.1" value="5" />
+          </div>
+          <div class="calc-row">
+            <label for="ride-km">Bike <strong id="ride-km-value">80.0 km</strong></label>
+            <input class="calc-range" id="ride-km" type="range" min="0" max="400" step="1" value="80" />
+          </div>
+          <div class="calc-row">
+            <label for="run-km">Run <strong id="run-km-value">20.0 km</strong></label>
+            <input class="calc-range" id="run-km" type="range" min="0" max="80" step="0.1" value="20" />
+          </div>
+          <div class="calc-row">
+            <span>Beers</span>
+            <div class="stepper" id="beer-stepper" tabindex="0" role="group" aria-label="Beer count">
+              <button type="button" id="beer-minus" aria-label="Fewer beers">−</button>
+              <span class="beer-count" id="beer-count-value">4</span>
+              <button type="button" id="beer-plus" aria-label="More beers">+</button>
+            </div>
+          </div>
+        </form>
+        <aside class="receipt" aria-live="polite">
+          <div class="receipt-brand"><span>Brick &amp; Brew</span><span>Tab</span></div>
+          <h3>Total Index</h3>
+          <dl>
+            <div><dt>Swim × 10</dt><dd id="receipt-swim">50 pts</dd></div>
+            <div><dt>Bike × 1</dt><dd id="receipt-ride">80 pts</dd></div>
+            <div><dt>Run × 3</dt><dd id="receipt-run">60 pts</dd></div>
+            <div><dt>Beers × 2</dt><dd id="receipt-beer">8 pts</dd></div>
+            <div class="total"><dt>Due</dt><dd id="receipt-total">198 pts</dd></div>
+          </dl>
+          <p class="index-blowup" id="index-hero">198</p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section wrap" id="how">
+      <div class="section-head">
+        <p class="kicker">02 — How it works</p>
+        <h2>Built for one crew, not the internet.</h2>
+        <p>Identity is Sign in with Apple. Strava is just a data source. The board lives in CloudKit, filtered by invite code.</p>
+      </div>
+      <div class="steps">
+        <article class="step">
+          <span class="step-num">01</span>
+          <h3>Sign in</h3>
+          <p>Apple ID only. No extra account, no password to babysit after a long ride.</p>
+        </article>
+        <article class="step">
+          <span class="step-num">02</span>
+          <h3>Join the crew</h3>
+          <p>Enter a shared invite code. First person to use a new code creates the season.</p>
+        </article>
+        <article class="step">
+          <span class="step-num">03</span>
+          <h3>Sync Strava</h3>
+          <p>Each phone pulls its own swim, bike, and run. Teammates never share one API quota.</p>
+        </article>
+        <article class="step">
+          <span class="step-num">04</span>
+          <h3>Log the beer</h3>
+          <p>Tap plus, optional note, done. Recovery pints count toward the same Total Index.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section wrap" id="board">
+      <div class="section-head">
+        <p class="kicker">03 — The board</p>
+        <h2>Flip the sport. Keep the heat.</h2>
+        <p>Overall, swim, bike, run, or beers. Same crew, different bragging rights. Sample names, real formula.</p>
+      </div>
+      <div class="panel board-panel">
+        <div class="chips" role="group" aria-label="Full leaderboard filters">
+          <button class="chip is-active" type="button" data-board="overall" aria-pressed="true">Index</button>
+          <button class="chip" type="button" data-board="swim" aria-pressed="false">Swim</button>
+          <button class="chip" type="button" data-board="ride" aria-pressed="false">Bike</button>
+          <button class="chip" type="button" data-board="run" aria-pressed="false">Run</button>
+          <button class="chip" type="button" data-board="beers" aria-pressed="false">Beers</button>
+        </div>
+        <div class="rank-list" id="crew-board"></div>
+      </div>
+    </section>
+
+    <section class="section wrap" id="craft">
+      <div class="section-head">
+        <p class="kicker">04 — Inside the pint</p>
+        <h2>Production pieces, pub energy.</h2>
+      </div>
+      <div class="features">
+        <article class="feature">
+          <span class="icon-pill" aria-hidden="true"></span>
+          <h3>Sign in with Apple</h3>
+          <p>Strava is optional. You can skip the sync and still log beers with the crew.</p>
+        </article>
+        <article class="feature">
+          <span class="icon-pill" aria-hidden="true">S</span>
+          <h3>Strava, on your phone</h3>
+          <p>Activity summaries only. No posting back, no heart-rate streams, tokens in Keychain.</p>
+        </article>
+        <article class="feature">
+          <span class="icon-pill" aria-hidden="true">☁</span>
+          <h3>CloudKit crew board</h3>
+          <p>No paid backend. A free Cloudflare Worker exists only so the Strava secret never ships in the app.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section wrap">
+      <div class="crew-cta">
+        <div>
+          <p class="kicker">Invite only</p>
+          <h2>This is not a social network.</h2>
+          <p>Brick &amp; Brew is a private iPhone app for friends training together. TestFlight first. Share one code. Rank until the season is over — then order another round.</p>
+          <div class="cta-actions">
+            <a class="btn btn-primary" href="https://github.com/torresmanu/BrickAndBrew" rel="noopener noreferrer">Open the repo</a>
+            <a class="btn btn-ghost" href="privacy.html">Read the privacy policy</a>
+          </div>
+        </div>
+        <p class="cta-mark" aria-hidden="true">10S + 3R + 1B + 2</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-grid">
+      <p>© <span id="year">2026</span> Brick &amp; Brew. Train hard. Drink well.</p>
+      <div class="footer-links">
+        <a href="privacy.html">Privacy</a>
+        <a href="https://github.com/torresmanu/BrickAndBrew" rel="noopener noreferrer">GitHub</a>
+      </div>
+    </div>
+  </footer>
+  <script src="js/site.js" defer></script>
+</body>
+</html>

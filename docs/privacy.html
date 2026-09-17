@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Privacy Policy — Brick &amp; Brew</title>
+  <meta name="description" content="Privacy policy for the Brick & Brew iPhone app: what we collect, why, and how to delete it." />
+  <link rel="canonical" href="https://torresmanu.github.io/BrickAndBrew/privacy.html" />
+  <meta name="theme-color" content="#1A140F" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="assets/app-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=Fraunces:ital,opsz,wght@1,9..144,500&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/site.css" />
+</head>
+<body>
+  <a class="skip-link" href="#content">Skip to content</a>
+  <div class="atmosphere" aria-hidden="true"><div class="rings"></div></div>
+
+  <header class="site-header">
+    <div class="nav-bar">
+      <a class="brand" href="index.html">
+        <img src="assets/app-icon.png" width="36" height="36" alt="" />
+        Brick &amp; Brew
+      </a>
+      <input class="nav-toggle" id="nav-toggle" type="checkbox" />
+      <label class="nav-burger" for="nav-toggle" aria-label="Open menu"><span></span></label>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="index.html#formula">Formula</a>
+        <a href="index.html#board">Board</a>
+        <a href="privacy.html">Privacy</a>
+          <a class="btn btn-primary" href="https://github.com/torresmanu/BrickAndBrew" rel="noopener noreferrer">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="content" class="doc">
+    <p class="eyebrow">Legal</p>
+    <h1>Privacy Policy</h1>
+    <p class="updated">Last updated: 16 September 2026</p>
+    <p>Brick &amp; Brew is a private crew app for friends training for a triathlon. It is not a public social network.</p>
+
+    <h2>Who we are</h2>
+    <p>Brick &amp; Brew is provided by the app developer who invited you to TestFlight. Contact them through App Store Connect / TestFlight if you have questions about this policy.</p>
+
+    <h2>Data we collect</h2>
+    <ul>
+      <li><strong>Account.</strong> Sign in with Apple gives us an opaque user identifier and, if you share it, your name. We store a display name you choose so teammates can recognize you on the leaderboard.</li>
+      <li><strong>Crew membership.</strong> Invite code and team name so you can share one private board.</li>
+      <li><strong>Training.</strong> When you connect Strava, we read activity summaries (sport, start time, distance, moving time, elevation, average and max heart rate). We do not post to Strava and we do not download heart-rate streams.</li>
+      <li><strong>Beers.</strong> Counts, timestamps, and optional notes you enter in the app.</li>
+      <li><strong>Technical.</strong> Strava tokens live in the iOS Keychain. Crew records live in Apple CloudKit.</li>
+    </ul>
+
+    <h2>Why we collect it</h2>
+    <p>We use this data only to sign you in, sync your training, let you log beers, and show the crew leaderboard. We do not sell data, run ads, or track you across other companies' apps or websites.</p>
+
+    <h2>Where it is stored</h2>
+    <p>Strava tokens stay on-device. Profiles, activities, beers, and the team record are stored in CloudKit (public database, filtered by crew invite code). That is a small private-crew design, not bank-level isolation.</p>
+    <p>The Cloudflare Worker used for Strava OAuth exchanges a one-time code or refresh token with Strava. It does not keep an athlete database.</p>
+
+    <h2>Sharing</h2>
+    <p>We share data with Apple (Sign in with Apple, CloudKit, TestFlight) and, if you connect it, Strava. We do not share the crew board with advertisers.</p>
+
+    <h2>Retention and choices</h2>
+    <p>Disconnect Strava in the Me tab to delete tokens from Keychain. Sign out removes the local session. Email the developer from the Apple ID you used to sign in to request deletion of CloudKit records. Skipping Strava and logging beers only is supported.</p>
+
+    <h2>Children</h2>
+    <p>The app is intended for adults on a private TestFlight crew and is not directed at children under 13.</p>
+
+    <h2>Contact</h2>
+    <p>Open a TestFlight feedback ticket or email the developer listed on the App Store Connect record for Brick &amp; Brew.</p>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-grid">
+      <p>© <span id="year">2026</span> Brick &amp; Brew.</p>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="https://github.com/torresmanu/BrickAndBrew" rel="noopener noreferrer">GitHub</a>
+      </div>
+    </div>
+  </footer>
+  <script src="js/site.js" defer></script>
+</body>
+</html>

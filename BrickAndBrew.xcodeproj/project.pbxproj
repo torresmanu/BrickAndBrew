@@ -1,0 +1,707 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		098426BE0EB93043C7356392 /* StravaService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C4B9D1152FEB69DACBA90B5 /* StravaService.swift */; };
+		1604995998A495BCB0D0A231 /* BrickAndBrewApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB57C1DCA7489AF627DADED1 /* BrickAndBrewApp.swift */; };
+		1FDA567FEDD806FC39DAF9EF /* LocalCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E2F3E7AEC7E70CCD5C2A476 /* LocalCache.swift */; };
+		258F7A72B84091AD569E3932 /* BrickError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48424ACA259D26F27E396730 /* BrickError.swift */; };
+		26F34EA41448A05FD14CBF69 /* MeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB08807539B38BC5440CFD5 /* MeViewModel.swift */; };
+		337E9C867F3F747D833F22AB /* KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17CBB348F47D17E5C46926BF /* KeychainStore.swift */; };
+		4C386F4CC11760658EE779ED /* RankRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98D6671B92FB677A3D788F7B /* RankRowView.swift */; };
+		4E100A9CE2B88FEDBE21E3F8 /* SportKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26FD736A73D294D70AFC5B60 /* SportKind.swift */; };
+		54098D23AFDA8F934334CC9E /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38715438007CA11646217FBF /* RootView.swift */; };
+		59C44A2BBA0DE03D31EFD6E8 /* Scoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9B8C48E4958C4CE0B632E5 /* Scoring.swift */; };
+		5A234EA80C18A041BCC96D2E /* ScoringAndMappingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE403F61D143D8C5964D1545 /* ScoringAndMappingTests.swift */; };
+		5A805A27AE1A3B33AB620086 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A257A121611FD3C8D1938DF1 /* Profile.swift */; };
+		5DFA723DEF63AECA5955A328 /* StravaModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC10980F8868435C54B133D8 /* StravaModels.swift */; };
+		6864D97F781558246AF54950 /* CloudKitKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = E36ADEE30FF86916B6772F42 /* CloudKitKey.swift */; };
+		6F23C195F85F100AB1DFD2C6 /* LogBeerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45D3AECB67528A84E384189 /* LogBeerViewModel.swift */; };
+		78A867C803CEC5B4D4DF53A4 /* Team.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB0F07DC830D22FDCD04E87 /* Team.swift */; };
+		7E61488C04879DAF74E92CD1 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59FA86769D451FD129E893D8 /* AppConfig.swift */; };
+		8195A977B45AED00FB51120C /* CrewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9311672746C5C464080BC4 /* CrewView.swift */; };
+		8D7A78698DAC1C3A7F32E07D /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD3BC54AAE51DF9DEB198025 /* AuthService.swift */; };
+		8F13D8224A4EC88985C9B43C /* Leaderboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1801B024FF3988C1A9AB6A40 /* Leaderboard.swift */; };
+		8FF4F02F45CD66258569FFD8 /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DAB64D740BF140720C8F4F4 /* Haptics.swift */; };
+		9C8BA1C141FA3A5A42DFB46A /* AppSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4103667047C68EE715C45AE4 /* AppSession.swift */; };
+		9FE8A55FAE8107A3CE957201 /* InviteCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A660B58F839C19C0D9BB622 /* InviteCode.swift */; };
+		AB48B069A52A0A3ADECB8A5E /* Palette.swift in Sources */ = {isa = PBXBuildFile; fileRef = A991E7995A0F9FB5795BC795 /* Palette.swift */; };
+		B5237F2E105385BF5469EF21 /* Activity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94477C1C6330F5F39820C9EC /* Activity.swift */; };
+		B668FD885D32DC327DB8DF10 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = C86C8E7CA564490531582340 /* PrivacyInfo.xcprivacy */; };
+		B85AF03B71729B30A28AC13B /* Beer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0161265B8818923E829382EB /* Beer.swift */; };
+		C24A94D98A0E1E505D7BB562 /* StateViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AF5F86EE2104BA25271D32A /* StateViews.swift */; };
+		C53EAC059B3B2BC8B5704599 /* LogBeerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71C314D02949F264D26C7B39 /* LogBeerView.swift */; };
+		C77FF6E30898792287F65D08 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 94B041C6F12A2813D170867B /* Assets.xcassets */; };
+		CCB86A7481DB20B166AC2F3B /* MeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6BBFBBEC1780A5C9716388 /* MeView.swift */; };
+		D3E997919C71E17A4C5EED2D /* ConnectStravaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B97AD429451871644A7AFDE /* ConnectStravaView.swift */; };
+		D838F89CB298C5BC24E484B0 /* DisplayNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87484693F47BC3D18E16A346 /* DisplayNameView.swift */; };
+		DEA437B5ED7EE209AEA83076 /* CloudKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D741E3AF542F0C73F289A3 /* CloudKitService.swift */; };
+		E166F922C7ACAB79DFDD8DC0 /* LoadState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AD0C341EABD3298204B4659 /* LoadState.swift */; };
+		E3BB75DEA0DC8D45DDA86A1B /* ActivityMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9734F65635040C3DDA78303 /* ActivityMapper.swift */; };
+		E4FFE262A7DE68BF034208AF /* Spacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2EFBC78E7C9AD1F95FA7935 /* Spacing.swift */; };
+		E7B9B97330EA3C10314C14B7 /* LaunchEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAF6737883C6B0C1D7754359 /* LaunchEnvironment.swift */; };
+		E8B5C646F6C30750BA2A0203 /* Formatters.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2A7185DB2F4BC3CA83795AB /* Formatters.swift */; };
+		E8E21AC6D04831B7642737AF /* JoinCrewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799324DE9E35F0ECFF9D0A74 /* JoinCrewView.swift */; };
+		EF447A3256E019E04CE48A62 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B16721A4C03E76E56822295 /* WelcomeView.swift */; };
+		F21820811E3067C30BC02763 /* CrewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13A44AE3EC69BD259636FADF /* CrewViewModel.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		CFC87BDAAB1A710232611093 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DF69F7B636F718842BFE91EF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A254BC818889B10C64640809;
+			remoteInfo = BrickAndBrew;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0161265B8818923E829382EB /* Beer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Beer.swift; sourceTree = "<group>"; };
+		0C4B9D1152FEB69DACBA90B5 /* StravaService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StravaService.swift; sourceTree = "<group>"; };
+		0D0AD74F28286970F3E785BF /* BrickAndBrewTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = BrickAndBrewTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		0DB0F07DC830D22FDCD04E87 /* Team.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Team.swift; sourceTree = "<group>"; };
+		0FE7265F4DA12D3168A40085 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		11D741E3AF542F0C73F289A3 /* CloudKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitService.swift; sourceTree = "<group>"; };
+		13A44AE3EC69BD259636FADF /* CrewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrewViewModel.swift; sourceTree = "<group>"; };
+		17CBB348F47D17E5C46926BF /* KeychainStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStore.swift; sourceTree = "<group>"; };
+		1801B024FF3988C1A9AB6A40 /* Leaderboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Leaderboard.swift; sourceTree = "<group>"; };
+		26FD736A73D294D70AFC5B60 /* SportKind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportKind.swift; sourceTree = "<group>"; };
+		2AF5F86EE2104BA25271D32A /* StateViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateViews.swift; sourceTree = "<group>"; };
+		38715438007CA11646217FBF /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		3A041A4CF46E2AE22FEFF219 /* BrickAndBrew.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BrickAndBrew.entitlements; sourceTree = "<group>"; };
+		3A660B58F839C19C0D9BB622 /* InviteCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteCode.swift; sourceTree = "<group>"; };
+		3DB08807539B38BC5440CFD5 /* MeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeViewModel.swift; sourceTree = "<group>"; };
+		4103667047C68EE715C45AE4 /* AppSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSession.swift; sourceTree = "<group>"; };
+		48424ACA259D26F27E396730 /* BrickError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrickError.swift; sourceTree = "<group>"; };
+		4AD0C341EABD3298204B4659 /* LoadState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadState.swift; sourceTree = "<group>"; };
+		4B97AD429451871644A7AFDE /* ConnectStravaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectStravaView.swift; sourceTree = "<group>"; };
+		4E2F3E7AEC7E70CCD5C2A476 /* LocalCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalCache.swift; sourceTree = "<group>"; };
+		59FA86769D451FD129E893D8 /* AppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
+		5A9311672746C5C464080BC4 /* CrewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrewView.swift; sourceTree = "<group>"; };
+		5B16721A4C03E76E56822295 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
+		5DAB64D740BF140720C8F4F4 /* Haptics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Haptics.swift; sourceTree = "<group>"; };
+		71C314D02949F264D26C7B39 /* LogBeerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogBeerView.swift; sourceTree = "<group>"; };
+		799324DE9E35F0ECFF9D0A74 /* JoinCrewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinCrewView.swift; sourceTree = "<group>"; };
+		87484693F47BC3D18E16A346 /* DisplayNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayNameView.swift; sourceTree = "<group>"; };
+		94477C1C6330F5F39820C9EC /* Activity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Activity.swift; sourceTree = "<group>"; };
+		94B041C6F12A2813D170867B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		98D6671B92FB677A3D788F7B /* RankRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankRowView.swift; sourceTree = "<group>"; };
+		A257A121611FD3C8D1938DF1 /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
+		A991E7995A0F9FB5795BC795 /* Palette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Palette.swift; sourceTree = "<group>"; };
+		AC10980F8868435C54B133D8 /* StravaModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StravaModels.swift; sourceTree = "<group>"; };
+		B45D3AECB67528A84E384189 /* LogBeerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogBeerViewModel.swift; sourceTree = "<group>"; };
+		B9734F65635040C3DDA78303 /* ActivityMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityMapper.swift; sourceTree = "<group>"; };
+		C86C8E7CA564490531582340 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		D2EFBC78E7C9AD1F95FA7935 /* Spacing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spacing.swift; sourceTree = "<group>"; };
+		DA9B8C48E4958C4CE0B632E5 /* Scoring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scoring.swift; sourceTree = "<group>"; };
+		DB57C1DCA7489AF627DADED1 /* BrickAndBrewApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrickAndBrewApp.swift; sourceTree = "<group>"; };
+		E36ADEE30FF86916B6772F42 /* CloudKitKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitKey.swift; sourceTree = "<group>"; };
+		EADF2F6A20DE4307A72B0892 /* BrickAndBrew.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = BrickAndBrew.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		EAF6737883C6B0C1D7754359 /* LaunchEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchEnvironment.swift; sourceTree = "<group>"; };
+		EE403F61D143D8C5964D1545 /* ScoringAndMappingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoringAndMappingTests.swift; sourceTree = "<group>"; };
+		F2A7185DB2F4BC3CA83795AB /* Formatters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formatters.swift; sourceTree = "<group>"; };
+		FD3BC54AAE51DF9DEB198025 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		FF6BBFBBEC1780A5C9716388 /* MeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		19F9792D4B3B8EF2F234A44B /* BrickAndBrewTests */ = {
+			isa = PBXGroup;
+			children = (
+				EE403F61D143D8C5964D1545 /* ScoringAndMappingTests.swift */,
+			);
+			path = BrickAndBrewTests;
+			sourceTree = "<group>";
+		};
+		1A18C6BCE0C7701C8610CBB1 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				98D6671B92FB677A3D788F7B /* RankRowView.swift */,
+				2AF5F86EE2104BA25271D32A /* StateViews.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		2AFE9F553AA60F03CF487D4F /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				F2A7185DB2F4BC3CA83795AB /* Formatters.swift */,
+				A991E7995A0F9FB5795BC795 /* Palette.swift */,
+				D2EFBC78E7C9AD1F95FA7935 /* Spacing.swift */,
+			);
+			path = Theme;
+			sourceTree = "<group>";
+		};
+		2CABD6A1149E80C49E860A6B = {
+			isa = PBXGroup;
+			children = (
+				306BD467CAAC902C33843606 /* BrickAndBrew */,
+				19F9792D4B3B8EF2F234A44B /* BrickAndBrewTests */,
+				4DEE4E3D9FAA224C16A804F3 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		306BD467CAAC902C33843606 /* BrickAndBrew */ = {
+			isa = PBXGroup;
+			children = (
+				E9D3623D2FF89DC26F4AAACE /* App */,
+				1A18C6BCE0C7701C8610CBB1 /* Components */,
+				9FAA2D27DEE5773F9C28D879 /* Models */,
+				6E0722FDA678D75751DABAB0 /* Resources */,
+				4997C358AEE72D88FB0266FE /* Services */,
+				2AFE9F553AA60F03CF487D4F /* Theme */,
+				48647B4457D3C1D56EABB1E2 /* ViewModels */,
+				C8F33B41ACA8F40C35D0DE0B /* Views */,
+				94B041C6F12A2813D170867B /* Assets.xcassets */,
+				3A041A4CF46E2AE22FEFF219 /* BrickAndBrew.entitlements */,
+				0FE7265F4DA12D3168A40085 /* Info.plist */,
+				C86C8E7CA564490531582340 /* PrivacyInfo.xcprivacy */,
+			);
+			path = BrickAndBrew;
+			sourceTree = "<group>";
+		};
+		48647B4457D3C1D56EABB1E2 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				13A44AE3EC69BD259636FADF /* CrewViewModel.swift */,
+				B45D3AECB67528A84E384189 /* LogBeerViewModel.swift */,
+				3DB08807539B38BC5440CFD5 /* MeViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		4997C358AEE72D88FB0266FE /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				FD3BC54AAE51DF9DEB198025 /* AuthService.swift */,
+				11D741E3AF542F0C73F289A3 /* CloudKitService.swift */,
+				5DAB64D740BF140720C8F4F4 /* Haptics.swift */,
+				17CBB348F47D17E5C46926BF /* KeychainStore.swift */,
+				4E2F3E7AEC7E70CCD5C2A476 /* LocalCache.swift */,
+				0C4B9D1152FEB69DACBA90B5 /* StravaService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		4DEE4E3D9FAA224C16A804F3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				EADF2F6A20DE4307A72B0892 /* BrickAndBrew.app */,
+				0D0AD74F28286970F3E785BF /* BrickAndBrewTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		52A4F47EA4F8621CF6D8E280 /* Log */ = {
+			isa = PBXGroup;
+			children = (
+				71C314D02949F264D26C7B39 /* LogBeerView.swift */,
+			);
+			path = Log;
+			sourceTree = "<group>";
+		};
+		6E0722FDA678D75751DABAB0 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		830AF43B91F137BD78DBA036 /* Crew */ = {
+			isa = PBXGroup;
+			children = (
+				5A9311672746C5C464080BC4 /* CrewView.swift */,
+			);
+			path = Crew;
+			sourceTree = "<group>";
+		};
+		9FAA2D27DEE5773F9C28D879 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				94477C1C6330F5F39820C9EC /* Activity.swift */,
+				B9734F65635040C3DDA78303 /* ActivityMapper.swift */,
+				0161265B8818923E829382EB /* Beer.swift */,
+				48424ACA259D26F27E396730 /* BrickError.swift */,
+				E36ADEE30FF86916B6772F42 /* CloudKitKey.swift */,
+				3A660B58F839C19C0D9BB622 /* InviteCode.swift */,
+				1801B024FF3988C1A9AB6A40 /* Leaderboard.swift */,
+				4AD0C341EABD3298204B4659 /* LoadState.swift */,
+				A257A121611FD3C8D1938DF1 /* Profile.swift */,
+				DA9B8C48E4958C4CE0B632E5 /* Scoring.swift */,
+				26FD736A73D294D70AFC5B60 /* SportKind.swift */,
+				AC10980F8868435C54B133D8 /* StravaModels.swift */,
+				0DB0F07DC830D22FDCD04E87 /* Team.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		AF29954709772F6A337A0C50 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				FF6BBFBBEC1780A5C9716388 /* MeView.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		C39773B3273EEA733CDD49BD /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				4B97AD429451871644A7AFDE /* ConnectStravaView.swift */,
+				87484693F47BC3D18E16A346 /* DisplayNameView.swift */,
+				799324DE9E35F0ECFF9D0A74 /* JoinCrewView.swift */,
+				5B16721A4C03E76E56822295 /* WelcomeView.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		C8F33B41ACA8F40C35D0DE0B /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				830AF43B91F137BD78DBA036 /* Crew */,
+				52A4F47EA4F8621CF6D8E280 /* Log */,
+				C39773B3273EEA733CDD49BD /* Onboarding */,
+				AF29954709772F6A337A0C50 /* Profile */,
+				38715438007CA11646217FBF /* RootView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		E9D3623D2FF89DC26F4AAACE /* App */ = {
+			isa = PBXGroup;
+			children = (
+				59FA86769D451FD129E893D8 /* AppConfig.swift */,
+				4103667047C68EE715C45AE4 /* AppSession.swift */,
+				DB57C1DCA7489AF627DADED1 /* BrickAndBrewApp.swift */,
+				EAF6737883C6B0C1D7754359 /* LaunchEnvironment.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		6EBD41E2C2E1FF3F0A8AEE8F /* BrickAndBrewTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5B86CE60111CB317AE5BFAB9 /* Build configuration list for PBXNativeTarget "BrickAndBrewTests" */;
+			buildPhases = (
+				756F86F6610532B36DC5E20B /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4BE5889EF6E9C2DCB847493A /* PBXTargetDependency */,
+			);
+			name = BrickAndBrewTests;
+			packageProductDependencies = (
+			);
+			productName = BrickAndBrewTests;
+			productReference = 0D0AD74F28286970F3E785BF /* BrickAndBrewTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		A254BC818889B10C64640809 /* BrickAndBrew */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 93670EE301EC902FE1E8C7DC /* Build configuration list for PBXNativeTarget "BrickAndBrew" */;
+			buildPhases = (
+				62FDF8498CEF93AE6191A2FC /* Sources */,
+				EB99C8B3EC114DE8A02B198F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BrickAndBrew;
+			packageProductDependencies = (
+			);
+			productName = BrickAndBrew;
+			productReference = EADF2F6A20DE4307A72B0892 /* BrickAndBrew.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		DF69F7B636F718842BFE91EF /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					6EBD41E2C2E1FF3F0A8AEE8F = {
+						ProvisioningStyle = Automatic;
+					};
+					A254BC818889B10C64640809 = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 7C26F48531A083DE3B2D67AB /* Build configuration list for PBXProject "BrickAndBrew" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 2CABD6A1149E80C49E860A6B;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 4DEE4E3D9FAA224C16A804F3 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A254BC818889B10C64640809 /* BrickAndBrew */,
+				6EBD41E2C2E1FF3F0A8AEE8F /* BrickAndBrewTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		EB99C8B3EC114DE8A02B198F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C77FF6E30898792287F65D08 /* Assets.xcassets in Resources */,
+				B668FD885D32DC327DB8DF10 /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		62FDF8498CEF93AE6191A2FC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B5237F2E105385BF5469EF21 /* Activity.swift in Sources */,
+				E3BB75DEA0DC8D45DDA86A1B /* ActivityMapper.swift in Sources */,
+				7E61488C04879DAF74E92CD1 /* AppConfig.swift in Sources */,
+				9C8BA1C141FA3A5A42DFB46A /* AppSession.swift in Sources */,
+				8D7A78698DAC1C3A7F32E07D /* AuthService.swift in Sources */,
+				B85AF03B71729B30A28AC13B /* Beer.swift in Sources */,
+				1604995998A495BCB0D0A231 /* BrickAndBrewApp.swift in Sources */,
+				258F7A72B84091AD569E3932 /* BrickError.swift in Sources */,
+				6864D97F781558246AF54950 /* CloudKitKey.swift in Sources */,
+				DEA437B5ED7EE209AEA83076 /* CloudKitService.swift in Sources */,
+				D3E997919C71E17A4C5EED2D /* ConnectStravaView.swift in Sources */,
+				8195A977B45AED00FB51120C /* CrewView.swift in Sources */,
+				F21820811E3067C30BC02763 /* CrewViewModel.swift in Sources */,
+				D838F89CB298C5BC24E484B0 /* DisplayNameView.swift in Sources */,
+				E8B5C646F6C30750BA2A0203 /* Formatters.swift in Sources */,
+				8FF4F02F45CD66258569FFD8 /* Haptics.swift in Sources */,
+				9FE8A55FAE8107A3CE957201 /* InviteCode.swift in Sources */,
+				E8E21AC6D04831B7642737AF /* JoinCrewView.swift in Sources */,
+				337E9C867F3F747D833F22AB /* KeychainStore.swift in Sources */,
+				E7B9B97330EA3C10314C14B7 /* LaunchEnvironment.swift in Sources */,
+				8F13D8224A4EC88985C9B43C /* Leaderboard.swift in Sources */,
+				E166F922C7ACAB79DFDD8DC0 /* LoadState.swift in Sources */,
+				1FDA567FEDD806FC39DAF9EF /* LocalCache.swift in Sources */,
+				C53EAC059B3B2BC8B5704599 /* LogBeerView.swift in Sources */,
+				6F23C195F85F100AB1DFD2C6 /* LogBeerViewModel.swift in Sources */,
+				CCB86A7481DB20B166AC2F3B /* MeView.swift in Sources */,
+				26F34EA41448A05FD14CBF69 /* MeViewModel.swift in Sources */,
+				AB48B069A52A0A3ADECB8A5E /* Palette.swift in Sources */,
+				5A805A27AE1A3B33AB620086 /* Profile.swift in Sources */,
+				4C386F4CC11760658EE779ED /* RankRowView.swift in Sources */,
+				54098D23AFDA8F934334CC9E /* RootView.swift in Sources */,
+				59C44A2BBA0DE03D31EFD6E8 /* Scoring.swift in Sources */,
+				E4FFE262A7DE68BF034208AF /* Spacing.swift in Sources */,
+				4E100A9CE2B88FEDBE21E3F8 /* SportKind.swift in Sources */,
+				C24A94D98A0E1E505D7BB562 /* StateViews.swift in Sources */,
+				5DFA723DEF63AECA5955A328 /* StravaModels.swift in Sources */,
+				098426BE0EB93043C7356392 /* StravaService.swift in Sources */,
+				78A867C803CEC5B4D4DF53A4 /* Team.swift in Sources */,
+				EF447A3256E019E04CE48A62 /* WelcomeView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		756F86F6610532B36DC5E20B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5A234EA80C18A041BCC96D2E /* ScoringAndMappingTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4BE5889EF6E9C2DCB847493A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A254BC818889B10C64640809 /* BrickAndBrew */;
+			targetProxy = CFC87BDAAB1A710232611093 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		1D5D5892FD443E05F1B0B375 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BrickAndBrew/BrickAndBrew.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BrickAndBrew/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Brick & Brew";
+				INFOPLIST_KEY_LSRequiresIPhoneOS = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.brickandbrew.app;
+				PRODUCT_NAME = BrickAndBrew;
+				SDKROOT = iphoneos;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		2A130100722EEE8B362DB32E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		68DF2330E524422A9FB14FBE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.brickandbrew.app.tests;
+				SDKROOT = iphoneos;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BrickAndBrew.app/BrickAndBrew";
+			};
+			name = Release;
+		};
+		79849E539CF0C18263535D07 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BrickAndBrew/BrickAndBrew.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_TESTABILITY = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BrickAndBrew/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Brick & Brew";
+				INFOPLIST_KEY_LSRequiresIPhoneOS = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.brickandbrew.app;
+				PRODUCT_NAME = BrickAndBrew;
+				SDKROOT = iphoneos;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		9D75DAE41B11019D8C49A00A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.brickandbrew.app.tests;
+				SDKROOT = iphoneos;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BrickAndBrew.app/BrickAndBrew";
+			};
+			name = Debug;
+		};
+		9E6798C07FB1C565751242C0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		5B86CE60111CB317AE5BFAB9 /* Build configuration list for PBXNativeTarget "BrickAndBrewTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9D75DAE41B11019D8C49A00A /* Debug */,
+				68DF2330E524422A9FB14FBE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		7C26F48531A083DE3B2D67AB /* Build configuration list for PBXProject "BrickAndBrew" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2A130100722EEE8B362DB32E /* Debug */,
+				9E6798C07FB1C565751242C0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		93670EE301EC902FE1E8C7DC /* Build configuration list for PBXNativeTarget "BrickAndBrew" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				79849E539CF0C18263535D07 /* Debug */,
+				1D5D5892FD443E05F1B0B375 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = DF69F7B636F718842BFE91EF /* Project object */;
+}
