@@ -1,11 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Brick &amp; Brew">
-  <!-- App-icon master: white field, black mark, 26/180 padding from Figma 35:923. -->
-  <rect width="64" height="64" rx="14.4" fill="#ffffff"/>
-  <g fill="#000000" transform="translate(9.24444 9.24444) scale(0.142222)">
-    <rect x="0" y="6" width="120" height="120"/>
-    <path d="M120 6h60a60 60 0 0 1 0 120H120z"/>
-    <rect x="0" y="142" width="200" height="16"/>
-    <rect x="0" y="174" width="140" height="140"/>
-    <path d="M140 174h70a70 70 0 0 1 0 140H140z"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" role="img" aria-label="Brick &amp; Brew">
+  <!-- Tab size: #111 field so the mark reads on light chrome. Coordinates baked for 16px rasterizers. -->
+  <rect width="32" height="32" rx="7.2" fill="#111111"/>
+  <g fill="#ffffff">
+    <rect x="6.46" y="2" width="10.91" height="10.91"/>
+    <path d="M17.37 2h5.45a5.45 5.45 0 0 1 0 10.91H17.37z"/>
+    <rect x="6.46" y="14.36" width="18.18" height="1.45"/>
+    <rect x="6.46" y="17.27" width="12.73" height="12.73"/>
+    <path d="M19.19 17.27h6.36a6.36 6.36 0 0 1 0 12.73H19.19z"/>
   </g>
 </svg>
