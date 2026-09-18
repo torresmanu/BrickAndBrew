@@ -30,6 +30,10 @@ struct CrewView: View {
         .task(id: viewModel != nil) {
             await viewModel?.load(forceSync: true)
         }
+        .onChange(of: session.profile?.displayName) { _, name in
+            guard let name, let userId = session.profile?.id else { return }
+            viewModel?.applyDisplayName(name, userId: userId)
+        }
     }
 
     private func showScoringGuide() {
@@ -45,6 +49,7 @@ struct CrewView: View {
 }
 
 private struct CrewLoadedView: View {
+    @Environment(AppSession.self) private var session
     @Bindable var viewModel: CrewViewModel
 
     var body: some View {
@@ -80,9 +85,27 @@ private struct CrewLoadedView: View {
 
     @ViewBuilder
     private var content: some View {
+        List {
+            Section {
+                boardSection
+            }
+            Section("Crew pints") {
+                pintSection
+            }
+        }
+        .listStyle(.plain)
+        .scrollContentBackground(.hidden)
+    }
+
+    @ViewBuilder
+    private var boardSection: some View {
         switch viewModel.state {
         case .loading:
             LoadingView(message: "Crunching swim, bike, run, and beers…")
+                .frame(minHeight: 180)
+                .listRowInsets(listInsets)
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
         case .empty:
             EmptyStateView(
                 title: "The board is empty",
@@ -91,30 +114,85 @@ private struct CrewLoadedView: View {
                 actionTitle: "Refresh",
                 action: retry
             )
+            .frame(minHeight: 220)
+            .listRowInsets(listInsets)
+            .listRowBackground(Color.clear)
+            .listRowSeparator(.hidden)
         case .failed(let message):
             ErrorStateView(message: message, retry: retry)
+                .frame(minHeight: 220)
+                .listRowInsets(listInsets)
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
         case .loaded:
-            List {
-                ForEach(Array(viewModel.ranked.enumerated()), id: \.element.id) { index, entry in
-                    RankRowView(
-                        rank: index + 1,
-                        entry: entry,
-                        board: viewModel.board,
-                        isCurrentUser: entry.userId == viewModel.currentUserId
-                    )
-                    .listRowInsets(EdgeInsets(top: 6, leading: Spacing.md, bottom: 6, trailing: Spacing.md))
-                    .listRowBackground(Color.clear)
-                    .listRowSeparator(.hidden)
-                }
+            ForEach(Array(viewModel.ranked.enumerated()), id: \.element.id) { index, entry in
+                RankRowView(
+                    rank: index + 1,
+                    entry: entry,
+                    board: viewModel.board,
+                    isCurrentUser: entry.userId == viewModel.currentUserId,
+                    avatars: session.avatars
+                )
+                .listRowInsets(listInsets)
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
             }
-            .listStyle(.plain)
-            .scrollContentBackground(.hidden)
         }
+    }
+
+    @ViewBuilder
+    private var pintSection: some View {
+        switch viewModel.pintFeed {
+        case .loading:
+            LoadingView(message: "Loading crew pints…")
+                .frame(minHeight: 140)
+                .listRowInsets(listInsets)
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
+        case .empty:
+            EmptyStateView(
+                title: "No pint photos yet",
+                message: "Snap a pint from Log and it shows up here.",
+                icon: PintSymbol()
+            )
+            .frame(minHeight: 180)
+            .listRowInsets(listInsets)
+            .listRowBackground(Color.clear)
+            .listRowSeparator(.hidden)
+        case .failed(let message):
+            ErrorStateView(message: message, retry: retryPintFeed)
+                .frame(minHeight: 180)
+                .listRowInsets(listInsets)
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
+        case .loaded(let photos):
+            ForEach(photos) { photo in
+                CrewPintRowView(
+                    photo: photo,
+                    displayName: viewModel.displayName(for: photo.userId),
+                    avatars: session.avatars,
+                    photos: session.beerPhotos
+                )
+                .listRowInsets(listInsets)
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
+            }
+        }
+    }
+
+    private var listInsets: EdgeInsets {
+        EdgeInsets(top: 6, leading: Spacing.md, bottom: 6, trailing: Spacing.md)
     }
 
     private func retry() {
         Task {
             await viewModel.retry()
+        }
+    }
+
+    private func retryPintFeed() {
+        Task {
+            await viewModel.retryPintFeed()
         }
     }
 

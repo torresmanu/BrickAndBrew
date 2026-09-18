@@ -4,11 +4,19 @@ import Foundation
 @MainActor
 final class CloudKitService {
     private let containerIdentifier: String
+    private let avatars: AvatarCache
+    private let beerPhotos: BeerPhotoCache
     private lazy var container: CKContainer = CKContainer(identifier: containerIdentifier)
     private var database: CKDatabase { container.publicCloudDatabase }
 
-    init(containerIdentifier: String = AppConfig.cloudKitContainerID) {
+    init(
+        containerIdentifier: String = AppConfig.cloudKitContainerID,
+        avatars: AvatarCache,
+        beerPhotos: BeerPhotoCache
+    ) {
         self.containerIdentifier = containerIdentifier
+        self.avatars = avatars
+        self.beerPhotos = beerPhotos
     }
 
     func requireICloud() async throws {
@@ -43,6 +51,7 @@ final class CloudKitService {
         let recordID = CKRecord.ID(recordName: Profile.recordName(forAppleUserId: appleUserId))
         do {
             let record = try await database.record(for: recordID)
+            persistAvatar(from: record)
             return Profile(record: record)
         } catch let error as CKError where error.code == .unknownItem {
             return nil
@@ -51,14 +60,46 @@ final class CloudKitService {
         }
     }
 
+    /// Fetches the existing Profile record (or creates one) so scalar saves keep `avatar`.
     func saveProfile(_ profile: Profile) async throws -> Profile {
-        try await save(profile.makeRecord())
-        return profile
+        let record = try await mutableProfileRecord(for: profile)
+        profile.writeScalarFields(to: record)
+        try await saveProfileRecord(record)
+        persistAvatar(from: record)
+        return Profile(record: record) ?? profile
+    }
+
+    func saveProfileAvatar(_ profile: Profile, jpegData: Data) async throws -> Profile {
+        let record = try await mutableProfileRecord(for: profile)
+        profile.writeScalarFields(to: record)
+        let fileURL = try writeTempJPEG(jpegData)
+        record[CloudKitKey.Profile.avatar] = CKAsset(fileURL: fileURL)
+        do {
+            try await saveProfileRecord(record)
+        } catch {
+            try? FileManager.default.removeItem(at: fileURL)
+            throw error
+        }
+        try? FileManager.default.removeItem(at: fileURL)
+        avatars.store(userId: profile.id, jpeg: jpegData)
+        return Profile(record: record) ?? profile
+    }
+
+    func removeProfileAvatar(_ profile: Profile) async throws -> Profile {
+        let record = try await mutableProfileRecord(for: profile)
+        profile.writeScalarFields(to: record)
+        record[CloudKitKey.Profile.avatar] = nil
+        try await saveProfileRecord(record)
+        avatars.remove(userId: profile.id)
+        return Profile(record: record) ?? profile
     }
 
     func fetchProfiles(teamId: String) async throws -> [Profile] {
         let predicate = NSPredicate(format: "%K == %@", CloudKitKey.Profile.teamId, teamId)
         let records = try await query(recordType: CloudKitKey.RecordType.profile, predicate: predicate)
+        for record in records {
+            persistAvatar(from: record)
+        }
         return records.compactMap(Profile.init(record:))
     }
 
@@ -111,7 +152,60 @@ final class CloudKitService {
         return beer
     }
 
-    /// Removes this user's profile, activities, and beers. Does not delete the Team record.
+    func saveBeerPhoto(_ photo: BeerPhoto, jpegData: Data) async throws -> BeerPhoto {
+        let record = CKRecord(recordType: CloudKitKey.RecordType.beerPhoto, recordID: photo.recordID)
+        photo.writeScalarFields(to: record)
+        let fileURL = try writeTempJPEG(jpegData)
+        record[CloudKitKey.BeerPhoto.photo] = CKAsset(fileURL: fileURL)
+        do {
+            try await save(record)
+        } catch {
+            try? FileManager.default.removeItem(at: fileURL)
+            throw error
+        }
+        try? FileManager.default.removeItem(at: fileURL)
+        beerPhotos.store(beerId: photo.beerId, jpeg: jpegData)
+        return BeerPhoto(record: record) ?? photo
+    }
+
+    func fetchBeerPhotos(teamId: String, since: Date) async throws -> [BeerPhoto] {
+        let predicate = NSPredicate(
+            format: "%K == %@ AND %K >= %@",
+            CloudKitKey.BeerPhoto.teamId,
+            teamId,
+            CloudKitKey.BeerPhoto.loggedAt,
+            since as NSDate
+        )
+        let sort = [NSSortDescriptor(key: CloudKitKey.BeerPhoto.loggedAt, ascending: false)]
+        let records = try await query(
+            recordType: CloudKitKey.RecordType.beerPhoto,
+            predicate: predicate,
+            sortDescriptors: sort
+        )
+        for record in records {
+            persistBeerPhoto(from: record)
+        }
+        return records.compactMap(BeerPhoto.init(record:))
+    }
+
+    func fetchBeerPhotos(userId: String, teamId: String) async throws -> [BeerPhoto] {
+        let predicate = NSPredicate(
+            format: "%K == %@ AND %K == %@",
+            CloudKitKey.BeerPhoto.userId,
+            userId,
+            CloudKitKey.BeerPhoto.teamId,
+            teamId
+        )
+        let records = try await query(recordType: CloudKitKey.RecordType.beerPhoto, predicate: predicate)
+        for record in records {
+            persistBeerPhoto(from: record)
+        }
+        return records
+            .compactMap(BeerPhoto.init(record:))
+            .sorted { $0.loggedAt > $1.loggedAt }
+    }
+
+    /// Removes this user's profile, activities, beers, and pint photos. Does not delete the Team record.
     func deleteAccountRecords(for profile: Profile) async throws {
         let teamId = profile.teamId.isEmpty ? nil : profile.teamId
         async let activityIDs = ownedRecordIDs(
@@ -124,13 +218,87 @@ final class CloudKitService {
             userId: profile.id,
             teamId: teamId
         )
-        var recordIDs = try await activityIDs + beerIDs
+        async let photoIDs = ownedRecordIDs(
+            recordType: CloudKitKey.RecordType.beerPhoto,
+            userId: profile.id,
+            teamId: teamId
+        )
+        var recordIDs = try await activityIDs + beerIDs + photoIDs
         recordIDs.append(profile.recordID)
         try await delete(recordIDs)
     }
 
     private func save(_ record: CKRecord) async throws {
         try await modify([record])
+    }
+
+    /// `.changedKeys` leaves `avatar` untouched unless this call changed it.
+    private func saveProfileRecord(_ record: CKRecord) async throws {
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+            let operation = CKModifyRecordsOperation(recordsToSave: [record], recordIDsToDelete: nil)
+            operation.savePolicy = .changedKeys
+            operation.qualityOfService = .userInitiated
+            operation.modifyRecordsResultBlock = { result in
+                switch result {
+                case .success:
+                    continuation.resume()
+                case .failure(let error):
+                    continuation.resume(throwing: CloudKitService.mapError(error))
+                }
+            }
+            database.add(operation)
+        }
+    }
+
+    private func mutableProfileRecord(for profile: Profile) async throws -> CKRecord {
+        do {
+            return try await database.record(for: profile.recordID)
+        } catch let error as CKError where error.code == .unknownItem {
+            return CKRecord(recordType: CloudKitKey.RecordType.profile, recordID: profile.recordID)
+        } catch {
+            throw mapped(error)
+        }
+    }
+
+    /// CloudKit asset URLs are temporary. Copy bytes into the disk cache, but
+    /// keep the last file if the asset is present and the download failed.
+    private func persistAvatar(from record: CKRecord) {
+        let userId = record.recordID.recordName
+        guard let asset = record[CloudKitKey.Profile.avatar] as? CKAsset else {
+            avatars.remove(userId: userId)
+            return
+        }
+        guard let url = asset.fileURL else { return }
+        do {
+            let data = try Data(contentsOf: url)
+            guard data.isEmpty == false else { return }
+            avatars.store(userId: userId, jpeg: data)
+        } catch {
+            return
+        }
+    }
+
+    private func persistBeerPhoto(from record: CKRecord) {
+        guard let beerId = record[CloudKitKey.BeerPhoto.beerId] as? String else { return }
+        guard let asset = record[CloudKitKey.BeerPhoto.photo] as? CKAsset else {
+            beerPhotos.remove(beerId: beerId)
+            return
+        }
+        guard let url = asset.fileURL else { return }
+        do {
+            let data = try Data(contentsOf: url)
+            guard data.isEmpty == false else { return }
+            beerPhotos.store(beerId: beerId, jpeg: data)
+        } catch {
+            return
+        }
+    }
+
+    private func writeTempJPEG(_ data: Data) throws -> URL {
+        let url = FileManager.default.temporaryDirectory
+            .appendingPathComponent("upload-\(UUID().uuidString).jpg")
+        try data.write(to: url, options: .atomic)
+        return url
     }
 
     private func modify(_ records: [CKRecord]) async throws {
@@ -195,12 +363,16 @@ final class CloudKitService {
         }
     }
 
-    private func query(recordType: String, predicate: NSPredicate) async throws -> [CKRecord] {
+    private func query(
+        recordType: String,
+        predicate: NSPredicate,
+        sortDescriptors: [NSSortDescriptor]? = nil
+    ) async throws -> [CKRecord] {
         var results: [CKRecord] = []
         var cursor: CKQueryOperation.Cursor?
 
         let first = CKQuery(recordType: recordType, predicate: predicate)
-        first.sortDescriptors = nil
+        first.sortDescriptors = sortDescriptors
 
         do {
             repeat {
@@ -238,7 +410,7 @@ final class CloudKitService {
             case .notAuthenticated:
                 return .iCloudUnavailable
             case .invalidArguments:
-                return .cloudKit("iCloud indexes are missing. In CloudKit Console, mark teamId, startDate, and loggedAt as Queryable, then pull to refresh.")
+                return .cloudKit("iCloud indexes are missing. In CloudKit Console, mark teamId, startDate, and loggedAt as Queryable (BeerPhoto.loggedAt also Sortable), then pull to refresh.")
             default:
                 return .cloudKit("We couldn't update the crew board. Pull to refresh and try again.")
             }

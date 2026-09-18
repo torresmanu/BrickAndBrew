@@ -70,6 +70,7 @@ targets:
         UILaunchScreen: {}
         CFBundleDisplayName: "Brick & Brew"
         ITSAppUsesNonExemptEncryption: false
+        NSCameraUsageDescription: "Brick & Brew uses the camera so you can snap a photo of a pint for the crew board."
         STRAVA_CLIENT_ID: "280004"
         STRAVA_OAUTH_WORKER_URL: "https://brickandbrew-strava.brickandbrew.workers.dev"
         CFBundleURLTypes:

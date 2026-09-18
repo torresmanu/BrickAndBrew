@@ -32,6 +32,10 @@ enum Formatters {
         count == 1 ? "1 beer" : "\(count) beers"
     }
 
+    static func streakDays(_ count: Int) -> String {
+        count == 1 ? "1 day" : "\(count) days"
+    }
+
     /// Whole numbers stay compact; fractions keep one decimal for the scoring guide.
     static func compactNumber(_ value: Double) -> String {
         if value == value.rounded() {

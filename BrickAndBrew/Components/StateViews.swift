@@ -18,16 +18,30 @@ struct LoadingView: View {
     }
 }
 
-struct EmptyStateView: View {
+struct EmptyStateView<Icon: View>: View {
     let title: String
     let message: String
-    var systemImage: String = "tray"
+    var icon: Icon
     var actionTitle: String?
     var action: (() -> Void)?
 
+    init(
+        title: String,
+        message: String,
+        icon: Icon,
+        actionTitle: String? = nil,
+        action: (() -> Void)? = nil
+    ) {
+        self.title = title
+        self.message = message
+        self.icon = icon
+        self.actionTitle = actionTitle
+        self.action = action
+    }
+
     var body: some View {
         VStack(spacing: Spacing.md) {
-            Image(systemName: systemImage)
+            icon
                 .font(.system(size: 36, weight: .semibold))
                 .foregroundStyle(Palette.amber)
             Text(title)
@@ -45,6 +59,24 @@ struct EmptyStateView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+}
+
+extension EmptyStateView where Icon == Image {
+    init(
+        title: String,
+        message: String,
+        systemImage: String = "tray",
+        actionTitle: String? = nil,
+        action: (() -> Void)? = nil
+    ) {
+        self.init(
+            title: title,
+            message: message,
+            icon: Image(systemName: systemImage),
+            actionTitle: actionTitle,
+            action: action
+        )
     }
 }
 

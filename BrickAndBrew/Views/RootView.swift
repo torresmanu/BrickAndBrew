@@ -59,20 +59,40 @@ struct RootView: View {
 }
 
 struct MainTabView: View {
+    @Environment(AppSession.self) private var session
+    @Environment(\.scenePhase) private var scenePhase
+
     var body: some View {
-        TabView {
-            Tab("Crew", systemImage: "trophy") {
+        @Bindable var session = session
+        TabView(selection: $session.selectedTab) {
+            Tab("Crew", systemImage: "trophy", value: AppTab.crew) {
                 CrewView()
             }
-            Tab("Log", systemImage: "mug.fill") {
+            Tab(value: AppTab.log) {
                 LogBeerView()
+            } label: {
+                Label {
+                    Text("Log")
+                } icon: {
+                    Image(uiImage: PintSymbol.tabBarImage)
+                        .renderingMode(.original)
+                }
             }
-            Tab("Me", systemImage: "person.crop.circle") {
+            Tab("Me", systemImage: "person.crop.circle", value: AppTab.me) {
                 MeView()
             }
         }
         .tint(Palette.amber)
         .toolbarBackground(Palette.background, for: .tabBar)
         .toolbarBackground(.visible, for: .tabBar)
+        .onChange(of: scenePhase) { _, phase in
+            guard phase == .active else { return }
+            Task {
+                await session.refreshPintReminderFromCloud()
+            }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .openLogTab)) { _ in
+            session.selectedTab = .log
+        }
     }
 }

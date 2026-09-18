@@ -7,6 +7,7 @@ enum CloudKitKey {
         static let profile = "Profile"
         static let activity = "Activity"
         static let beer = "Beer"
+        static let beerPhoto = "BeerPhoto"
     }
 
     enum Team {
@@ -21,6 +22,7 @@ enum CloudKitKey {
         static let teamId = "teamId"
         static let stravaAthleteId = "stravaAthleteId"
         static let stravaAthleteName = "stravaAthleteName"
+        static let avatar = "avatar"
     }
 
     enum Activity {
@@ -43,5 +45,15 @@ enum CloudKitKey {
         static let count = "count"
         static let loggedAt = "loggedAt"
         static let note = "note"
+    }
+
+    enum BeerPhoto {
+        static let beerId = "beerId"
+        static let userId = "userId"
+        static let teamId = "teamId"
+        static let count = "count"
+        static let loggedAt = "loggedAt"
+        static let note = "note"
+        static let photo = "photo"
     }
 }

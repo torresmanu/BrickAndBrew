@@ -1,4 +1,5 @@
 import SwiftUI
+import UserNotifications
 
 @main
 struct BrickAndBrewApp: App {
@@ -6,6 +7,9 @@ struct BrickAndBrewApp: App {
 
     init() {
         BrandChrome.apply()
+        if LaunchEnvironment.isRunningUnitTests == false {
+            UNUserNotificationCenter.current().delegate = PintReminderCenterDelegate.shared
+        }
     }
 
     var body: some Scene {

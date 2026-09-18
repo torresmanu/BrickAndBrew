@@ -1,4 +1,8 @@
 import SwiftUI
+import UIKit
+
+/// Architectural B-monogram from Brand Labs Finalist B (Figma node 35:821).
+/// Drawn on the 320-unit grid so padding and bowl radii stay faithful at every size.
 
 /// Architectural B-monogram from Brand Labs Finalist B (Figma node 35:821).
 /// Drawn on the 320-unit grid so padding and bowl radii stay faithful at every size.
@@ -57,5 +61,51 @@ struct BrandMark: View {
         BrandMonogram()
             .aspectRatio(1, contentMode: .fit)
             .accessibilityLabel("Brick & Brew")
+    }
+}
+
+/// Beer mug emoji. Apple has no pint SF Symbol; mug.fill is a coffee cup.
+struct PintSymbol: View {
+    var body: some View {
+        Text("🍺")
+            .accessibilityHidden(true)
+    }
+}
+
+extension PintSymbol {
+    /// Tab bars flatten icons to template glyphs. Original rendering keeps the emoji in color.
+    static let tabBarImage: UIImage = renderBeerEmoji(pointSize: 25)
+
+    private static func renderBeerEmoji(pointSize: CGFloat) -> UIImage {
+        let emoji = "🍺" as NSString
+        let font = UIFont.systemFont(ofSize: pointSize)
+        let attributes: [NSAttributedString.Key: Any] = [.font: font]
+        let textSize = emoji.size(withAttributes: attributes)
+        let side = ceil(max(textSize.width, textSize.height)) + 2
+        let size = CGSize(width: side, height: side)
+        let format = UIGraphicsImageRendererFormat()
+        format.opaque = false
+        let image = UIGraphicsImageRenderer(size: size, format: format).image { _ in
+            let origin = CGPoint(
+                x: (side - textSize.width) / 2,
+                y: (side - textSize.height) / 2
+            )
+            emoji.draw(at: origin, withAttributes: attributes)
+        }
+        return image.withRenderingMode(.alwaysOriginal)
+    }
+}
+
+extension StreakKind {
+    @ViewBuilder
+    var icon: some View {
+        switch self {
+        case .pint:
+            PintSymbol()
+        case .brick:
+            Image(systemName: "figure.run")
+        case .brickAndBrew:
+            Image(systemName: "flag.checkered")
+        }
     }
 }

@@ -11,6 +11,12 @@ enum SessionPhase: Equatable {
     case iCloudUnavailable
 }
 
+enum AppTab: Hashable {
+    case crew
+    case log
+    case me
+}
+
 @MainActor
 @Observable
 final class AppSession {
@@ -20,10 +26,21 @@ final class AppSession {
     var suggestedName = ""
     var isBusy = false
     var bannerMessage: String?
+    var selectedTab: AppTab = .crew
 
     let auth = AuthService()
-    let cloudKit = CloudKitService()
+    let avatars: AvatarCache
+    let beerPhotos: BeerPhotoCache
+    let cloudKit: CloudKitService
     let strava = StravaService()
+
+    init() {
+        let avatarCache = AvatarCache()
+        let photoCache = BeerPhotoCache()
+        avatars = avatarCache
+        beerPhotos = photoCache
+        cloudKit = CloudKitService(avatars: avatarCache, beerPhotos: photoCache)
+    }
 
     func bootstrap() async {
         if LaunchEnvironment.isRunningUnitTests {
@@ -92,13 +109,9 @@ final class AppSession {
     func saveDisplayName(_ rawName: String) async {
         isBusy = true
         defer { isBusy = false }
-        let name = rawName.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard name.isEmpty == false else {
-            bannerMessage = BrickError.missingDisplayName.localizedDescription
-            return
-        }
 
         do {
+            let name = try DisplayName.validated(rawName)
             guard let userId = try auth.storedAppleUserId() else {
                 throw BrickError.notSignedIn
             }
@@ -116,6 +129,15 @@ final class AppSession {
         } catch {
             bannerMessage = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
         }
+    }
+
+    /// Updates the name on an existing profile without changing onboarding phase.
+    func updateDisplayName(_ rawName: String) async throws {
+        let name = try DisplayName.validated(rawName)
+        guard var current = profile else { throw BrickError.missingProfile }
+        if current.displayName == name { return }
+        current.displayName = name
+        profile = try await cloudKit.saveProfile(current)
     }
 
     func joinCrew(inviteCode rawCode: String) async {
@@ -199,14 +221,45 @@ final class AppSession {
         return mapped.count
     }
 
+    func saveProfileAvatar(jpegData: Data) async throws {
+        guard let current = profile else { throw BrickError.missingProfile }
+        profile = try await cloudKit.saveProfileAvatar(current, jpegData: jpegData)
+    }
+
+    func removeProfileAvatar() async throws {
+        guard let current = profile else { throw BrickError.missingProfile }
+        profile = try await cloudKit.removeProfileAvatar(current)
+    }
+
     func signOut() {
+        PintReminderScheduler.cancel()
         try? auth.signOut()
         CrewCache.clear()
         SyncCursor.clear()
+        avatars.removeAll()
+        beerPhotos.removeAll()
         profile = nil
         team = nil
         suggestedName = ""
+        selectedTab = .crew
         phase = .needsAppleSignIn
+    }
+
+    /// Recomputes the pint ping from CloudKit. Fetch failure leaves a pending request in place.
+    func refreshPintReminderFromCloud() async {
+        guard PintReminderSettings.isEnabled else { return }
+        guard let profile, let team else { return }
+        do {
+            let beers = try await cloudKit.fetchBeers(userId: profile.id, teamId: team.id)
+            let pint = StreakCalculator.summarize(
+                activities: [],
+                beers: beers,
+                seasonStart: team.seasonStart
+            ).pint
+            await PintReminderScheduler.refresh(pint: pint)
+        } catch {
+            return
+        }
     }
 
     /// Deletes CloudKit data for this user, then clears the local session.

@@ -8,6 +8,7 @@ struct Profile: Identifiable, Sendable, Hashable {
     var teamId: String
     var stravaAthleteId: Int64?
     var stravaAthleteName: String?
+    var hasAvatar: Bool = false
 
     var isStravaConnected: Bool {
         stravaAthleteId != nil
@@ -45,10 +46,12 @@ extension Profile {
             stravaAthleteId = nil
         }
         stravaAthleteName = record[CloudKitKey.Profile.stravaAthleteName] as? String
+        hasAvatar = record[CloudKitKey.Profile.avatar] is CKAsset
     }
 
-    func makeRecord() -> CKRecord {
-        let record = CKRecord(recordType: CloudKitKey.RecordType.profile, recordID: recordID)
+    /// Writes name, crew, and Strava fields only. Never touches `avatar` so a
+    /// later save cannot wipe the photo when joining a crew or connecting Strava.
+    func writeScalarFields(to record: CKRecord) {
         record[CloudKitKey.Profile.appleUserId] = appleUserId as CKRecordValue
         record[CloudKitKey.Profile.displayName] = displayName as CKRecordValue
         record[CloudKitKey.Profile.teamId] = teamId as CKRecordValue
@@ -62,6 +65,5 @@ extension Profile {
         } else {
             record[CloudKitKey.Profile.stravaAthleteName] = nil
         }
-        return record
     }
 }

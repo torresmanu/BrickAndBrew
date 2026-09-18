@@ -6,6 +6,7 @@ enum BrickError: LocalizedError, Equatable {
     case appleSignInCancelled
     case appleSignInFailed
     case missingDisplayName
+    case displayNameTooLong
     case invalidInviteCode
     case missingStravaConfiguration
     case stravaDenied
@@ -15,6 +16,8 @@ enum BrickError: LocalizedError, Equatable {
     case keychain
     case missingProfile
     case accountDeletionFailed
+    case cameraUnavailable
+    case cameraDenied
 
     var errorDescription: String? {
         switch self {
@@ -28,6 +31,8 @@ enum BrickError: LocalizedError, Equatable {
             "Apple couldn't complete sign in. Use a physical iPhone signed into iCloud, then try again."
         case .missingDisplayName:
             "Pick a name your teammates will recognize."
+        case .displayNameTooLong:
+            "Use \(DisplayName.maxLength) characters or fewer."
         case .invalidInviteCode:
             "Use 4–20 letters or numbers for the invite code."
         case .missingStravaConfiguration:
@@ -46,6 +51,10 @@ enum BrickError: LocalizedError, Equatable {
             "We couldn't find your crew profile. Sign in again."
         case .accountDeletionFailed:
             "We couldn't delete your account. Check your connection and iCloud, then try again."
+        case .cameraUnavailable:
+            "Camera isn't available on this device. You can still log the pint without a photo."
+        case .cameraDenied:
+            "Camera access is off. Turn it on in iOS Settings if you want to snap a pint, or log without a photo."
         }
     }
 }

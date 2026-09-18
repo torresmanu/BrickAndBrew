@@ -16,6 +16,17 @@ enum CrewCache {
     static func clear() {
         UserDefaults.standard.removeObject(forKey: key)
     }
+
+    static func updateDisplayName(userId: String, displayName: String) {
+        guard var snapshot = load() else { return }
+        snapshot.entries = snapshot.entries.map { entry in
+            guard entry.userId == userId else { return entry }
+            var next = entry
+            next.displayName = displayName
+            return next
+        }
+        save(snapshot)
+    }
 }
 
 enum SyncCursor {
@@ -31,5 +42,14 @@ enum SyncCursor {
 
     static func clear() {
         UserDefaults.standard.removeObject(forKey: key)
+    }
+}
+
+enum PintReminderSettings {
+    private static let key = "pintReminder.enabled"
+
+    static var isEnabled: Bool {
+        get { UserDefaults.standard.bool(forKey: key) }
+        set { UserDefaults.standard.set(newValue, forKey: key) }
     }
 }

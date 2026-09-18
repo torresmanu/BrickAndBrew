@@ -1,6 +1,6 @@
 # Privacy Policy for Brick & Brew
 
-Last updated: 17 September 2026
+Last updated: 18 September 2026
 
 Brick & Brew is a private crew app for friends training for a triathlon. It is not a public social network.
 
@@ -10,20 +10,20 @@ Brick & Brew is provided by the app developer who invited you to TestFlight. Con
 
 ## Data we collect
 
-- **Account.** Sign in with Apple gives us an opaque user identifier and, if you share it, your name. We store a display name you choose so teammates can recognize you on the leaderboard.
+- **Account.** Sign in with Apple gives us an opaque user identifier and, if you share it, your name. We store a display name you choose, and an optional profile photo, so teammates can recognize you on the leaderboard.
 - **Crew membership.** Invite code and team name so you can share one private board.
 - **Training.** When you connect Strava, we read your activity summaries (sport, start time, distance, moving time, elevation, average and max heart rate). We do not request permission to post to Strava and we do not download heart-rate streams.
-- **Beers.** Counts, timestamps, and optional notes you enter in the app.
+- **Beers.** Counts, timestamps, optional notes, and optional photos you take with the camera. Teammates on your crew can see those photos on the crew board.
 - **Technical.** Tokens needed to talk to Strava are stored in the iOS Keychain on your device. Crew records are stored in Apple CloudKit.
 
 ## Why we collect it
 
-All of the above is used only to sign you in, sync your own training, let you log beers, and show the crew leaderboard. We do not sell data, run ads, or use the data for tracking across other companies' apps or websites.
+All of the above is used only to sign you in, sync your own training, let you log beers, and show the crew leaderboard (including optional profile photos and pint photos). We do not sell data, run ads, or use the data for tracking across other companies' apps or websites.
 
 ## Where it is stored
 
 - Strava access and refresh tokens: on-device Keychain.
-- Profiles, activities, beers, and team records: Apple CloudKit (public database, filtered by your crew's invite code). This is a small private-crew design: teammates in the same crew can read the board. It is not bank-level isolation.
+- Profiles (including optional profile photos), activities, beers (including optional pint photos), and team records: Apple CloudKit (public database, filtered by your crew's invite code). This is a small private-crew design: teammates in the same crew can read the board. It is not bank-level isolation.
 
 The Cloudflare Worker used for Strava OAuth sees a one-time authorization code or a refresh token only to exchange it with Strava. It does not keep a database of athletes.
 
@@ -40,11 +40,13 @@ We do not share your crew board with advertisers.
 
 Disconnect Strava in the Me tab to delete tokens from the Keychain and clear the Strava athlete id on your profile. Sign out removes the local session only.
 
-To delete your account, open the Me tab and choose **Delete account**. That removes your CloudKit profile, activities, and beers from the crew board and signs you out. The crew itself stays for teammates. Deletion is immediate.
+To delete your account, open the Me tab and choose **Delete account**. That removes your CloudKit profile (including your photo), activities, beers, and pint photos from the crew board and signs you out. The crew itself stays for teammates. Deletion is immediate.
 
 ## Your choices
 
 - Skip Strava and only log beers.
+- Skip a profile photo; the board shows your initials.
+- Skip a pint photo; you can still log beers without the camera.
 - Disconnect Strava at any time.
 - Sign out at any time.
 - Delete your account at any time from the Me tab.

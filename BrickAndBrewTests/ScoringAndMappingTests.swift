@@ -96,6 +96,12 @@ struct ScoringTests {
         #expect(Formatters.compactNumber(12) == "12")
         #expect(Formatters.compactNumber(Scoring.trainingPointsCoveredPerBeer / Scoring.runPointsPerKilometer) == "6.7")
     }
+
+    @Test func streakDaysUsesSingularForOne() {
+        #expect(Formatters.streakDays(1) == "1 day")
+        #expect(Formatters.streakDays(12) == "12 days")
+        #expect(Formatters.streakDays(0) == "0 days")
+    }
 }
 
 struct ActivityMappingTests {
@@ -230,6 +236,62 @@ struct LeaderboardBuilderTests {
         let ranked = LeaderboardBuilder.ranked([low, high], board: .beers)
         #expect(ranked.first?.userId == "b")
     }
+
+    @Test func attachesSeasonStreaksToEachEntry() {
+        var gmt = Calendar(identifier: .gregorian)
+        gmt.timeZone = TimeZone(secondsFromGMT: 0)!
+        let now = gmt.date(from: DateComponents(year: 2026, month: 1, day: 9, hour: 12))!
+        let day8 = gmt.date(from: DateComponents(year: 2026, month: 1, day: 8, hour: 12))!
+        let season = gmt.date(from: DateComponents(year: 2026, month: 1, day: 1))!
+        let profile = Profile(
+            id: "p1",
+            appleUserId: "a1",
+            displayName: "Sam",
+            teamId: "t1",
+            stravaAthleteId: nil,
+            stravaAthleteName: nil
+        )
+        let run = Activity(
+            id: "r1",
+            stravaId: 2,
+            userId: "p1",
+            teamId: "t1",
+            type: "Run",
+            sport: .run,
+            startDate: day8,
+            distanceMeters: 5_000,
+            movingTimeSeconds: 1_500,
+            averageHeartrate: nil,
+            maxHeartrate: nil,
+            elevationGain: nil
+        )
+        let pint = Beer(id: "b1", userId: "p1", teamId: "t1", count: 1, loggedAt: day8, note: nil)
+
+        let entries = LeaderboardBuilder.build(
+            profiles: [profile],
+            activities: [run],
+            beers: [pint],
+            seasonStart: season,
+            now: now,
+            calendar: gmt
+        )
+
+        #expect(entries[0].streaks.pint.current == 1)
+        #expect(entries[0].streaks.brick.current == 1)
+        #expect(entries[0].streaks.brickAndBrew.current == 1)
+        #expect(entries[0].streaks.pint.isAtRisk(now: now, calendar: gmt))
+        #expect(entries[0].streaks.brick.isAtRisk(now: now, calendar: gmt))
+        #expect(entries[0].streaks.brickAndBrew.isAtRisk(now: now, calendar: gmt))
+    }
+
+    @Test func decodesLegacySnapshotsWithoutStreaks() throws {
+        let json = """
+        {"userId":"a","displayName":"A","swimMeters":0,"runMeters":0,"rideMeters":0,"beerCount":2}
+        """
+        let entry = try JSONDecoder().decode(LeaderboardEntry.self, from: Data(json.utf8))
+        #expect(entry.beerCount == 2)
+        #expect(entry.streaks == .empty)
+    }
 }
 
 struct InviteCodeTests {
@@ -238,6 +300,26 @@ struct InviteCodeTests {
         #expect(InviteCode.isValid("CREW"))
         #expect(InviteCode.isValid("AB") == false)
         #expect(InviteCode.isValid("CREW-1") == false)
+    }
+}
+
+struct DisplayNameTests {
+    @Test func trimsAndRejectsBlankNames() throws {
+        #expect(DisplayName.normalized("  Alex  ") == "Alex")
+        #expect(throws: BrickError.missingDisplayName) {
+            try DisplayName.validated("   ")
+        }
+    }
+
+    @Test func acceptsARecognizableName() throws {
+        #expect(try DisplayName.validated("  Alex Rivera ") == "Alex Rivera")
+    }
+
+    @Test func rejectsNamesOverTheLimit() {
+        let tooLong = String(repeating: "a", count: DisplayName.maxLength + 1)
+        #expect(throws: BrickError.displayNameTooLong) {
+            try DisplayName.validated(tooLong)
+        }
     }
 }
 
@@ -258,5 +340,339 @@ struct AccountDeletionTests {
     @Test func accountDeletionErrorAsksTheUserToRetry() {
         let message = BrickError.accountDeletionFailed.localizedDescription ?? ""
         #expect(message.contains("couldn't delete your account"))
+    }
+}
+
+struct StreakCalculatorTests {
+    private var gmt: Calendar {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(secondsFromGMT: 0)!
+        return calendar
+    }
+
+    /// Noon UTC on 1-based day-of-month in January 2026, so start-of-day math stays off midnight.
+    private func day(_ day: Int, hour: Int = 12) -> Date {
+        gmt.date(from: DateComponents(year: 2026, month: 1, day: day, hour: hour))!
+    }
+
+    @Test func emptyHistoryIsZero() {
+        let set = StreakCalculator.summarize(
+            activities: [],
+            beers: [],
+            seasonStart: day(1),
+            now: day(10),
+            calendar: gmt
+        )
+        #expect(set == .empty)
+    }
+
+    @Test func sameDayDuplicatesCountOnce() {
+        let beers = [
+            beer(loggedAt: day(8, hour: 11), count: 1),
+            beer(loggedAt: day(8, hour: 22), count: 2)
+        ]
+        let set = StreakCalculator.summarize(
+            activities: [],
+            beers: beers,
+            seasonStart: day(1),
+            now: day(8),
+            calendar: gmt
+        )
+        #expect(set.pint.current == 1)
+        #expect(set.pint.longest == 1)
+    }
+
+    @Test func threeBeersInOneLogStillOnePintDay() {
+        let set = StreakCalculator.summarize(
+            activities: [],
+            beers: [beer(loggedAt: day(8), count: 3)],
+            seasonStart: day(1),
+            now: day(8),
+            calendar: gmt
+        )
+        #expect(set.pint.current == 1)
+    }
+
+    @Test func yesterdayKeepsTheStreakAliveAndAtRisk() {
+        let set = StreakCalculator.summarize(
+            activities: [],
+            beers: [beer(loggedAt: day(7)), beer(loggedAt: day(8))],
+            seasonStart: day(1),
+            now: day(9),
+            calendar: gmt
+        )
+        #expect(set.pint.current == 2)
+        #expect(set.pint.longest == 2)
+        #expect(set.pint.isAtRisk(now: day(9), calendar: gmt))
+    }
+
+    @Test func todayLocksTheStreakIn() {
+        let set = StreakCalculator.summarize(
+            activities: [],
+            beers: [beer(loggedAt: day(7)), beer(loggedAt: day(8)), beer(loggedAt: day(9))],
+            seasonStart: day(1),
+            now: day(9),
+            calendar: gmt
+        )
+        #expect(set.pint.current == 3)
+        #expect(set.pint.isAtRisk(now: day(9), calendar: gmt) == false)
+    }
+
+    @Test func twoDayGapResetsCurrentButKeepsLongest() {
+        let beers = [beer(loggedAt: day(3)), beer(loggedAt: day(4)), beer(loggedAt: day(5)), beer(loggedAt: day(8))]
+        let set = StreakCalculator.summarize(
+            activities: [],
+            beers: beers,
+            seasonStart: day(1),
+            now: day(8),
+            calendar: gmt
+        )
+        #expect(set.pint.current == 1)
+        #expect(set.pint.longest == 3)
+        #expect(set.pint.isAtRisk(now: day(8), calendar: gmt) == false)
+    }
+
+    @Test func seasonStartCutsHistory() {
+        let beers = [beer(loggedAt: day(2)), beer(loggedAt: day(3)), beer(loggedAt: day(8))]
+        let set = StreakCalculator.summarize(
+            activities: [],
+            beers: beers,
+            seasonStart: day(7),
+            now: day(8),
+            calendar: gmt
+        )
+        #expect(set.pint.current == 1)
+        #expect(set.pint.longest == 1)
+    }
+
+    @Test func otherSportDoesNotCountAsBrick() {
+        let walk = activity(sport: .other, start: day(8), meters: 8_000, moving: 3_600)
+        let set = StreakCalculator.summarize(
+            activities: [walk],
+            beers: [],
+            seasonStart: day(1),
+            now: day(8),
+            calendar: gmt
+        )
+        #expect(set.brick.current == 0)
+    }
+
+    @Test func shortRunBelowDistanceAndTimeFloorsDoesNotCount() {
+        let jog = activity(sport: .run, start: day(8), meters: 500, moving: 5 * 60)
+        let set = StreakCalculator.summarize(
+            activities: [jog],
+            beers: [],
+            seasonStart: day(1),
+            now: day(8),
+            calendar: gmt
+        )
+        #expect(set.brick.current == 0)
+    }
+
+    @Test func shortRunStillCountsWhenItTakesTime() {
+        let jog = activity(sport: .run, start: day(8), meters: 500, moving: 12 * 60)
+        let set = StreakCalculator.summarize(
+            activities: [jog],
+            beers: [],
+            seasonStart: day(1),
+            now: day(8),
+            calendar: gmt
+        )
+        #expect(set.brick.current == 1)
+    }
+
+    @Test func distanceFloorCountsEvenWhenTheWatchIsFast() {
+        let swim = activity(sport: .swim, start: day(8), meters: 200, moving: 4 * 60)
+        let set = StreakCalculator.summarize(
+            activities: [swim],
+            beers: [],
+            seasonStart: day(1),
+            now: day(8),
+            calendar: gmt
+        )
+        #expect(set.brick.current == 1)
+    }
+
+    @Test func comboNeedsTrainingAndAPintOnTheSameDay() {
+        let run = activity(sport: .run, start: day(8), meters: 5_000, moving: 1_500)
+        let set = StreakCalculator.summarize(
+            activities: [run],
+            beers: [beer(loggedAt: day(8, hour: 20))],
+            seasonStart: day(1),
+            now: day(8),
+            calendar: gmt
+        )
+        #expect(set.pint.current == 1)
+        #expect(set.brick.current == 1)
+        #expect(set.brickAndBrew.current == 1)
+    }
+
+    @Test func comboDoesNotFormWhenThePintIsADifferentDay() {
+        let run = activity(sport: .run, start: day(8), meters: 5_000, moving: 1_500)
+        let set = StreakCalculator.summarize(
+            activities: [run],
+            beers: [beer(loggedAt: day(7))],
+            seasonStart: day(1),
+            now: day(8),
+            calendar: gmt
+        )
+        #expect(set.brickAndBrew.current == 0)
+        #expect(set.pint.isAtRisk(now: day(8), calendar: gmt))
+    }
+
+    @Test func midnightSplitsPintDays() {
+        let late = beer(loggedAt: day(8, hour: 23))
+        let early = beer(loggedAt: day(9, hour: 0))
+        let set = StreakCalculator.summarize(
+            activities: [],
+            beers: [late, early],
+            seasonStart: day(1),
+            now: day(9, hour: 1),
+            calendar: gmt
+        )
+        #expect(set.pint.current == 2)
+        #expect(calendarDaysApart(set.pint.lastQualifyingDay, day(9)) == true)
+    }
+
+    @Test func olderThanYesterdayBreaksCurrent() {
+        let set = StreakCalculator.summarize(
+            activities: [],
+            beers: [beer(loggedAt: day(5)), beer(loggedAt: day(6))],
+            seasonStart: day(1),
+            now: day(9),
+            calendar: gmt
+        )
+        #expect(set.pint.current == 0)
+        #expect(set.pint.longest == 2)
+        #expect(set.pint.isAtRisk(now: day(9), calendar: gmt) == false)
+    }
+
+    @Test func boardPicksTheStreakKindForTheBadge() {
+        #expect(LeaderboardBoard.overall.streakKind == .brickAndBrew)
+        #expect(LeaderboardBoard.beers.streakKind == .pint)
+        #expect(LeaderboardBoard.swim.streakKind == .brick)
+        #expect(LeaderboardBoard.run.streakKind == .brick)
+        #expect(LeaderboardBoard.ride.streakKind == .brick)
+    }
+
+    private func calendarDaysApart(_ last: Date?, _ expected: Date) -> Bool {
+        guard let last else { return false }
+        return gmt.isDate(last, inSameDayAs: expected)
+    }
+
+    private func beer(loggedAt: Date, count: Int = 1) -> Beer {
+        Beer(id: UUID().uuidString, userId: "p1", teamId: "t1", count: count, loggedAt: loggedAt, note: nil)
+    }
+
+    private func activity(sport: SportKind, start: Date, meters: Double, moving: Int) -> Activity {
+        Activity(
+            id: UUID().uuidString,
+            stravaId: Int64(meters),
+            userId: "p1",
+            teamId: "t1",
+            type: sport.rawValue,
+            sport: sport,
+            startDate: start,
+            distanceMeters: meters,
+            movingTimeSeconds: moving,
+            averageHeartrate: nil,
+            maxHeartrate: nil,
+            elevationGain: nil
+        )
+    }
+}
+
+struct PintReminderPlannerTests {
+    private var gmt: Calendar {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(secondsFromGMT: 0)!
+        return calendar
+    }
+
+    @Test func disabledNeverFires() {
+        let fire = PintReminderPlanner.nextFire(
+            streak: atRiskStreak(now: day(9, hour: 15)),
+            now: day(9, hour: 15),
+            calendar: gmt,
+            enabled: false
+        )
+        #expect(fire == nil)
+    }
+
+    @Test func zeroStreakNeverFires() {
+        let fire = PintReminderPlanner.nextFire(
+            streak: .empty,
+            now: day(9, hour: 15),
+            calendar: gmt,
+            enabled: true
+        )
+        #expect(fire == nil)
+    }
+
+    @Test func atRiskBeforeSevenSchedulesToday() throws {
+        let now = day(9, hour: 15)
+        let fire = try #require(
+            PintReminderPlanner.nextFire(
+                streak: atRiskStreak(now: now),
+                now: now,
+                calendar: gmt,
+                enabled: true
+            )
+        )
+        #expect(gmt.component(.hour, from: fire) == 19)
+        #expect(gmt.isDate(fire, inSameDayAs: now))
+    }
+
+    @Test func atRiskAfterSevenDoesNotFireLate() {
+        let now = day(9, hour: 20)
+        let fire = PintReminderPlanner.nextFire(
+            streak: atRiskStreak(now: now),
+            now: now,
+            calendar: gmt,
+            enabled: true
+        )
+        #expect(fire == nil)
+    }
+
+    @Test func loggedTodaySchedulesTomorrow() throws {
+        let now = day(9, hour: 15)
+        let fire = try #require(
+            PintReminderPlanner.nextFire(
+                streak: lockedInStreak(now: now),
+                now: now,
+                calendar: gmt,
+                enabled: true
+            )
+        )
+        let tomorrow = gmt.date(byAdding: .day, value: 1, to: gmt.startOfDay(for: now))!
+        #expect(gmt.isDate(fire, inSameDayAs: tomorrow))
+        #expect(gmt.component(.hour, from: fire) == 19)
+    }
+
+    @Test func midnightStillUsesStartOfDayForAtRisk() throws {
+        let now = day(9, hour: 0)
+        let fire = try #require(
+            PintReminderPlanner.nextFire(
+                streak: atRiskStreak(now: now),
+                now: now,
+                calendar: gmt,
+                enabled: true
+            )
+        )
+        #expect(gmt.isDate(fire, inSameDayAs: now))
+        #expect(gmt.component(.hour, from: fire) == 19)
+    }
+
+    private func day(_ day: Int, hour: Int) -> Date {
+        gmt.date(from: DateComponents(year: 2026, month: 1, day: day, hour: hour))!
+    }
+
+    private func atRiskStreak(now: Date) -> Streak {
+        let yesterday = gmt.date(byAdding: .day, value: -1, to: gmt.startOfDay(for: now))!
+        return Streak(current: 2, longest: 2, lastQualifyingDay: yesterday)
+    }
+
+    private func lockedInStreak(now: Date) -> Streak {
+        Streak(current: 3, longest: 3, lastQualifyingDay: now)
     }
 }

@@ -13,6 +13,7 @@ struct ScoringGuideView: View {
                     coverageCard
                     taxCard
                     boardsCard
+                    streaksCard
                 }
                 .padding(Spacing.md)
                 .padding(.bottom, Spacing.lg)
@@ -53,7 +54,9 @@ struct ScoringGuideView: View {
     }
 
     private var coverageCard: some View {
-        GuideCard(title: "Pints cover bricks", systemImage: "mug.fill") {
+        GuideCard(title: "Pints cover bricks") {
+            PintSymbol()
+        } content: {
             Text(coverageCopy)
                 .font(Typography.body)
                 .foregroundStyle(Palette.cream)
@@ -79,6 +82,17 @@ struct ScoringGuideView: View {
         }
     }
 
+    private var streaksCard: some View {
+        GuideCard(title: "Streaks") {
+            PintSymbol()
+        } content: {
+            Text(streaksCopy)
+                .font(Typography.body)
+                .foregroundStyle(Palette.cream)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+    }
+
     private var coverageCopy: String {
         let covered = Formatters.compactNumber(Scoring.trainingPointsCoveredPerBeer)
         let swimKm = Formatters.compactNumber(Scoring.trainingPointsCoveredPerBeer / Scoring.swimPointsPerKilometer)
@@ -89,6 +103,10 @@ struct ScoringGuideView: View {
 
     private var taxCopy: String {
         "Training past that coverage is removed from the Index, then taxed another \(Scoring.uncoveredTrainingPenaltyPercent)%. Skip the pint and the number can go negative."
+    }
+
+    private var streaksCopy: String {
+        "Pint is consecutive days with a logged beer. Brick is a scored swim, bike, or run that actually happened — not a 90-second GPS hiccup. Brick & Brew is both on the same calendar day. Yesterday still counts; the day before does not. Streaks don't score Index points. They just look good at the bar. \(StreakCopy.brickSyncLag)"
     }
 
     private func close() {
@@ -132,24 +150,34 @@ private extension ScoringGuideView {
     ]
 }
 
-private struct GuideCard<Content: View>: View {
+private struct GuideCard<Content: View, Icon: View>: View {
     let title: String
-    let systemImage: String
+    let icon: Icon
     let content: Content
 
-    init(title: String, systemImage: String, @ViewBuilder content: () -> Content) {
+    init(title: String, systemImage: String, @ViewBuilder content: () -> Content) where Icon == Image {
         self.title = title
-        self.systemImage = systemImage
+        self.icon = Image(systemName: systemImage)
+        self.content = content()
+    }
+
+    init(title: String, @ViewBuilder icon: () -> Icon, @ViewBuilder content: () -> Content) {
+        self.title = title
+        self.icon = icon()
         self.content = content()
     }
 
     var body: some View {
         VStack(alignment: .leading, spacing: Spacing.sm) {
-            Label(title, systemImage: systemImage)
-                .font(Typography.caption)
-                .fontWeight(.semibold)
-                .foregroundStyle(Palette.muted)
-                .symbolRenderingMode(.hierarchical)
+            Label {
+                Text(title)
+            } icon: {
+                icon
+            }
+            .font(Typography.caption)
+            .fontWeight(.semibold)
+            .foregroundStyle(Palette.muted)
+            .symbolRenderingMode(.hierarchical)
             content
         }
         .padding(Spacing.md)

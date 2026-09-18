@@ -45,9 +45,10 @@ After the first run on a signed-in device, open [CloudKit Dashboard](https://icl
 - `Profile`: `appleUserId`, `teamId`
 - `Activity`: `teamId`, `userId`, `startDate`
 - `Beer`: `teamId`, `userId`, `loggedAt`
+- `BeerPhoto`: `teamId`, `userId`, `beerId`, `loggedAt` (also mark `loggedAt` **Sortable**)
 - `Team`: `inviteCode`
 
-Record types: `Team`, `Profile`, `Activity`, `Beer`.
+Record types: `Team`, `Profile`, `Activity`, `Beer`, `BeerPhoto`. `Profile.avatar` and `BeerPhoto.photo` are optional Assets (not queryable). They appear after the first photo save. Scoring queries never download `BeerPhoto`.
 
 ### 3. Strava API application
 
@@ -118,7 +119,7 @@ xcodebuild -scheme BrickAndBrew -destination 'platform=iOS Simulator,name=iPhone
 - [ ] Sign in with Apple enabled on the App ID
 - [ ] `STRAVA_CLIENT_ID` and `STRAVA_OAUTH_WORKER_URL` are real values, not placeholders
 - [ ] Worker secrets set; `/token` smoke-tested
-- [ ] Privacy policy live; App Privacy filled in App Store Connect (fitness, health/heart rate from Strava, name, user id — not used for tracking)
+- [ ] Privacy policy live; App Privacy filled in App Store Connect (fitness, health/heart rate from Strava, name, user id, photos/camera — not used for tracking)
 - [ ] Export compliance: `ITSAppUsesNonExemptEncryption` is already `false`
 - [ ] Archive → Distribute App → TestFlight
 - [ ] External testers: add review notes that login is Sign in with Apple, Strava is optional, and beers are logged in-app
@@ -126,4 +127,4 @@ xcodebuild -scheme BrickAndBrew -destination 'platform=iOS Simulator,name=iPhone
 
 ## What v1 does not include
 
-Push notifications, beer photos, multiple crews, Android, HealthKit, Strava webhooks, chat.
+Push notifications, multiple crews, Android, HealthKit, Strava webhooks, chat.

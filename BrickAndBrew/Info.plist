@@ -35,6 +35,8 @@
 	<string>1</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>NSCameraUsageDescription</key>
+	<string>Brick &amp; Brew uses the camera so you can snap a photo of a pint for the crew board.</string>
 	<key>STRAVA_CLIENT_ID</key>
 	<string>280004</string>
 	<key>STRAVA_OAUTH_WORKER_URL</key>
