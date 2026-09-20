@@ -48,9 +48,16 @@ struct CrewView: View {
     }
 }
 
+private struct IndexBreakdownSelection: Identifiable {
+    let entry: LeaderboardEntry
+    let rank: Int
+    var id: String { entry.userId }
+}
+
 private struct CrewLoadedView: View {
     @Environment(AppSession.self) private var session
     @Bindable var viewModel: CrewViewModel
+    @State private var breakdownSelection: IndexBreakdownSelection?
 
     var body: some View {
         VStack(spacing: Spacing.md) {
@@ -66,6 +73,16 @@ private struct CrewLoadedView: View {
         }
         .padding(.top, Spacing.sm)
         .refreshable(action: refresh)
+        .sheet(item: $breakdownSelection, content: breakdownSheet)
+    }
+
+    private func breakdownSheet(_ selection: IndexBreakdownSelection) -> IndexBreakdownView {
+        IndexBreakdownView(
+            rank: selection.rank,
+            entry: selection.entry,
+            isCurrentUser: selection.entry.userId == viewModel.currentUserId,
+            avatars: session.avatars
+        )
     }
 
     private var boardPicker: some View {
@@ -131,7 +148,8 @@ private struct CrewLoadedView: View {
                     entry: entry,
                     board: viewModel.board,
                     isCurrentUser: entry.userId == viewModel.currentUserId,
-                    avatars: session.avatars
+                    avatars: session.avatars,
+                    onSelect: indexRowAction
                 )
                 .listRowInsets(listInsets)
                 .listRowBackground(Color.clear)
@@ -184,6 +202,11 @@ private struct CrewLoadedView: View {
         EdgeInsets(top: 6, leading: Spacing.md, bottom: 6, trailing: Spacing.md)
     }
 
+    /// Only the Index board reveals the pub-rule math. Sport boards stay volume-only.
+    private var indexRowAction: ((LeaderboardEntry, Int) -> Void)? {
+        viewModel.board == .overall ? showBreakdown : nil
+    }
+
     private func retry() {
         Task {
             await viewModel.retry()
@@ -198,6 +221,11 @@ private struct CrewLoadedView: View {
 
     private func refresh() async {
         await viewModel.load(forceSync: true)
+    }
+
+    private func showBreakdown(_ entry: LeaderboardEntry, rank: Int) {
+        Haptics.light()
+        breakdownSelection = IndexBreakdownSelection(entry: entry, rank: rank)
     }
 }
 

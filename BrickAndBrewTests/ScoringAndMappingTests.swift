@@ -97,6 +97,18 @@ struct ScoringTests {
         #expect(Formatters.compactNumber(Scoring.trainingPointsCoveredPerBeer / Scoring.runPointsPerKilometer) == "6.7")
     }
 
+    @Test func signedPointsMarksCreditsAndPenalties() {
+        #expect(Formatters.signedPoints(50) == "+50 pts")
+        #expect(Formatters.signedPoints(-2.5) == "-2.5 pts")
+        #expect(Formatters.signedPoints(0) == "0 pts")
+    }
+
+    @Test func uncoveredTrainingHelpersMatchThePubRule() {
+        #expect(Scoring.uncoveredTrainingPoints(trainingPoints: 50, beerCount: 2) == 10)
+        #expect(Scoring.uncoveredTrainingPenalty(trainingPoints: 50, beerCount: 2) == 2.5)
+        #expect(Scoring.grindTax(trainingPoints: 50, beerCount: 2) == 12.5)
+    }
+
     @Test func streakDaysUsesSingularForOne() {
         #expect(Formatters.streakDays(1) == "1 day")
         #expect(Formatters.streakDays(12) == "12 days")
@@ -291,6 +303,125 @@ struct LeaderboardBuilderTests {
         let entry = try JSONDecoder().decode(LeaderboardEntry.self, from: Data(json.utf8))
         #expect(entry.beerCount == 2)
         #expect(entry.streaks == .empty)
+    }
+}
+
+struct IndexBreakdownTests {
+    @Test func bikeAndBeersSplitCreditsFromTheGrindTax() {
+        let entry = LeaderboardEntry(
+            userId: "1",
+            displayName: "Alex",
+            swimMeters: 0,
+            runMeters: 0,
+            rideMeters: 50_000,
+            beerCount: 2
+        )
+        let breakdown = IndexBreakdown(entry: entry, isCurrentUser: true)
+
+        #expect(breakdown.total == 61.5)
+        #expect(breakdown.lines.map(\.kind) == [.ride, .beers, .uncovered, .grindTax])
+        #expect(breakdown.lines.map(\.points) == [50, 24, -10, -2.5])
+        #expect(breakdown.lines.map(\.points).reduce(0.0, +) == breakdown.total)
+        #expect(breakdown.explanation.contains("50 pts because of your bike"))
+        #expect(breakdown.explanation.contains("24 pts because of your 2 beers"))
+        #expect(breakdown.explanation.contains("you had a grind tax of -2.5 pts"))
+        #expect(breakdown.explanation.contains("10 training pts weren't covered"))
+        #expect(breakdown.headline == "Your Index is 61.5 pts")
+        #expect(breakdown.taxNote != nil)
+    }
+
+    @Test func otherCrewMembersDoNotReadAsYour() {
+        let entry = LeaderboardEntry(
+            userId: "2",
+            displayName: "Sam",
+            swimMeters: 0,
+            runMeters: 0,
+            rideMeters: 50_000,
+            beerCount: 2
+        )
+        let breakdown = IndexBreakdown(entry: entry, isCurrentUser: false)
+        #expect(breakdown.headline == "Sam's Index is 61.5 pts")
+        #expect(breakdown.explanation.contains("Sam's bike"))
+        #expect(breakdown.explanation.contains("Sam had a grind tax"))
+        #expect(breakdown.explanation.contains("your") == false)
+    }
+
+    @Test func coveredTrainingOmitsTaxRows() {
+        let entry = LeaderboardEntry(
+            userId: "1",
+            displayName: "Alex",
+            swimMeters: 1_000,
+            runMeters: 1_000,
+            rideMeters: 1_000,
+            beerCount: 2
+        )
+        let breakdown = IndexBreakdown(entry: entry, isCurrentUser: true)
+        #expect(breakdown.total == 38)
+        #expect(breakdown.lines.map(\.kind) == [.swim, .ride, .run, .beers])
+        #expect(breakdown.lines.map(\.points).reduce(0.0, +) == breakdown.total)
+        #expect(breakdown.taxNote == nil)
+        #expect(breakdown.explanation.contains("no grind tax"))
+    }
+
+    @Test func trainingWithoutBeersGoesNegativeAndShowsZeroBeerRow() {
+        let entry = LeaderboardEntry(
+            userId: "1",
+            displayName: "Alex",
+            swimMeters: 10_000,
+            runMeters: 0,
+            rideMeters: 0,
+            beerCount: 0
+        )
+        let breakdown = IndexBreakdown(entry: entry, isCurrentUser: true)
+        #expect(breakdown.total == -25)
+        #expect(breakdown.lines.map(\.kind) == [.swim, .beers, .uncovered, .grindTax])
+        #expect(breakdown.lines.map(\.points) == [100, 0, -100, -25])
+        #expect(breakdown.lines.map(\.points).reduce(0.0, +) == breakdown.total)
+        #expect(breakdown.explanation.contains("because of your swim"))
+        #expect(breakdown.explanation.contains("none of this training is covered by pints"))
+        #expect(breakdown.explanation.contains("0 pts because") == false)
+        #expect(breakdown.taxNote?.contains("No pints") == true)
+    }
+
+    @Test func beersAloneHaveNoTax() {
+        let entry = LeaderboardEntry(
+            userId: "1",
+            displayName: "Alex",
+            swimMeters: 0,
+            runMeters: 0,
+            rideMeters: 0,
+            beerCount: 2
+        )
+        let breakdown = IndexBreakdown(entry: entry, isCurrentUser: true)
+        #expect(breakdown.lines.map(\.kind) == [.beers])
+        #expect(breakdown.total == 24)
+        #expect(breakdown.taxNote == nil)
+        #expect(breakdown.explanation == "24 pts because of your 2 beers.")
+    }
+
+    @Test func emptySeasonUsesFriendlyCopy() {
+        let entry = LeaderboardEntry(
+            userId: "1",
+            displayName: "Alex",
+            swimMeters: 0,
+            runMeters: 0,
+            rideMeters: 0,
+            beerCount: 0
+        )
+        let mine = IndexBreakdown(entry: entry, isCurrentUser: true)
+        let theirs = IndexBreakdown(entry: entry, isCurrentUser: false)
+        #expect(mine.hasVolume == false)
+        #expect(mine.lines.isEmpty)
+        #expect(mine.explanation == "No swim, bike, run, or beers this season yet.")
+        #expect(theirs.explanation == "Alex has no swim, bike, run, or beers this season yet.")
+        #expect(mine.taxNote == nil)
+    }
+
+    @Test func joinedListUsesAndBeforeTheLastItem() {
+        #expect(IndexBreakdown.joined([]) == "")
+        #expect(IndexBreakdown.joined(["a"]) == "a")
+        #expect(IndexBreakdown.joined(["a", "b"]) == "a and b")
+        #expect(IndexBreakdown.joined(["a", "b", "c"]) == "a, b, and c")
     }
 }
 

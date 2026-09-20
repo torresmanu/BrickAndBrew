@@ -6,8 +6,26 @@ struct RankRowView: View {
     let board: LeaderboardBoard
     let isCurrentUser: Bool
     let avatars: AvatarCache
+    /// Index board rows open the point breakdown. Other boards stay static.
+    var onSelect: ((LeaderboardEntry, Int) -> Void)? = nil
 
     var body: some View {
+        if onSelect == nil {
+            rowContent
+        } else {
+            Button(action: selectRow) {
+                rowContent
+            }
+            .buttonStyle(RankRowButtonStyle())
+            .contentShape(RoundedRectangle(cornerRadius: Radius.object, style: .continuous))
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(accessibilityText)
+            .accessibilityHint("Shows how this Index is calculated")
+            .accessibilityAddTraits(.isButton)
+        }
+    }
+
+    private var rowContent: some View {
         HStack(spacing: Spacing.md) {
             Text("\(rank)")
                 .font(.headline.monospacedDigit())
@@ -19,6 +37,8 @@ struct RankRowView: View {
                 userId: entry.userId,
                 displayName: entry.displayName,
                 size: 40,
+                // Nested buttons fight the row tap, so Index rows skip the photo preview.
+                allowsPreview: onSelect == nil,
                 cache: avatars
             )
 
@@ -47,6 +67,13 @@ struct RankRowView: View {
                 .foregroundStyle(Palette.amber)
                 .layoutPriority(1)
                 .accessibilityHidden(true)
+
+            if onSelect != nil {
+                Image(systemName: "chevron.right")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(Palette.muted)
+                    .accessibilityHidden(true)
+            }
         }
         .padding(Spacing.md)
         .background(isCurrentUser ? Palette.surfaceElevated : Palette.surface)
@@ -57,11 +84,22 @@ struct RankRowView: View {
         }
     }
 
+    private func selectRow() {
+        onSelect?(entry, rank)
+    }
+
     private var accessibilityText: String {
         let badge = entry.streaks.streak(for: board)
         if badge.current > 0 {
             return "Rank \(rank), \(entry.displayName), \(entry.detail(for: board)), \(board.streakKind.title) streak \(Formatters.streakDays(badge.current))"
         }
         return "Rank \(rank), \(entry.displayName), \(entry.detail(for: board))"
+    }
+}
+
+private struct RankRowButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .opacity(configuration.isPressed ? 0.82 : 1)
     }
 }

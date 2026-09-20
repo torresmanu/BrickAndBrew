@@ -13,6 +13,17 @@ enum Formatters {
         return String(format: "%.1f pts", value)
     }
 
+    /// Index breakdown rows need an explicit plus or minus so credits and tax don't look the same.
+    static func signedPoints(_ value: Double) -> String {
+        if value > 0 {
+            return "+\(points(value))"
+        }
+        if value < 0 {
+            return "-\(points(abs(value)))"
+        }
+        return points(value)
+    }
+
     static func movingTime(_ seconds: Int) -> String {
         let hours = seconds / 3600
         let minutes = (seconds % 3600) / 60

@@ -31,6 +31,18 @@ struct LeaderboardEntry: Identifiable, Sendable, Codable, Hashable {
         swimPoints + runPoints + ridePoints
     }
 
+    var coveredTrainingPoints: Double {
+        Scoring.coveredTrainingPoints(beerCount: beerCount)
+    }
+
+    var uncoveredTrainingPoints: Double {
+        Scoring.uncoveredTrainingPoints(trainingPoints: trainingLoad, beerCount: beerCount)
+    }
+
+    var uncoveredTrainingPenalty: Double {
+        Scoring.uncoveredTrainingPenalty(trainingPoints: trainingLoad, beerCount: beerCount)
+    }
+
     var grindTax: Double {
         Scoring.grindTax(trainingPoints: trainingLoad, beerCount: beerCount)
     }

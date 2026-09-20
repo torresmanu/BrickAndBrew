@@ -49,10 +49,19 @@ enum Scoring: Sendable {
         Double(max(0, beerCount)) * trainingPointsCoveredPerBeer
     }
 
+    /// Training points past pint coverage. Zero when beers cover the load.
+    static func uncoveredTrainingPoints(trainingPoints: Double, beerCount: Int) -> Double {
+        max(0, trainingPoints - coveredTrainingPoints(beerCount: beerCount))
+    }
+
+    /// Extra 25% hit on uncovered training, on top of stripping that volume.
+    static func uncoveredTrainingPenalty(trainingPoints: Double, beerCount: Int) -> Double {
+        uncoveredTrainingPoints(trainingPoints: trainingPoints, beerCount: beerCount) * uncoveredTrainingPenaltyRate
+    }
+
     /// Uncovered training is removed from the Index, then taxed again.
     static func grindTax(trainingPoints: Double, beerCount: Int) -> Double {
-        let uncovered = max(0, trainingPoints - coveredTrainingPoints(beerCount: beerCount))
-        return uncovered * (1 + uncoveredTrainingPenaltyRate)
+        uncoveredTrainingPoints(trainingPoints: trainingPoints, beerCount: beerCount) * (1 + uncoveredTrainingPenaltyRate)
     }
 
     static func totalIndex(
