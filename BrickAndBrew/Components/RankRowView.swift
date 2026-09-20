@@ -6,13 +6,15 @@ struct RankRowView: View {
     let board: LeaderboardBoard
     let isCurrentUser: Bool
     let avatars: AvatarCache
-    /// Index board rows open the point breakdown. Other boards stay static.
-    var onSelect: ((LeaderboardEntry, Int) -> Void)? = nil
+    @Binding var breakdownSelection: IndexBreakdownSelection?
+
+    /// Index rows open the point breakdown. Sport boards stay volume-only.
+    private var showsBreakdown: Bool {
+        board == .overall
+    }
 
     var body: some View {
-        if onSelect == nil {
-            rowContent
-        } else {
+        if showsBreakdown {
             Button(action: selectRow) {
                 rowContent
             }
@@ -22,6 +24,8 @@ struct RankRowView: View {
             .accessibilityLabel(accessibilityText)
             .accessibilityHint("Shows how this Index is calculated")
             .accessibilityAddTraits(.isButton)
+        } else {
+            rowContent
         }
     }
 
@@ -38,7 +42,7 @@ struct RankRowView: View {
                 displayName: entry.displayName,
                 size: 40,
                 // Nested buttons fight the row tap, so Index rows skip the photo preview.
-                allowsPreview: onSelect == nil,
+                allowsPreview: showsBreakdown == false,
                 cache: avatars
             )
 
@@ -68,7 +72,7 @@ struct RankRowView: View {
                 .layoutPriority(1)
                 .accessibilityHidden(true)
 
-            if onSelect != nil {
+            if showsBreakdown {
                 Image(systemName: "chevron.right")
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(Palette.muted)
@@ -85,7 +89,8 @@ struct RankRowView: View {
     }
 
     private func selectRow() {
-        onSelect?(entry, rank)
+        Haptics.light()
+        breakdownSelection = IndexBreakdownSelection(entry: entry, rank: rank)
     }
 
     private var accessibilityText: String {

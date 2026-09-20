@@ -234,3 +234,10 @@ struct IndexBreakdown: Sendable, Equatable {
         return String(first).uppercased() + text.dropFirst()
     }
 }
+
+/// Payload for the Index breakdown sheet. Rank is frozen at tap time so switching boards cannot rewrite it.
+struct IndexBreakdownSelection: Identifiable, Hashable {
+    let entry: LeaderboardEntry
+    let rank: Int
+    var id: String { entry.userId }
+}
