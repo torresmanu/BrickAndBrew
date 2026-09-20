@@ -7,21 +7,18 @@ struct CrewView: View {
 
     var body: some View {
         NavigationStack {
-            Group {
-                if let viewModel {
-                    CrewLoadedView(viewModel: viewModel)
-                } else {
-                    LoadingView(message: "Loading the crew board…")
+            VStack(spacing: 0) {
+                CrewNavigationHeader(action: showScoringGuide)
+                Group {
+                    if let viewModel {
+                        CrewLoadedView(viewModel: viewModel)
+                    } else {
+                        LoadingView(message: "Loading the crew board…")
+                    }
                 }
             }
             .background(Palette.background.ignoresSafeArea())
-            .navigationTitle("Crew")
-            .toolbarBackground(Palette.background, for: .navigationBar)
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("How points are calculated", systemImage: "info.circle", action: showScoringGuide)
-                }
-            }
+            .toolbar(.hidden, for: .navigationBar)
             .sheet(isPresented: $isScoringGuidePresented) {
                 ScoringGuideView()
             }
@@ -48,16 +45,58 @@ struct CrewView: View {
     }
 }
 
+/// Large italic Crew title on the left, scoring info on the right — one row.
+private struct CrewNavigationHeader: View {
+    let action: () -> Void
+
+    var body: some View {
+        HStack(alignment: .center, spacing: Spacing.sm) {
+            Text("Crew")
+                .font(Typography.navigationLarge)
+                .foregroundStyle(Palette.text)
+                .accessibilityAddTraits(.isHeader)
+            Spacer(minLength: Spacing.sm)
+            ScoringGuideButton(action: action)
+        }
+        .padding(.horizontal, Spacing.md)
+        .padding(.top, Spacing.xs)
+        .padding(.bottom, Spacing.xxs)
+        .background(Palette.background)
+    }
+}
+
+/// Icon-only scoring guide control. Uses system liquid glass on iOS 26, matching toolbar buttons.
+private struct ScoringGuideButton: View {
+    let action: () -> Void
+
+    var body: some View {
+        if #available(iOS 26, *) {
+            iconButton
+                .buttonStyle(.glass)
+                .buttonBorderShape(.circle)
+        } else {
+            iconButton
+        }
+    }
+
+    private var iconButton: some View {
+        Button("How points are calculated", systemImage: "info.circle", action: action)
+            .labelStyle(.iconOnly)
+    }
+}
+
 private struct CrewLoadedView: View {
     @Environment(AppSession.self) private var session
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Bindable var viewModel: CrewViewModel
+    @State private var selectedBreakdown: ScoreBreakdownSelection?
 
     var body: some View {
         VStack(spacing: 0) {
             BoardFilterBar(
                 boards: LeaderboardBoard.allCases,
                 selected: viewModel.board,
-                action: viewModel.selectBoard
+                action: selectBoardFromFilter
             )
             .padding(.top, Spacing.xs)
             .padding(.bottom, Spacing.sm)
@@ -72,13 +111,81 @@ private struct CrewLoadedView: View {
                     .padding(.bottom, Spacing.xs)
             }
 
-            content
+            // Horizontal pages for Index / Swim / Bike / Run / Beers. The filter bar stays pinned.
+            TabView(selection: $viewModel.board) {
+                ForEach(LeaderboardBoard.allCases) { board in
+                    CrewBoardPage(
+                        board: board,
+                        viewModel: viewModel,
+                        onSelectEntry: { entry in showBreakdown(entry, board: board) },
+                        onRetry: retry,
+                        onRetryPintFeed: retryPintFeed,
+                        onRefresh: refresh
+                    )
+                    .tag(board)
+                }
+            }
+            .tabViewStyle(.page(indexDisplayMode: .never))
+            .background(Palette.background)
+            .onChange(of: viewModel.board) { oldBoard, newBoard in
+                guard oldBoard != newBoard else { return }
+                Haptics.light()
+            }
         }
-        .refreshable(action: refresh)
+        .sheet(item: $selectedBreakdown) { selection in
+            ScoreBreakdownView(
+                entry: selection.entry,
+                board: selection.board,
+                isCurrentUser: selection.entry.userId == viewModel.currentUserId,
+                avatars: session.avatars
+            )
+        }
     }
 
-    @ViewBuilder
-    private var content: some View {
+    private func selectBoardFromFilter(_ board: LeaderboardBoard) {
+        guard viewModel.board != board else { return }
+        if reduceMotion {
+            viewModel.selectBoard(board)
+        } else {
+            withAnimation(Motion.sport) {
+                viewModel.selectBoard(board)
+            }
+        }
+    }
+
+    private func retry() {
+        Task {
+            await viewModel.retry()
+        }
+    }
+
+    private func retryPintFeed() {
+        Task {
+            await viewModel.retryPintFeed()
+        }
+    }
+
+    private func refresh() async {
+        await viewModel.load(forceSync: true)
+    }
+
+    private func showBreakdown(_ entry: LeaderboardEntry, board: LeaderboardBoard) {
+        Haptics.light()
+        selectedBreakdown = ScoreBreakdownSelection(entry: entry, board: board)
+    }
+}
+
+/// One crew board page. Ranked independently so a swipe can show the next sport before it settles.
+private struct CrewBoardPage: View {
+    @Environment(AppSession.self) private var session
+    let board: LeaderboardBoard
+    let viewModel: CrewViewModel
+    let onSelectEntry: (LeaderboardEntry) -> Void
+    let onRetry: () -> Void
+    let onRetryPintFeed: () -> Void
+    let onRefresh: () async -> Void
+
+    var body: some View {
         List {
             if case .loaded = viewModel.state, let standing = currentStanding {
                 Section {
@@ -86,7 +193,8 @@ private struct CrewLoadedView: View {
                         name: session.profile?.displayName ?? standing.entry.displayName,
                         rank: standing.rank,
                         entry: standing.entry,
-                        board: viewModel.board
+                        board: board,
+                        action: showCurrentStandingBreakdown
                     )
                     .listRowInsets(headerInsets)
                     .listRowBackground(Color.clear)
@@ -102,17 +210,23 @@ private struct CrewLoadedView: View {
                     .listRowInsets(EdgeInsets(top: Spacing.md, leading: Spacing.md, bottom: Spacing.xs, trailing: Spacing.md))
             }
 
-            Section {
-                pintSection
-            } header: {
-                SectionHeader(title: "Crew pints")
-                    .textCase(nil)
-                    .listRowInsets(EdgeInsets(top: Spacing.lg, leading: Spacing.md, bottom: Spacing.xs, trailing: Spacing.md))
+            if board.showsCrewPints {
+                Section {
+                    pintSection
+                } header: {
+                    SectionHeader(title: "Crew pints")
+                        .textCase(nil)
+                        .listRowInsets(EdgeInsets(top: Spacing.lg, leading: Spacing.md, bottom: Spacing.xs, trailing: Spacing.md))
+                }
             }
         }
         .listStyle(.plain)
         .scrollContentBackground(.hidden)
         .listSectionSeparator(.hidden)
+        .refreshable {
+            await onRefresh()
+        }
+        .accessibilityHint("Swipe left or right to switch boards")
     }
 
     @ViewBuilder
@@ -130,26 +244,27 @@ private struct CrewLoadedView: View {
                 message: "Log a beer or sync Strava to put someone on the board.",
                 systemImage: "trophy",
                 actionTitle: "Refresh",
-                action: retry
+                action: onRetry
             )
             .frame(minHeight: 220)
             .listRowInsets(listInsets)
             .listRowBackground(Color.clear)
             .listRowSeparator(.hidden)
         case .failed(let message):
-            ErrorStateView(message: message, retry: retry)
+            ErrorStateView(message: message, retry: onRetry)
                 .frame(minHeight: 220)
                 .listRowInsets(listInsets)
                 .listRowBackground(Color.clear)
                 .listRowSeparator(.hidden)
         case .loaded:
-            ForEach(Array(viewModel.ranked.enumerated()), id: \.element.id) { index, entry in
+            ForEach(Array(ranked.enumerated()), id: \.element.id) { index, entry in
                 RankRowView(
                     rank: index + 1,
                     entry: entry,
-                    board: viewModel.board,
+                    board: board,
                     isCurrentUser: entry.userId == viewModel.currentUserId,
-                    avatars: session.avatars
+                    avatars: session.avatars,
+                    onSelect: onSelectEntry
                 )
                 .listRowInsets(listInsets)
                 .listRowBackground(Color.clear)
@@ -178,7 +293,7 @@ private struct CrewLoadedView: View {
             .listRowBackground(Color.clear)
             .listRowSeparator(.hidden)
         case .failed(let message):
-            ErrorStateView(message: message, retry: retryPintFeed)
+            ErrorStateView(message: message, retry: onRetryPintFeed)
                 .frame(minHeight: 180)
                 .listRowInsets(listInsets)
                 .listRowBackground(Color.clear)
@@ -198,12 +313,16 @@ private struct CrewLoadedView: View {
         }
     }
 
+    private var ranked: [LeaderboardEntry] {
+        viewModel.ranked(for: board)
+    }
+
     private var currentStanding: (rank: Int, entry: LeaderboardEntry)? {
         guard let userId = viewModel.currentUserId,
-              let index = viewModel.ranked.firstIndex(where: { $0.userId == userId }) else {
+              let index = ranked.firstIndex(where: { $0.userId == userId }) else {
             return nil
         }
-        return (index + 1, viewModel.ranked[index])
+        return (index + 1, ranked[index])
     }
 
     private var listInsets: EdgeInsets {
@@ -214,20 +333,18 @@ private struct CrewLoadedView: View {
         EdgeInsets(top: Spacing.sm, leading: Spacing.md, bottom: Spacing.md, trailing: Spacing.md)
     }
 
-    private func retry() {
-        Task {
-            await viewModel.retry()
-        }
+    private func showCurrentStandingBreakdown() {
+        guard let standing = currentStanding else { return }
+        onSelectEntry(standing.entry)
     }
+}
 
-    private func retryPintFeed() {
-        Task {
-            await viewModel.retryPintFeed()
-        }
-    }
+private struct ScoreBreakdownSelection: Identifiable, Hashable {
+    let entry: LeaderboardEntry
+    let board: LeaderboardBoard
 
-    private func refresh() async {
-        await viewModel.load(forceSync: true)
+    var id: String {
+        "\(entry.userId)-\(board.rawValue)"
     }
 }
 
@@ -237,24 +354,41 @@ private struct CrewStandingHeader: View {
     let rank: Int
     let entry: LeaderboardEntry
     let board: LeaderboardBoard
+    let action: () -> Void
 
     var body: some View {
+        Button(action: action) {
+            headerContent
+        }
+        .buttonStyle(.plain)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(accessibilityText)
+        .accessibilityHint("Shows how this score is calculated")
+        .accessibilityAddTraits(.isButton)
+    }
+
+    private var headerContent: some View {
         VStack(alignment: .leading, spacing: Spacing.sm) {
             Text(GreetingCopy.headline(name: name))
                 .font(Typography.metadata)
                 .foregroundStyle(Palette.secondaryText)
                 .tracking(1.8)
-            Text(Formatters.rank(rank))
-                .font(Typography.displayXL)
-                .foregroundStyle(Palette.accent)
-                .lineLimit(1)
-                .minimumScaleFactor(0.5)
-            MetricView(
-                value: Formatters.pointsValue(entry.points(for: board)),
-                unit: "PTS",
-                valueFont: Typography.displayL,
-                valueColor: Palette.text
-            )
+            // Rank and score share a baseline so the header reads as one scoreboard row.
+            HStack(alignment: .firstTextBaseline, spacing: Spacing.md) {
+                Text(Formatters.rank(rank))
+                    .font(Typography.displayXL)
+                    .foregroundStyle(Palette.accent)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.5)
+                Spacer(minLength: Spacing.sm)
+                MetricView(
+                    value: Formatters.pointsValue(entry.points(for: board)),
+                    unit: "PTS",
+                    valueFont: Typography.displayL,
+                    valueColor: Palette.text,
+                    alignment: .trailing
+                )
+            }
             Text(metaLine)
                 .font(Typography.metadata)
                 .foregroundStyle(Palette.secondaryText)
@@ -264,8 +398,7 @@ private struct CrewStandingHeader: View {
                 .padding(.top, Spacing.xs)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel(accessibilityText)
+        .contentShape(Rectangle())
     }
 
     private var metaLine: String {

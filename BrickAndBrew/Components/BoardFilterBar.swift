@@ -7,19 +7,32 @@ struct BoardFilterBar: View {
     let action: (LeaderboardBoard) -> Void
 
     var body: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: Spacing.lg) {
-                ForEach(boards) { board in
-                    BoardFilterButton(
-                        title: board.title,
-                        isSelected: selected == board,
-                        action: { action(board) }
-                    )
+        ScrollViewReader { proxy in
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: Spacing.lg) {
+                    ForEach(boards) { board in
+                        BoardFilterButton(
+                            title: board.title,
+                            isSelected: selected == board,
+                            action: { action(board) }
+                        )
+                        .id(board.id)
+                    }
+                }
+                .padding(.horizontal, Spacing.md)
+                .animation(Motion.sport, value: selected)
+            }
+            .onAppear {
+                proxy.scrollTo(selected.id, anchor: .center)
+            }
+            .onChange(of: selected) { _, board in
+                withAnimation(Motion.sport) {
+                    proxy.scrollTo(board.id, anchor: .center)
                 }
             }
-            .padding(.horizontal, Spacing.md)
         }
         .accessibilityElement(children: .contain)
+        .accessibilityHint("Swipe the board left or right to switch sports")
     }
 }
 

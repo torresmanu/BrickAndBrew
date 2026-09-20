@@ -41,6 +41,7 @@
 		5A805A27AE1A3B33AB620086 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A257A121611FD3C8D1938DF1 /* Profile.swift */; };
 		5DFA723DEF63AECA5955A328 /* StravaModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC10980F8868435C54B133D8 /* StravaModels.swift */; };
 		5E5805AA6C5451683E09636B /* AvatarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7B56104E874A3B70DBA90F9 /* AvatarTests.swift */; };
+		6243B345B55033EDEFD8C3E8 /* ScoreBreakdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9DA36036DF15190365CAAAE /* ScoreBreakdown.swift */; };
 		640D3EDDE786EBE1C70777AC /* Radius.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B0CE8B2DCB4BEE364BC4010 /* Radius.swift */; };
 		660E9E8C5950701ECF13630A /* CrewPintRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EE7B7F1701B9BDAA78ABB3D /* CrewPintRowView.swift */; };
 		67F888D6C536A33F06D5B3D2 /* BrandChrome.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3DFECE5A2B31B1A4974AE62 /* BrandChrome.swift */; };
@@ -57,6 +58,7 @@
 		8D7A78698DAC1C3A7F32E07D /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD3BC54AAE51DF9DEB198025 /* AuthService.swift */; };
 		8F13D8224A4EC88985C9B43C /* Leaderboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1801B024FF3988C1A9AB6A40 /* Leaderboard.swift */; };
 		8FF4F02F45CD66258569FFD8 /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DAB64D740BF140720C8F4F4 /* Haptics.swift */; };
+		9046A29A0E41692F1ED3414C /* ScoreBreakdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82CE69821378191CC2DE14F9 /* ScoreBreakdownView.swift */; };
 		9921113BD01F4BC1C12A4DC4 /* CameraPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C778A4243B5D6CF039CBE0E /* CameraPicker.swift */; };
 		9C8BA1C141FA3A5A42DFB46A /* AppSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4103667047C68EE715C45AE4 /* AppSession.swift */; };
 		9D76D0DCF3315A420B91CBCA /* BrandPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78673F3000A5AA3F095E7BA1 /* BrandPhoto.swift */; };
@@ -155,6 +157,7 @@
 		799324DE9E35F0ECFF9D0A74 /* JoinCrewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinCrewView.swift; sourceTree = "<group>"; };
 		7D20CD59C03A1321DD1F3633 /* AvatarImageProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarImageProcessor.swift; sourceTree = "<group>"; };
 		7E9C221B318862696F978839 /* BarlowCondensed-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BarlowCondensed-Bold.ttf"; sourceTree = "<group>"; };
+		82CE69821378191CC2DE14F9 /* ScoreBreakdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreBreakdownView.swift; sourceTree = "<group>"; };
 		84192FD3051FC4DB0E966C5E /* DisplayName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayName.swift; sourceTree = "<group>"; };
 		87484693F47BC3D18E16A346 /* DisplayNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayNameView.swift; sourceTree = "<group>"; };
 		8764D94CD8DA9BA77BB65DA7 /* Typography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typography.swift; sourceTree = "<group>"; };
@@ -165,6 +168,7 @@
 		A257A121611FD3C8D1938DF1 /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		A41396BABDCE2B0602B7C903 /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
 		A991E7995A0F9FB5795BC795 /* Palette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Palette.swift; sourceTree = "<group>"; };
+		A9DA36036DF15190365CAAAE /* ScoreBreakdown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreBreakdown.swift; sourceTree = "<group>"; };
 		AC10980F8868435C54B133D8 /* StravaModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StravaModels.swift; sourceTree = "<group>"; };
 		AE1161FD6F3E112E8D7DC93D /* StreakCopy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakCopy.swift; sourceTree = "<group>"; };
 		B45D3AECB67528A84E384189 /* LogBeerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogBeerViewModel.swift; sourceTree = "<group>"; };
@@ -324,6 +328,7 @@
 			isa = PBXGroup;
 			children = (
 				5A9311672746C5C464080BC4 /* CrewView.swift */,
+				82CE69821378191CC2DE14F9 /* ScoreBreakdownView.swift */,
 				5D61EA27F179ECA7FD2746A1 /* ScoringGuideView.swift */,
 			);
 			path = Crew;
@@ -365,6 +370,7 @@
 				4AD0C341EABD3298204B4659 /* LoadState.swift */,
 				588ACA0F7174779C93948B9A /* PintReminderPlanner.swift */,
 				A257A121611FD3C8D1938DF1 /* Profile.swift */,
+				A9DA36036DF15190365CAAAE /* ScoreBreakdown.swift */,
 				DA9B8C48E4958C4CE0B632E5 /* Scoring.swift */,
 				26FD736A73D294D70AFC5B60 /* SportKind.swift */,
 				AC10980F8868435C54B133D8 /* StravaModels.swift */,
@@ -576,6 +582,8 @@
 				640D3EDDE786EBE1C70777AC /* Radius.swift in Sources */,
 				4C386F4CC11760658EE779ED /* RankRowView.swift in Sources */,
 				54098D23AFDA8F934334CC9E /* RootView.swift in Sources */,
+				6243B345B55033EDEFD8C3E8 /* ScoreBreakdown.swift in Sources */,
+				9046A29A0E41692F1ED3414C /* ScoreBreakdownView.swift in Sources */,
 				59C44A2BBA0DE03D31EFD6E8 /* Scoring.swift in Sources */,
 				6E3AC34B879F2D85F909510C /* ScoringGuideView.swift in Sources */,
 				509AFC7B930F2799C0639B85 /* SectionHeader.swift in Sources */,

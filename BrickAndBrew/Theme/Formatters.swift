@@ -54,6 +54,18 @@ enum Formatters {
         grouped(value, fractionDigits: value == value.rounded() ? 0 : 1)
     }
 
+    /// Receipt sign for a points delta. Uses a minus sign so negative tax lines stay tabular.
+    static func signedPointsValue(_ value: Double) -> String {
+        let amount = pointsValue(abs(value))
+        if value > 0 {
+            return "+\(amount)"
+        }
+        if value < 0 {
+            return "−\(amount)"
+        }
+        return amount
+    }
+
     /// Kilometers without the unit, so MetricView can set KM beside the number.
     static func distanceValue(meters: Double) -> String {
         grouped(meters / Scoring.metersPerKilometer, fractionDigits: 1)

@@ -6,16 +6,20 @@ struct RankRowView: View {
     let board: LeaderboardBoard
     let isCurrentUser: Bool
     let avatars: AvatarCache
+    let onSelect: (LeaderboardEntry) -> Void
 
     var body: some View {
         HStack(alignment: .center, spacing: Spacing.md) {
-            Text(Formatters.rank(rank))
-                .font(Typography.displayM)
-                .foregroundStyle(rankColor)
-                .frame(width: 56, alignment: .leading)
-                .lineLimit(1)
-                .minimumScaleFactor(0.5)
-                .accessibilityHidden(true)
+            Button(action: select) {
+                Text(Formatters.rank(rank))
+                    .font(Typography.displayM)
+                    .foregroundStyle(rankColor)
+                    .frame(width: 56, alignment: .leading)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.5)
+            }
+            .buttonStyle(.plain)
+            .accessibilityHidden(true)
 
             AvatarView(
                 userId: entry.userId,
@@ -24,44 +28,56 @@ struct RankRowView: View {
                 cache: avatars
             )
 
-            VStack(alignment: .leading, spacing: 2) {
-                HStack(spacing: Spacing.xs) {
-                    Text(entry.displayName.uppercased())
-                        .font(Typography.label)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(Palette.text)
-                        .lineLimit(1)
-                    StreakBadgeView(
-                        kind: board.streakKind,
-                        streak: entry.streaks.streak(for: board)
+            Button(action: select) {
+                HStack(alignment: .center, spacing: Spacing.md) {
+                    VStack(alignment: .leading, spacing: 2) {
+                        HStack(spacing: Spacing.xs) {
+                            Text(entry.displayName.uppercased())
+                                .font(Typography.label)
+                                .fontWeight(.semibold)
+                                .foregroundStyle(Palette.text)
+                                .lineLimit(1)
+                            StreakBadgeView(
+                                kind: board.streakKind,
+                                streak: entry.streaks.streak(for: board),
+                                symbolName: board.sport?.systemImage
+                            )
+                            .layoutPriority(1)
+                        }
+                        Text(entry.detail(for: board).uppercased())
+                            .font(Typography.metadata)
+                            .foregroundStyle(Palette.secondaryText)
+                            .tracking(1.2)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+
+                    MetricView(
+                        value: Formatters.pointsValue(entry.points(for: board)),
+                        unit: "PTS",
+                        valueFont: Typography.title,
+                        unitFont: Typography.metadata,
+                        valueColor: isCurrentUser ? Palette.accent : Palette.text,
+                        unitColor: Palette.secondaryText,
+                        alignment: .trailing
                     )
                     .layoutPriority(1)
                 }
-                Text(entry.detail(for: board).uppercased())
-                    .font(Typography.metadata)
-                    .foregroundStyle(Palette.secondaryText)
-                    .tracking(1.2)
+                .contentShape(Rectangle())
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .accessibilityElement(children: .combine)
+            .buttonStyle(.plain)
+            .accessibilityElement(children: .ignore)
             .accessibilityLabel(accessibilityText)
-
-            MetricView(
-                value: Formatters.pointsValue(entry.points(for: board)),
-                unit: "PTS",
-                valueFont: Typography.title,
-                unitFont: Typography.metadata,
-                valueColor: isCurrentUser ? Palette.accent : Palette.text,
-                unitColor: Palette.secondaryText,
-                alignment: .trailing
-            )
-            .layoutPriority(1)
-            .accessibilityHidden(true)
+            .accessibilityHint("Shows how this score is calculated")
+            .accessibilityAddTraits(.isButton)
         }
         .padding(.vertical, Spacing.sm)
         .overlay(alignment: .bottom) {
             Hairline()
         }
+    }
+
+    private func select() {
+        onSelect(entry)
     }
 
     private var rankColor: Color {

@@ -7,6 +7,8 @@ enum Typography {
     static let displayXL = condensed(size: 72, italic: true, relativeTo: .largeTitle)
     static let displayL = condensed(size: 48, italic: true, relativeTo: .largeTitle)
     static let displayM = condensed(size: 36, italic: true, relativeTo: .title)
+    /// Large italic screen title. A step up from the 32pt UIKit navigation large title.
+    static let navigationLarge = condensed(size: 36, italic: true, relativeTo: .largeTitle)
     static let title = condensed(size: 28, italic: false, relativeTo: .title2)
     static let wordmark = condensed(size: 40, italic: true, relativeTo: .largeTitle)
     static let heading1 = title

@@ -68,9 +68,19 @@ struct LeaderboardEntry: Identifiable, Sendable, Codable, Hashable {
             Formatters.beerCount(beerCount)
         }
     }
+
+    func scoreBreakdown(for board: LeaderboardBoard) -> ScoreBreakdown {
+        ScoreBreakdown.make(
+            swimMeters: swimMeters,
+            runMeters: runMeters,
+            rideMeters: rideMeters,
+            beerCount: beerCount,
+            board: board
+        )
+    }
 }
 
-enum LeaderboardBoard: String, CaseIterable, Identifiable, Sendable {
+enum LeaderboardBoard: String, CaseIterable, Identifiable, Hashable, Sendable {
     case overall
     case swim
     case ride
@@ -86,6 +96,24 @@ enum LeaderboardBoard: String, CaseIterable, Identifiable, Sendable {
         case .ride: "Bike"
         case .run: "Run"
         case .beers: "Beers"
+        }
+    }
+
+    /// Pint photos belong with Index and Beers, not the sport-only boards.
+    var showsCrewPints: Bool {
+        switch self {
+        case .overall, .beers: true
+        case .swim, .ride, .run: false
+        }
+    }
+
+    /// Sport boards show that activity's glyph on the brick streak badge.
+    var sport: SportKind? {
+        switch self {
+        case .swim: .swim
+        case .run: .run
+        case .ride: .ride
+        case .overall, .beers: nil
         }
     }
 }

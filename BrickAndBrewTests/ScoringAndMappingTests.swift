@@ -97,10 +97,118 @@ struct ScoringTests {
         #expect(Formatters.compactNumber(Scoring.trainingPointsCoveredPerBeer / Scoring.runPointsPerKilometer) == "6.7")
     }
 
+    @Test func signedPointsValueKeepsReceiptSigns() {
+        #expect(Formatters.signedPointsValue(50) == "+\(Formatters.pointsValue(50))")
+        #expect(Formatters.signedPointsValue(-2.5) == "−\(Formatters.pointsValue(2.5))")
+        #expect(Formatters.signedPointsValue(0) == Formatters.pointsValue(0))
+    }
+
+    @Test func uncoveredTrainingIsLoadPastPintCoverage() {
+        #expect(Scoring.uncoveredTrainingPoints(trainingPoints: 50, beerCount: 2) == 10)
+        #expect(Scoring.grindTaxSurcharge(trainingPoints: 50, beerCount: 2) == 2.5)
+        #expect(Scoring.grindTax(trainingPoints: 50, beerCount: 2) == 12.5)
+    }
+
     @Test func streakDaysUsesSingularForOne() {
         #expect(Formatters.streakDays(1) == "1 day")
         #expect(Formatters.streakDays(12) == "12 days")
         #expect(Formatters.streakDays(0) == "0 days")
+    }
+}
+
+struct ScoreBreakdownTests {
+    @Test func coveredLoadShowsSportsAndBeersWithNoTax() {
+        let entry = LeaderboardEntry(
+            userId: "1",
+            displayName: "Alex",
+            swimMeters: 1_000,
+            runMeters: 1_000,
+            rideMeters: 1_000,
+            beerCount: 2
+        )
+        let breakdown = entry.scoreBreakdown(for: .overall)
+        #expect(breakdown.lines.map(\.id) == ["swim", "ride", "run", "beers"])
+        #expect(breakdown.lines.map(\.points) == [10, 1, 3, 24])
+        #expect(breakdown.total == 38)
+        #expect(breakdown.lines.reduce(0) { $0 + $1.points } == breakdown.total)
+        #expect(breakdown.footnote == "Pints cover the training load. No grind tax.")
+    }
+
+    @Test func bikeAndBeersSplitUncoveredVolumeFromGrindTax() {
+        let entry = LeaderboardEntry(
+            userId: "1",
+            displayName: "Alex",
+            swimMeters: 0,
+            runMeters: 0,
+            rideMeters: 50_000,
+            beerCount: 2
+        )
+        let breakdown = entry.scoreBreakdown(for: .overall)
+        #expect(breakdown.lines.map(\.id) == ["ride", "beers", "uncovered", "tax"])
+        #expect(breakdown.lines.map(\.points) == [50, 24, -10, -2.5])
+        #expect(breakdown.total == 61.5)
+        #expect(breakdown.total == entry.totalIndex)
+        #expect(breakdown.footnote.contains("10 went uncovered"))
+    }
+
+    @Test func emptyIndexHasFriendlyCopyAndZeroTotal() {
+        let entry = LeaderboardEntry(
+            userId: "1",
+            displayName: "Alex",
+            swimMeters: 0,
+            runMeters: 0,
+            rideMeters: 0,
+            beerCount: 0
+        )
+        let breakdown = entry.scoreBreakdown(for: .overall)
+        #expect(breakdown.isEmpty)
+        #expect(breakdown.total == 0)
+        #expect(breakdown.emptyMessage.contains("The Index stays at zero"))
+    }
+
+    @Test func trainingWithoutBeersDropsTheLoadThenTaxesIt() {
+        let entry = LeaderboardEntry(
+            userId: "1",
+            displayName: "Alex",
+            swimMeters: 10_000,
+            runMeters: 0,
+            rideMeters: 0,
+            beerCount: 0
+        )
+        let breakdown = entry.scoreBreakdown(for: .overall)
+        #expect(breakdown.lines.map(\.points) == [100, -100, -25])
+        #expect(breakdown.total == -25)
+        #expect(breakdown.total == entry.totalIndex)
+        #expect(breakdown.footnote.contains("No pints this season"))
+    }
+
+    @Test func sportBoardOnlyShowsThatSport() {
+        let entry = LeaderboardEntry(
+            userId: "1",
+            displayName: "Alex",
+            swimMeters: 0,
+            runMeters: 0,
+            rideMeters: 50_000,
+            beerCount: 2
+        )
+        let breakdown = entry.scoreBreakdown(for: .ride)
+        #expect(breakdown.lines.map(\.points) == [50])
+        #expect(breakdown.total == 50)
+        #expect(breakdown.footnote.contains("grind tax only hits the Index"))
+    }
+
+    @Test func beersBoardIgnoresTraining() {
+        let entry = LeaderboardEntry(
+            userId: "1",
+            displayName: "Alex",
+            swimMeters: 1_000,
+            runMeters: 0,
+            rideMeters: 0,
+            beerCount: 2
+        )
+        let breakdown = entry.scoreBreakdown(for: .beers)
+        #expect(breakdown.lines.map(\.points) == [24])
+        #expect(breakdown.total == 24)
     }
 }
 
@@ -553,6 +661,12 @@ struct StreakCalculatorTests {
         #expect(LeaderboardBoard.swim.streakKind == .brick)
         #expect(LeaderboardBoard.run.streakKind == .brick)
         #expect(LeaderboardBoard.ride.streakKind == .brick)
+        #expect(LeaderboardBoard.swim.sport == .swim)
+        #expect(LeaderboardBoard.run.sport == .run)
+        #expect(LeaderboardBoard.ride.sport == .ride)
+        #expect(LeaderboardBoard.ride.sport?.systemImage == "figure.outdoor.cycle")
+        #expect(LeaderboardBoard.overall.sport == nil)
+        #expect(LeaderboardBoard.beers.sport == nil)
     }
 
     private func calendarDaysApart(_ last: Date?, _ expected: Date) -> Bool {

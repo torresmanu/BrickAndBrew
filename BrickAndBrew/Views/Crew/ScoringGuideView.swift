@@ -38,7 +38,7 @@ struct ScoringGuideView: View {
                 .font(Typography.displayM)
                 .foregroundStyle(Palette.text)
                 .minimumScaleFactor(0.7)
-            Text("Beers score hard. Each pint covers a slice of training. Stack swim, bike, and run past your beers and the grind tax lands.")
+            Text("Beers score hard. Each pint covers a slice of training. Stack swim, bike, and run past your beers and the grind tax lands. Tap anyone on the board to see their receipt.")
                 .font(Typography.body)
                 .foregroundStyle(Palette.secondaryText)
                 .fixedSize(horizontal: false, vertical: true)

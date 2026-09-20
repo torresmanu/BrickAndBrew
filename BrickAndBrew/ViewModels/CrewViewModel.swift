@@ -22,6 +22,11 @@ final class CrewViewModel {
     }
 
     var ranked: [LeaderboardEntry] {
+        ranked(for: board)
+    }
+
+    /// Rankings for a specific board so neighboring pages can render during a swipe.
+    func ranked(for board: LeaderboardBoard) -> [LeaderboardEntry] {
         if case .loaded(let entries) = state {
             return LeaderboardBuilder.ranked(entries, board: board)
         }

@@ -4,13 +4,14 @@ import SwiftUI
 struct StreakBadgeView: View {
     let kind: StreakKind
     let streak: Streak
+    var symbolName: String? = nil
     var now: Date = Date()
     var calendar: Calendar = .current
 
     var body: some View {
         if streak.current > 0 {
             HStack(spacing: Spacing.xxs) {
-                kind.icon
+                icon
                     .font(.caption.weight(.semibold))
                     .symbolRenderingMode(.hierarchical)
                 Text("\(streak.current)")
@@ -19,6 +20,15 @@ struct StreakBadgeView: View {
             .foregroundStyle(streak.isAtRisk(now: now, calendar: calendar) ? Palette.secondaryText : Palette.accent)
             .accessibilityElement(children: .combine)
             .accessibilityLabel(accessibilityText)
+        }
+    }
+
+    @ViewBuilder
+    private var icon: some View {
+        if let symbolName {
+            Image(systemName: symbolName)
+        } else {
+            kind.icon
         }
     }
 
