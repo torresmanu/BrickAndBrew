@@ -1,0 +1,199 @@
+/**
+ * Brick & Brew design tokens — web source of truth.
+ *
+ * Identity: precision × chaos.
+ * Controlled: type, grid, logo, core colors, hierarchy, data, UI.
+ * Uncontrolled: photography, people, distortion, beer, celebration.
+ *
+ * Three layers, always consumed top-down:
+ *   1. Primitives — raw values. Never paint a component with these.
+ *   2. Semantic — meaning (canvas, accent, danger). What components read.
+ *   3. Component recipes — control heights, focus rings, photo treatments.
+ *
+ * Contract for every current and future component:
+ *   - Color, space, type, radius, shadow, and motion come from this file.
+ *   - If a value is missing, add a token here first. Do not invent a hex in CSS.
+ *   - iOS maps these names 1:1 in a later pass (Palette / Spacing / Typography).
+ */
+
+:root {
+  /* --- Layer 1: primitives ------------------------------------------------ */
+
+  --color-ink-1000: #000000;
+  --color-ink-900: #0a0a0a;
+  --color-ink-800: #161616;
+  --color-ink-700: #2a2a2a;
+  --color-ink-500: #6a6864;
+  --color-ink-400: #8c8882;
+
+  --color-paper-300: #d4cfc4;
+  --color-paper-200: #e4e0d6;
+  --color-paper-100: #f2efe7;
+  --color-paper-50: #f7f5ef;
+
+  --color-signal-400: #ff6a4a;
+  --color-signal-500: #ff4b24;
+  --color-signal-600: #e03a16;
+  --color-signal-700: #b82c10;
+
+  --color-red-500: #ff3b30;
+  --color-green-500: #34c759;
+  --color-strava-500: #fc4c02;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+  --space-10: 128px;
+
+  --radius-none: 0;
+  --radius-pack: 2px;
+  --radius-tile: 4px;
+  --radius-object: 4px;
+  --radius-panel: 4px;
+  --radius-device: 42px;
+  --radius-device-screen: 32px;
+  --radius-squircle: 22.5%;
+  --radius-full: 999px;
+
+  --font-display: "Barlow Condensed", "Arial Narrow", "Helvetica Neue", sans-serif;
+  --font-body: "IBM Plex Sans", "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  --font-size-caption: 0.72rem;
+  --font-size-small: 0.875rem;
+  --font-size-body: 1rem;
+  --font-size-body-lg: 1.125rem;
+  --font-size-h3: 1.5rem;
+  --font-size-h2: clamp(2.4rem, 7vw, 5.5rem);
+  --font-size-h1: clamp(3.2rem, 12vw, 8rem);
+  --font-size-display: clamp(4.2rem, 16vw, 12rem);
+  --font-size-display-xl: clamp(5rem, 22vw, 16rem);
+  --font-size-index: clamp(5.5rem, 16vw, 12rem);
+  --font-size-stat: clamp(2.8rem, 8vw, 6rem);
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-black: 800;
+  --font-weight-ultra: 900;
+
+  --leading-display: 0.82;
+  --leading-heading: 0.9;
+  --leading-body: 1.55;
+  --leading-mono: 1.4;
+
+  --tracking-display: -0.03em;
+  --tracking-tight: -0.02em;
+  --tracking-body: 0;
+  --tracking-caps: 0.16em;
+  --tracking-meta: 0.2em;
+
+  --shadow-1: 0 8px 24px rgba(0, 0, 0, 0.28);
+  --shadow-2: 0 24px 48px rgba(0, 0, 0, 0.5);
+
+  --ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-sport: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 320ms;
+
+  --z-atmosphere: 0;
+  --z-content: 1;
+  --z-header: 10;
+  --z-overlay: 20;
+
+  --width-page: 1440px;
+  --width-doc: 44rem;
+  --width-brand: 1200px;
+  --gutter: clamp(1rem, 3.5vw, 3rem);
+  --grid-gutter: clamp(12px, 1.6vw, 24px);
+  --grid-columns: 12;
+  --header-height: 64px;
+
+  /* --- Layer 2: semantic (ink canvas, default product polarity) ---------- */
+
+  --color-bg-canvas: var(--color-ink-900);
+  --color-bg-surface: var(--color-ink-1000);
+  --color-bg-elevated: var(--color-ink-800);
+  --color-bg-inverse: var(--color-paper-100);
+  --color-bg-inverse-elevated: var(--color-paper-50);
+
+  --color-fg-primary: var(--color-paper-100);
+  --color-fg-secondary: var(--color-ink-400);
+  --color-fg-muted: var(--color-ink-400);
+  --color-fg-inverse: var(--color-ink-900);
+  --color-fg-inverse-muted: var(--color-ink-500);
+  --color-fg-accent: var(--color-signal-500);
+  --color-fg-accent-strong: var(--color-signal-600);
+  --color-fg-danger: var(--color-red-500);
+  --color-fg-success: var(--color-green-500);
+  --color-fg-strava: var(--color-strava-500);
+
+  --color-border-default: rgba(242, 239, 231, 0.14);
+  --color-border-strong: rgba(242, 239, 231, 0.28);
+  --color-border-inverse: rgba(10, 10, 10, 0.14);
+  --color-border-focus: var(--color-signal-500);
+
+  --color-accent-default: var(--color-signal-500);
+  --color-accent-hover: var(--color-signal-400);
+  --color-accent-pressed: var(--color-signal-600);
+  --color-accent-on-inverse: var(--color-signal-600);
+
+  --color-sport-swim: var(--color-fg-primary);
+  --color-sport-bike: var(--color-fg-primary);
+  --color-sport-run: var(--color-fg-primary);
+  --color-sport-beer: var(--color-fg-accent);
+
+  --opacity-grain: 0;
+  --opacity-disabled: 0.4;
+
+  /* --- Layer 3: component recipes ---------------------------------------- */
+
+  --control-height-sm: 36px;
+  --control-height-md: 48px;
+  --control-height-lg: 52px;
+  --touch-min: 44px;
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 3px;
+  --icon-well: 42px;
+  --brand-mark: 36px;
+  --range-track: 2px;
+  --range-thumb: 16px;
+  --photo-scale: 1.08;
+}
+
+/**
+ * Inverse paper surface. Quiet editorial sections, legal, brandbook.
+ * Nested components read these semantic names, so they flip without new hex.
+ */
+[data-surface="paper"] {
+  --color-bg-canvas: var(--color-paper-100);
+  --color-bg-surface: var(--color-paper-50);
+  --color-bg-elevated: var(--color-paper-200);
+  --color-fg-primary: var(--color-ink-900);
+  --color-fg-secondary: var(--color-ink-500);
+  --color-fg-muted: var(--color-ink-500);
+  --color-fg-accent: var(--color-signal-500);
+  --color-border-default: var(--color-border-inverse);
+  --color-border-strong: rgba(10, 10, 10, 0.28);
+  --color-border-focus: var(--color-signal-500);
+  --color-accent-default: var(--color-signal-500);
+  --color-accent-hover: var(--color-ink-900);
+  background-color: var(--color-bg-canvas);
+  color: var(--color-fg-primary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-base: 0ms;
+    --duration-slow: 0ms;
+  }
+}

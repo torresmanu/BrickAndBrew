@@ -272,6 +272,91 @@ function initYear() {
   setText('year', String(new Date().getFullYear()));
 }
 
+function prefersReducedMotion() {
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+// Reveals stay visible without JS; motion only runs when the observer can unobserve.
+
+function isInViewport(node) {
+  const rect = node.getBoundingClientRect();
+  return rect.bottom > 0 && rect.top < window.innerHeight;
+}
+
+function revealNode(node) {
+  node.classList.add('is-in');
+}
+
+function initReveals() {
+  const nodes = document.querySelectorAll('[data-reveal]');
+  if (!nodes.length) {
+    return;
+  }
+  if (prefersReducedMotion()) {
+    nodes.forEach(revealNode);
+    return;
+  }
+
+  // Hash jumps (#formula, #how) can land on a section before the observer fires.
+  // Reveal anything already on screen so content is never left blank.
+  nodes.forEach((node) => {
+    if (isInViewport(node)) {
+      revealNode(node);
+    }
+  });
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        revealNode(entry.target);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.01, rootMargin: '0px 0px -4% 0px' });
+
+  nodes.forEach((node) => {
+    if (!node.classList.contains('is-in')) {
+      observer.observe(node);
+    }
+  });
+
+  window.addEventListener('hashchange', () => {
+    document.querySelectorAll('[data-reveal]:not(.is-in)').forEach((node) => {
+      if (isInViewport(node)) {
+        revealNode(node);
+      }
+    });
+  });
+}
+
+let parallaxFrame = 0;
+
+function syncParallax() {
+  if (prefersReducedMotion()) {
+    return;
+  }
+  document.querySelectorAll('[data-parallax]').forEach((el) => {
+    const rect = el.getBoundingClientRect();
+    const viewH = window.innerHeight;
+    if (rect.bottom < 0 || rect.top > viewH) {
+      return;
+    }
+    const progress = (viewH - rect.top) / (viewH + rect.height);
+    const shift = (progress - 0.5) * 36;
+    el.style.transform = `translate3d(0, ${shift}px, 0) scale(1.08)`;
+  });
+}
+
+function requestParallax() {
+  if (parallaxFrame) {
+    return;
+  }
+  parallaxFrame = window.requestAnimationFrame(() => {
+    parallaxFrame = 0;
+    syncParallax();
+  });
+}
+
 function init() {
   document.querySelectorAll('[data-board]').forEach((button) => {
     button.addEventListener('click', handleBoardClick);
@@ -301,11 +386,15 @@ function init() {
   });
 
   window.addEventListener('scroll', syncHeader, { passive: true });
+  window.addEventListener('scroll', requestParallax, { passive: true });
+  window.addEventListener('resize', requestParallax);
 
   initYear();
   setActiveBoard('overall');
   updateCalculator();
   syncHeader();
+  initReveals();
+  syncParallax();
 }
 
 if (document.readyState === 'loading') {
