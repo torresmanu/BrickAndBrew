@@ -6,11 +6,11 @@ struct LoadingView: View {
     var body: some View {
         VStack(spacing: Spacing.md) {
             ProgressView()
-                .tint(Palette.amber)
-                .scaleEffect(1.15)
+                .tint(Palette.paper)
+                .scaleEffect(1.1)
             Text(message)
-                .font(.subheadline)
-                .foregroundStyle(Palette.muted)
+                .font(Typography.body)
+                .foregroundStyle(Palette.secondaryText)
                 .multilineTextAlignment(.center)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -40,25 +40,25 @@ struct EmptyStateView<Icon: View>: View {
     }
 
     var body: some View {
-        VStack(spacing: Spacing.md) {
+        VStack(alignment: .leading, spacing: Spacing.md) {
             icon
-                .font(.system(size: 36, weight: .semibold))
-                .foregroundStyle(Palette.amber)
+                .font(.system(size: 28, weight: .semibold))
+                .foregroundStyle(Palette.paper)
             Text(title)
-                .font(.title3.weight(.semibold))
-                .foregroundStyle(Palette.cream)
+                .font(Typography.title)
+                .foregroundStyle(Palette.text)
             Text(message)
-                .font(.subheadline)
-                .foregroundStyle(Palette.muted)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, Spacing.lg)
+                .font(Typography.body)
+                .foregroundStyle(Palette.secondaryText)
+                .fixedSize(horizontal: false, vertical: true)
             if let actionTitle, let action {
                 Button(actionTitle, action: action)
                     .buttonStyle(PrimaryButtonStyle())
-                    .padding(.top, Spacing.sm)
+                    .padding(.top, Spacing.xs)
             }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.vertical, Spacing.lg)
     }
 }
 
@@ -86,49 +86,80 @@ struct ErrorStateView: View {
     var retry: () -> Void
 
     var body: some View {
-        VStack(spacing: Spacing.md) {
+        VStack(alignment: .leading, spacing: Spacing.md) {
             Image(systemName: "wifi.slash")
-                .font(.system(size: 36, weight: .semibold))
+                .font(.system(size: 28, weight: .semibold))
                 .foregroundStyle(Palette.danger)
             Text("Couldn't load this")
-                .font(.title3.weight(.semibold))
-                .foregroundStyle(Palette.cream)
+                .font(Typography.title)
+                .foregroundStyle(Palette.text)
             Text(message)
-                .font(.subheadline)
-                .foregroundStyle(Palette.muted)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, Spacing.lg)
+                .font(Typography.body)
+                .foregroundStyle(Palette.secondaryText)
+                .fixedSize(horizontal: false, vertical: true)
             Button(retryTitle, action: retry)
                 .buttonStyle(PrimaryButtonStyle())
-                .padding(.top, Spacing.sm)
+                .padding(.top, Spacing.xs)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.vertical, Spacing.lg)
     }
 }
 
+/// Strong rectangle. Orange fill, ink type. Not a pill.
 struct PrimaryButtonStyle: ButtonStyle {
-    var fill: Color = Palette.amber
-    var foreground: Color = Palette.background
+    var fill: Color = Palette.accent
+    var foreground: Color = Palette.ink
 
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(.headline)
+            .font(Typography.plexSans(size: 14, weight: .semibold, relativeTo: .body))
+            .textCase(.uppercase)
+            .tracking(1.1)
             .foregroundStyle(foreground)
             .frame(maxWidth: .infinity)
-            .padding(.vertical, Spacing.sm + 2)
-            .background(fill.opacity(configuration.isPressed ? 0.8 : 1))
-            .clipShape(RoundedRectangle(cornerRadius: Radius.object, style: .continuous))
+            .frame(minHeight: 48)
+            .background(configuration.isPressed ? fill.opacity(0.82) : fill)
+            .clipShape(RoundedRectangle(cornerRadius: Radius.control, style: .continuous))
     }
 }
 
+/// Outlined control on ink. Paper type.
 struct SecondaryButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(.headline)
-            .foregroundStyle(Palette.cream)
+            .font(Typography.plexSans(size: 14, weight: .semibold, relativeTo: .body))
+            .textCase(.uppercase)
+            .tracking(1.1)
+            .foregroundStyle(Palette.text)
             .frame(maxWidth: .infinity)
-            .padding(.vertical, Spacing.sm + 2)
+            .frame(minHeight: 48)
             .background(Palette.surfaceElevated.opacity(configuration.isPressed ? 0.7 : 1))
-            .clipShape(RoundedRectangle(cornerRadius: Radius.object, style: .continuous))
+            .overlay {
+                RoundedRectangle(cornerRadius: Radius.control, style: .continuous)
+                    .stroke(Palette.hairlineStrong, lineWidth: 1)
+            }
+            .clipShape(RoundedRectangle(cornerRadius: Radius.control, style: .continuous))
+    }
+}
+
+struct BrandFieldModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .font(Typography.body)
+            .foregroundStyle(Palette.text)
+            .padding(Spacing.md)
+            .background(Palette.surfaceElevated)
+            .clipShape(RoundedRectangle(cornerRadius: Radius.control, style: .continuous))
+            .overlay {
+                RoundedRectangle(cornerRadius: Radius.control, style: .continuous)
+                    .stroke(Palette.hairline, lineWidth: 1)
+            }
+    }
+}
+
+extension View {
+    func brandField() -> some View {
+        modifier(BrandFieldModifier())
     }
 }

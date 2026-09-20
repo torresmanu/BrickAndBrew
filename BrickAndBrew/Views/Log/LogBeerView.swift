@@ -36,10 +36,7 @@ private struct LogBeerLoadedView: View {
 
     var body: some View {
         ScrollView {
-            VStack(spacing: Spacing.lg) {
-                if let cheer = viewModel.cheerMessage {
-                    cheerCard(cheer)
-                }
+            VStack(alignment: .leading, spacing: Spacing.xl) {
                 composer
                 recent
             }
@@ -66,51 +63,69 @@ private struct LogBeerLoadedView: View {
             )
             .ignoresSafeArea()
         }
+        .fullScreenCover(isPresented: cheerBinding) {
+            CelebrationView(
+                kicker: "THE PUB RULE",
+                title: "BEER\nEARNED.",
+                value: "+\(Formatters.pointsValue(Scoring.beerPoints(count: viewModel.lastLoggedCount)))",
+                unit: "PTS",
+                detail: viewModel.cheerMessage,
+                dismiss: viewModel.dismissCheer
+            )
+        }
     }
 
     private var composer: some View {
-        VStack(spacing: Spacing.md) {
-            Text("Add beers")
-                .font(.title2.bold())
-                .foregroundStyle(Palette.cream)
-                .frame(maxWidth: .infinity, alignment: .leading)
+        VStack(alignment: .leading, spacing: Spacing.md) {
+            Text("BEER")
+                .font(Typography.displayM)
+                .foregroundStyle(Palette.text)
 
             if viewModel.showsPintNudge {
                 Text(StreakCopy.atRiskNudge(kind: .pint))
                     .font(Typography.body)
-                    .foregroundStyle(Palette.muted)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .foregroundStyle(Palette.secondaryText)
                     .fixedSize(horizontal: false, vertical: true)
                     .accessibilityLabel(StreakCopy.atRiskNudge(kind: .pint))
             }
 
-            HStack(spacing: Spacing.lg) {
+            HStack(alignment: .bottom, spacing: Spacing.lg) {
                 Button(action: viewModel.decrementCount) {
-                    Image(systemName: "minus.circle.fill")
-                        .font(.system(size: 36))
-                        .foregroundStyle(Palette.muted)
+                    Image(systemName: "minus")
+                        .font(.system(size: 22, weight: .semibold))
+                        .foregroundStyle(Palette.secondaryText)
+                        .frame(width: 44, height: 44)
+                        .overlay {
+                            RoundedRectangle(cornerRadius: Radius.control, style: .continuous)
+                                .stroke(Palette.hairline, lineWidth: 1)
+                        }
                 }
                 .accessibilityLabel("Fewer beers")
 
-                Text("\(viewModel.count)")
-                    .font(.system(size: 48, weight: .bold, design: .rounded))
-                    .foregroundStyle(Palette.amber)
-                    .frame(minWidth: 64)
-                    .accessibilityLabel("\(viewModel.count) beers")
+                MetricView(
+                    value: Formatters.rank(viewModel.count),
+                    unit: Formatters.beerUnit(viewModel.count),
+                    valueFont: Typography.displayXL,
+                    valueColor: Palette.accent
+                )
+                .frame(maxWidth: .infinity)
 
                 Button(action: viewModel.incrementCount) {
-                    Image(systemName: "plus.circle.fill")
-                        .font(.system(size: 36))
-                        .foregroundStyle(Palette.amber)
+                    Image(systemName: "plus")
+                        .font(.system(size: 22, weight: .semibold))
+                        .foregroundStyle(Palette.accent)
+                        .frame(width: 44, height: 44)
+                        .overlay {
+                            RoundedRectangle(cornerRadius: Radius.control, style: .continuous)
+                                .stroke(Palette.accent, lineWidth: 1)
+                        }
                 }
                 .accessibilityLabel("More beers")
             }
+            .accessibilityElement(children: .contain)
 
             TextField("Optional note (IPA, finish-line pint…)", text: $viewModel.note)
-                .padding(Spacing.md)
-                .background(Palette.surface)
-                .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
-                .foregroundStyle(Palette.cream)
+                .brandField()
 
             photoComposer
 
@@ -118,13 +133,10 @@ private struct LogBeerLoadedView: View {
                 LoadingView(message: "Pouring it onto the board…")
                     .frame(height: 80)
             } else {
-                Button("Log beers", action: log)
+                Button("Add beer", action: log)
                     .buttonStyle(PrimaryButtonStyle())
             }
         }
-        .padding(Spacing.md)
-        .background(Palette.surface)
-        .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
     }
 
     private var photoComposer: some View {
@@ -134,9 +146,9 @@ private struct LogBeerLoadedView: View {
                     .resizable()
                     .scaledToFill()
                     .frame(maxWidth: .infinity)
-                    .frame(height: 160)
+                    .frame(height: 220)
                     .clipped()
-                    .clipShape(RoundedRectangle(cornerRadius: Radius.object, style: .continuous))
+                    .padding(.horizontal, -Spacing.md)
                     .accessibilityLabel("Pint photo ready to log")
                 Button("Remove photo", role: .destructive, action: viewModel.removePendingPhoto)
                     .disabled(viewModel.isSaving)
@@ -152,9 +164,7 @@ private struct LogBeerLoadedView: View {
     @ViewBuilder
     private var recent: some View {
         VStack(alignment: .leading, spacing: Spacing.sm) {
-            Text("Your beers")
-                .font(.headline)
-                .foregroundStyle(Palette.cream)
+            SectionHeader(title: "Your beers")
 
             switch viewModel.state {
             case .loading:
@@ -182,33 +192,6 @@ private struct LogBeerLoadedView: View {
         }
     }
 
-    private func cheerCard(_ message: String) -> some View {
-        Button(action: viewModel.dismissCheer) {
-            HStack(alignment: .top, spacing: Spacing.sm) {
-                PintSymbol()
-                    .font(.body.weight(.semibold))
-                    .foregroundStyle(Palette.cream)
-                    .symbolRenderingMode(.hierarchical)
-                    .accessibilityHidden(true)
-                Text(message)
-                    .font(Typography.body)
-                    .foregroundStyle(Palette.cream)
-                    .multilineTextAlignment(.leading)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            .padding(Spacing.md)
-            .background(Palette.surfaceElevated)
-            .clipShape(RoundedRectangle(cornerRadius: Radius.object, style: .continuous))
-            .overlay {
-                RoundedRectangle(cornerRadius: Radius.object, style: .continuous)
-                    .stroke(Palette.hairline, lineWidth: 1)
-            }
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel(message)
-        .accessibilityHint("Dismisses the cheer")
-    }
-
     private var bannerBinding: Binding<Bool> {
         Binding(
             get: { viewModel.bannerMessage != nil },
@@ -227,6 +210,17 @@ private struct LogBeerLoadedView: View {
             set: { isPresented in
                 if isPresented == false {
                     viewModel.cancelCamera()
+                }
+            }
+        )
+    }
+
+    private var cheerBinding: Binding<Bool> {
+        Binding(
+            get: { viewModel.cheerMessage != nil },
+            set: { isPresented in
+                if isPresented == false {
+                    viewModel.dismissCheer()
                 }
             }
         )
@@ -275,19 +269,27 @@ private struct BeerRowView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: Spacing.sm) {
-            HStack {
-                Text(Formatters.beerCount(beer.count))
-                    .font(.headline)
-                    .foregroundStyle(Palette.cream)
+            HStack(alignment: .firstTextBaseline) {
+                MetricView(
+                    value: Formatters.rank(beer.count),
+                    unit: Formatters.beerUnit(beer.count),
+                    valueFont: Typography.displayM,
+                    valueColor: Palette.text
+                )
                 Spacer()
-                Text(Formatters.relative(beer.loggedAt))
-                    .font(.caption)
-                    .foregroundStyle(Palette.muted)
+                Text(Formatters.relative(beer.loggedAt).uppercased())
+                    .font(Typography.metadata)
+                    .foregroundStyle(Palette.secondaryText)
+                    .tracking(1.2)
             }
+            Text("+\(Formatters.pointsValue(Scoring.beerPoints(count: beer.count))) PTS")
+                .font(Typography.metadata)
+                .foregroundStyle(Palette.accent)
+                .tracking(1.4)
             if let note = beer.note, note.isEmpty == false {
                 Text(note)
-                    .font(.subheadline)
-                    .foregroundStyle(Palette.muted)
+                    .font(Typography.body)
+                    .foregroundStyle(Palette.secondaryText)
             }
             if hasPhoto, let image = currentImage {
                 Button(action: showPreview) {
@@ -295,21 +297,21 @@ private struct BeerRowView: View {
                         .resizable()
                         .scaledToFill()
                         .frame(maxWidth: .infinity)
-                        .frame(height: 140)
+                        .frame(height: 200)
                         .clipped()
-                        .clipShape(RoundedRectangle(cornerRadius: Radius.object, style: .continuous))
                 }
                 .buttonStyle(.plain)
+                .padding(.horizontal, -Spacing.md)
                 .accessibilityLabel("Pint photo")
                 .accessibilityHint("Shows a larger photo")
                 .fullScreenCover(isPresented: $isPreviewPresented) {
                     PhotoPreviewView(image: image, accessibilityLabel: "Pint photo")
                 }
             }
+            Hairline()
+                .padding(.top, Spacing.xs)
         }
-        .padding(Spacing.md)
-        .background(Palette.surface)
-        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .padding(.vertical, Spacing.sm)
     }
 
     private var currentImage: UIImage? {

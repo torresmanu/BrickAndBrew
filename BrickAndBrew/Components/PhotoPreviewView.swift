@@ -23,7 +23,7 @@ struct PhotoPreviewView: View {
 
             Button("Close", action: close)
                 .font(Typography.body.weight(.semibold))
-                .foregroundStyle(Palette.cream)
+                .foregroundStyle(Palette.text)
                 .padding(Spacing.md)
                 .accessibilityLabel("Close photo")
         }

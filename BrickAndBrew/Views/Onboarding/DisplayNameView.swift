@@ -7,19 +7,17 @@ struct DisplayNameView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: Spacing.lg) {
             Spacer()
-            Text("What should the crew call you?")
-                .font(Typography.heading1)
-                .foregroundStyle(Palette.cream)
+            Text("WHAT SHOULD\nTHE CREW\nCALL YOU?")
+                .font(Typography.displayM)
+                .foregroundStyle(Palette.text)
+                .minimumScaleFactor(0.7)
             Text("This name shows on the leaderboard. Keep it recognizable.")
                 .font(Typography.body)
-                .foregroundStyle(Palette.muted)
+                .foregroundStyle(Palette.secondaryText)
             TextField("Display name", text: $name)
                 .textContentType(.nickname)
                 .submitLabel(.done)
-                .padding(Spacing.md)
-                .background(Palette.surface)
-                .clipShape(RoundedRectangle(cornerRadius: Radius.object, style: .continuous))
-                .foregroundStyle(Palette.cream)
+                .brandField()
                 .onSubmit(save)
 
             if session.isBusy {
@@ -29,7 +27,7 @@ struct DisplayNameView: View {
                 Button("Continue", action: save)
                     .buttonStyle(PrimaryButtonStyle())
                     .disabled(name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
-                    .opacity(name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? 0.5 : 1)
+                    .opacity(name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? 0.4 : 1)
             }
             Spacer()
         }

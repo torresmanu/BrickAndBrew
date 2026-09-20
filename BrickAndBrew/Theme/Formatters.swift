@@ -43,4 +43,32 @@ enum Formatters {
         }
         return String(format: "%.1f", value)
     }
+
+    /// Zero-padded rank used as a graphic: 01, 02, 12.
+    static func rank(_ value: Int) -> String {
+        String(format: "%02d", value)
+    }
+
+    /// Points without the unit, so MetricView can set PTS in display type.
+    static func pointsValue(_ value: Double) -> String {
+        grouped(value, fractionDigits: value == value.rounded() ? 0 : 1)
+    }
+
+    /// Kilometers without the unit, so MetricView can set KM beside the number.
+    static func distanceValue(meters: Double) -> String {
+        grouped(meters / Scoring.metersPerKilometer, fractionDigits: 1)
+    }
+
+    static func beerUnit(_ count: Int) -> String {
+        count == 1 ? "PINT" : "PINTS"
+    }
+
+    private static func grouped(_ value: Double, fractionDigits: Int) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.maximumFractionDigits = fractionDigits
+        formatter.minimumFractionDigits = fractionDigits == 0 ? 0 : min(1, fractionDigits)
+        formatter.usesGroupingSeparator = true
+        return formatter.string(from: NSNumber(value: value)) ?? compactNumber(value)
+    }
 }

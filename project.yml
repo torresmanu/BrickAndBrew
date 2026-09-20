@@ -28,8 +28,8 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.brickandbrew.app
         PRODUCT_NAME: BrickAndBrew
-        MARKETING_VERSION: "1.0.0"
-        CURRENT_PROJECT_VERSION: "2"
+        MARKETING_VERSION: "2.0.0"
+        CURRENT_PROJECT_VERSION: "4"
         DEVELOPMENT_TEAM: DTF4NR87GG
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_FILE: BrickAndBrew/Info.plist
@@ -69,6 +69,8 @@ targets:
       properties:
         UILaunchScreen: {}
         CFBundleDisplayName: "Brick & Brew"
+        CFBundleShortVersionString: "$(MARKETING_VERSION)"
+        CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
         ITSAppUsesNonExemptEncryption: false
         NSCameraUsageDescription: "Brick & Brew uses the camera so you can snap a photo of a pint for the crew board."
         STRAVA_CLIENT_ID: "280004"
@@ -82,6 +84,13 @@ targets:
           - IBMPlexSans-Regular.ttf
           - IBMPlexSans-Medium.ttf
           - IBMPlexSans-Bold.ttf
+          - IBMPlexMono-Regular.ttf
+          - IBMPlexMono-Medium.ttf
+          - IBMPlexMono-Bold.ttf
+          - BarlowCondensed-ExtraBoldItalic.ttf
+          - BarlowCondensed-ExtraBold.ttf
+          - BarlowCondensed-Bold.ttf
+          - BarlowCondensed-BoldItalic.ttf
     scheme:
       testTargets:
         - BrickAndBrewTests

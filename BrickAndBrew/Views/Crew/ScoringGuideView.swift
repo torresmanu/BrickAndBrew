@@ -7,13 +7,13 @@ struct ScoringGuideView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(alignment: .leading, spacing: Spacing.lg) {
+                VStack(alignment: .leading, spacing: Spacing.xl) {
                     intro
-                    weightsCard
-                    coverageCard
-                    taxCard
-                    boardsCard
-                    streaksCard
+                    weights
+                    coverage
+                    tax
+                    boards
+                    streaks
                 }
                 .padding(Spacing.md)
                 .padding(.bottom, Spacing.lg)
@@ -33,62 +33,62 @@ struct ScoringGuideView: View {
     }
 
     private var intro: some View {
-        VStack(alignment: .leading, spacing: Spacing.xs) {
-            Text("The Index is the pub rule.")
-                .font(Typography.heading2)
-                .foregroundStyle(Palette.cream)
+        VStack(alignment: .leading, spacing: Spacing.sm) {
+            Text("THE INDEX\nIS THE PUB RULE.")
+                .font(Typography.displayM)
+                .foregroundStyle(Palette.text)
+                .minimumScaleFactor(0.7)
             Text("Beers score hard. Each pint covers a slice of training. Stack swim, bike, and run past your beers and the grind tax lands.")
                 .font(Typography.body)
-                .foregroundStyle(Palette.muted)
+                .foregroundStyle(Palette.secondaryText)
                 .fixedSize(horizontal: false, vertical: true)
         }
         .accessibilityElement(children: .combine)
     }
 
-    private var weightsCard: some View {
-        GuideCard(title: "Weights", systemImage: "scalemass") {
-            VStack(spacing: Spacing.sm) {
-                ForEach(Self.weightRows, content: WeightRowView.init)
-            }
+    private var weights: some View {
+        VStack(alignment: .leading, spacing: Spacing.md) {
+            SectionHeader(title: "Weights")
+            ForEach(Self.weightRows, content: WeightRowView.init)
         }
     }
 
-    private var coverageCard: some View {
-        GuideCard(title: "Pints cover bricks") {
-            PintSymbol()
-        } content: {
+    private var coverage: some View {
+        VStack(alignment: .leading, spacing: Spacing.sm) {
+            SectionHeader(title: "Pints cover bricks")
             Text(coverageCopy)
                 .font(Typography.body)
-                .foregroundStyle(Palette.cream)
+                .foregroundStyle(Palette.text)
                 .fixedSize(horizontal: false, vertical: true)
         }
     }
 
-    private var taxCard: some View {
-        GuideCard(title: "Grind tax", systemImage: "exclamationmark.triangle.fill") {
+    private var tax: some View {
+        VStack(alignment: .leading, spacing: Spacing.sm) {
+            SectionHeader(title: "Grind tax")
             Text(taxCopy)
                 .font(Typography.body)
-                .foregroundStyle(Palette.cream)
+                .foregroundStyle(Palette.text)
                 .fixedSize(horizontal: false, vertical: true)
         }
     }
 
-    private var boardsCard: some View {
-        GuideCard(title: "Other boards", systemImage: "list.bullet") {
+    private var boards: some View {
+        VStack(alignment: .leading, spacing: Spacing.sm) {
+            SectionHeader(title: "Other boards")
             Text("Swim, Bike, Run, and Beers still rank raw volume. The grind tax only hits the Index.")
                 .font(Typography.body)
-                .foregroundStyle(Palette.cream)
+                .foregroundStyle(Palette.text)
                 .fixedSize(horizontal: false, vertical: true)
         }
     }
 
-    private var streaksCard: some View {
-        GuideCard(title: "Streaks") {
-            PintSymbol()
-        } content: {
+    private var streaks: some View {
+        VStack(alignment: .leading, spacing: Spacing.sm) {
+            SectionHeader(title: "Streaks")
             Text(streaksCopy)
                 .font(Typography.body)
-                .foregroundStyle(Palette.cream)
+                .foregroundStyle(Palette.text)
                 .fixedSize(horizontal: false, vertical: true)
         }
     }
@@ -150,43 +150,6 @@ private extension ScoringGuideView {
     ]
 }
 
-private struct GuideCard<Content: View, Icon: View>: View {
-    let title: String
-    let icon: Icon
-    let content: Content
-
-    init(title: String, systemImage: String, @ViewBuilder content: () -> Content) where Icon == Image {
-        self.title = title
-        self.icon = Image(systemName: systemImage)
-        self.content = content()
-    }
-
-    init(title: String, @ViewBuilder icon: () -> Icon, @ViewBuilder content: () -> Content) {
-        self.title = title
-        self.icon = icon()
-        self.content = content()
-    }
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: Spacing.sm) {
-            Label {
-                Text(title)
-            } icon: {
-                icon
-            }
-            .font(Typography.caption)
-            .fontWeight(.semibold)
-            .foregroundStyle(Palette.muted)
-            .symbolRenderingMode(.hierarchical)
-            content
-        }
-        .padding(Spacing.md)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Palette.surface)
-        .clipShape(RoundedRectangle(cornerRadius: Radius.object, style: .continuous))
-    }
-}
-
 private struct WeightRowView: View {
     let row: ScoringWeightRow
 
@@ -196,16 +159,22 @@ private struct WeightRowView: View {
 
     var body: some View {
         HStack(alignment: .firstTextBaseline, spacing: Spacing.sm) {
-            Text(row.title)
-                .font(Typography.body)
-                .foregroundStyle(Palette.cream)
+            Text(row.title.uppercased())
+                .font(Typography.label)
+                .foregroundStyle(row.id == "beer" ? Palette.accent : Palette.text)
             Spacer(minLength: Spacing.sm)
             Text(row.weight)
-                .font(.body.weight(.semibold).monospacedDigit())
-                .foregroundStyle(Palette.amber)
-            Text(row.detail)
-                .font(Typography.caption)
-                .foregroundStyle(Palette.muted)
+                .font(Typography.displayM)
+                .foregroundStyle(row.id == "beer" ? Palette.accent : Palette.text)
+                .monospacedDigit()
+            Text(row.detail.uppercased())
+                .font(Typography.metadata)
+                .foregroundStyle(Palette.secondaryText)
+                .tracking(1.2)
+        }
+        .overlay(alignment: .bottom) {
+            Hairline()
+                .padding(.top, Spacing.sm)
         }
         .accessibilityElement(children: .combine)
         .accessibilityLabel("\(row.title), \(row.weight) \(row.detail)")

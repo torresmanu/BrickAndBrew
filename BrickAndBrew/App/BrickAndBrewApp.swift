@@ -17,7 +17,7 @@ struct BrickAndBrewApp: App {
             RootView()
                 .environment(session)
                 .preferredColorScheme(.dark)
-                .tint(Palette.amber)
+                .tint(Palette.accent)
                 .task {
                     guard LaunchEnvironment.isRunningUnitTests == false else { return }
                     await session.bootstrap()

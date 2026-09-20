@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Personal streak theater card: big current number, longest, one pub-table line.
+/// Personal streak as a metric, not a floating card.
 struct StreakCardView: View {
     let kind: StreakKind
     let streak: Streak
@@ -9,34 +9,36 @@ struct StreakCardView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: Spacing.xs) {
-            Label {
-                Text(kind.title)
-            } icon: {
+            HStack(spacing: Spacing.xs) {
                 kind.icon
+                Text(kind.title.uppercased())
             }
-            .font(Typography.caption)
-            .fontWeight(.semibold)
-            .foregroundStyle(Palette.muted)
+            .font(Typography.metadata)
+            .foregroundStyle(Palette.secondaryText)
             .symbolRenderingMode(.hierarchical)
+            .tracking(1.6)
 
-            Text("\(streak.current)")
-                .font(Typography.heading1)
-                .foregroundStyle(Palette.cream)
-                .monospacedDigit()
+            MetricView(
+                value: "\(streak.current)",
+                unit: streak.current == 1 ? "DAY" : "DAYS",
+                valueColor: streak.current > 0 ? Palette.text : Palette.secondaryText
+            )
 
-            Text(StreakCopy.longestCaption(streak))
-                .font(Typography.caption)
-                .foregroundStyle(Palette.muted)
+            Text(StreakCopy.longestCaption(streak).uppercased())
+                .font(Typography.metadata)
+                .foregroundStyle(Palette.secondaryText)
+                .tracking(1.2)
 
             Text(StreakCopy.line(kind: kind, streak: streak, now: now, calendar: calendar))
                 .font(Typography.body)
-                .foregroundStyle(Palette.cream)
+                .foregroundStyle(Palette.text)
                 .fixedSize(horizontal: false, vertical: true)
         }
-        .padding(Spacing.md)
+        .padding(.vertical, Spacing.md)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Palette.surface)
-        .clipShape(RoundedRectangle(cornerRadius: Radius.object, style: .continuous))
+        .overlay(alignment: .bottom) {
+            Hairline()
+        }
         .accessibilityElement(children: .combine)
         .accessibilityLabel(accessibilityText)
     }

@@ -64,6 +64,28 @@ struct BrandMark: View {
     }
 }
 
+/// Italic condensed wordmark plus the four-discipline lockup.
+struct BrandWordmark: View {
+    var alignment: HorizontalAlignment = .leading
+
+    var body: some View {
+        VStack(alignment: alignment, spacing: Spacing.xs) {
+            Text("BRICK & BREW™")
+                .font(Typography.wordmark)
+                .foregroundStyle(Palette.paper)
+                .tracking(-1)
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
+            Text("RUN  /  RIDE  /  SWIM  /  BEER")
+                .font(Typography.metadata)
+                .foregroundStyle(Palette.paper)
+                .tracking(2)
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Brick & Brew. Run, ride, swim, beer.")
+    }
+}
+
 /// Beer mug emoji. Apple has no pint SF Symbol; mug.fill is a coffee cup.
 struct PintSymbol: View {
     var body: some View {

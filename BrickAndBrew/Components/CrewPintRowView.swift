@@ -10,7 +10,7 @@ struct CrewPintRowView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: Spacing.sm) {
-            HStack(spacing: Spacing.sm) {
+            HStack(alignment: .firstTextBaseline, spacing: Spacing.sm) {
                 AvatarView(
                     userId: photo.userId,
                     displayName: displayName,
@@ -18,24 +18,32 @@ struct CrewPintRowView: View {
                     cache: avatars
                 )
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(displayName)
-                        .font(.headline)
-                        .foregroundStyle(Palette.cream)
+                    Text(displayName.uppercased())
+                        .font(Typography.label)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(Palette.text)
                         .lineLimit(1)
-                    Text(Formatters.relative(photo.loggedAt))
-                        .font(.caption)
-                        .foregroundStyle(Palette.muted)
+                    Text("BEER  ·  \(Formatters.relative(photo.loggedAt).uppercased())")
+                        .font(Typography.metadata)
+                        .foregroundStyle(Palette.secondaryText)
+                        .tracking(1.2)
                 }
                 Spacer()
-                Text(Formatters.beerCount(photo.count))
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(Palette.amber)
+                MetricView(
+                    value: Formatters.compactNumber(Double(photo.count)),
+                    unit: Formatters.beerUnit(photo.count),
+                    valueFont: Typography.title,
+                    unitFont: Typography.metadata,
+                    valueColor: Palette.accent,
+                    alignment: .trailing
+                )
             }
 
             if let note = photo.note, note.isEmpty == false {
-                Text(note)
-                    .font(.subheadline)
-                    .foregroundStyle(Palette.muted)
+                Text(note.uppercased())
+                    .font(Typography.title)
+                    .foregroundStyle(Palette.text)
+                    .fixedSize(horizontal: false, vertical: true)
             }
 
             if let image = currentImage {
@@ -44,11 +52,11 @@ struct CrewPintRowView: View {
                         .resizable()
                         .scaledToFill()
                         .frame(maxWidth: .infinity)
-                        .frame(height: 220)
+                        .frame(height: 280)
                         .clipped()
-                        .clipShape(RoundedRectangle(cornerRadius: Radius.object, style: .continuous))
                 }
                 .buttonStyle(.plain)
+                .padding(.horizontal, -Spacing.md)
                 .accessibilityLabel("Pint photo from \(displayName)")
                 .accessibilityHint("Shows a larger photo")
                 .fullScreenCover(isPresented: $isPreviewPresented) {
@@ -56,14 +64,15 @@ struct CrewPintRowView: View {
                 }
             } else {
                 Text("Photo isn't available yet. Pull to refresh.")
-                    .font(.subheadline)
-                    .foregroundStyle(Palette.muted)
+                    .font(Typography.body)
+                    .foregroundStyle(Palette.secondaryText)
                     .frame(maxWidth: .infinity, minHeight: 80, alignment: .leading)
             }
         }
-        .padding(Spacing.md)
-        .background(Palette.surface)
-        .clipShape(RoundedRectangle(cornerRadius: Radius.object, style: .continuous))
+        .padding(.vertical, Spacing.md)
+        .overlay(alignment: .bottom) {
+            Hairline()
+        }
     }
 
     private var currentImage: UIImage? {

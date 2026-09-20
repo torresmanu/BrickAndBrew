@@ -1,15 +1,16 @@
 import SwiftUI
 import UIKit
 
-/// Navigation and tab chrome for Finalist B negative polarity: `#111` ground, white type.
+/// Navigation and tab chrome: ink bars, paper type, signal orange for the selected tab.
 enum BrandChrome {
     @MainActor
     static func apply() {
-        let onGround = UIColor.white
-        let ground = UIColor(Palette.ground)
-        let meta = UIColor(Palette.meta)
-        let title = UIFont(name: "IBMPlexSans-Bold", size: 17) ?? .systemFont(ofSize: 17, weight: .bold)
-        let large = UIFont(name: "IBMPlexSans-Bold", size: 32) ?? .systemFont(ofSize: 32, weight: .bold)
+        let onGround = UIColor(Palette.paper)
+        let ground = UIColor(Palette.ink)
+        let meta = UIColor(Palette.inkMute)
+        let accent = UIColor(Palette.signal)
+        let title = Typography.uiDisplay(size: 17)
+        let large = Typography.uiDisplay(size: 32, italic: true)
 
         let nav = UINavigationBarAppearance()
         nav.configureWithOpaqueBackground()
@@ -29,10 +30,11 @@ enum BrandChrome {
         tab.shadowColor = .clear
         UITabBar.appearance().standardAppearance = tab
         UITabBar.appearance().scrollEdgeAppearance = tab
-        UITabBar.appearance().tintColor = onGround
+        UITabBar.appearance().tintColor = accent
         UITabBar.appearance().unselectedItemTintColor = meta
 
-        UITextField.appearance().tintColor = onGround
-        UISwitch.appearance().onTintColor = onGround
+        UITextField.appearance().tintColor = accent
+        UISwitch.appearance().onTintColor = accent
+        UITableView.appearance().separatorColor = UIColor(Palette.hairline)
     }
 }

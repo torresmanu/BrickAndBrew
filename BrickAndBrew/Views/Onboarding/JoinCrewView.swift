@@ -7,20 +7,18 @@ struct JoinCrewView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: Spacing.lg) {
             Spacer()
-            Text("Join the crew")
-                .font(Typography.heading1)
-                .foregroundStyle(Palette.cream)
+            Text("JOIN\nTHE CREW")
+                .font(Typography.displayL)
+                .foregroundStyle(Palette.text)
+                .minimumScaleFactor(0.7)
             Text("Ask a teammate for the invite code. If you're first, pick one and share it.")
                 .font(Typography.body)
-                .foregroundStyle(Palette.muted)
+                .foregroundStyle(Palette.secondaryText)
             TextField("Invite code", text: $code)
                 .textInputAutocapitalization(.characters)
                 .autocorrectionDisabled()
                 .submitLabel(.join)
-                .padding(Spacing.md)
-                .background(Palette.surface)
-                .clipShape(RoundedRectangle(cornerRadius: Radius.object, style: .continuous))
-                .foregroundStyle(Palette.cream)
+                .brandField()
                 .onSubmit(join)
 
             if session.isBusy {
@@ -30,7 +28,7 @@ struct JoinCrewView: View {
                 Button("Join or create", action: join)
                     .buttonStyle(PrimaryButtonStyle())
                     .disabled(InviteCode.isValid(InviteCode.normalized(code)) == false)
-                    .opacity(InviteCode.isValid(InviteCode.normalized(code)) ? 1 : 0.5)
+                    .opacity(InviteCode.isValid(InviteCode.normalized(code)) ? 1 : 0.4)
             }
             Spacer()
         }

@@ -27,7 +27,7 @@ struct RootView: View {
             }
         }
         .background(Palette.background.ignoresSafeArea())
-        .tint(Palette.amber)
+        .tint(Palette.accent)
         .alert(
             "Heads up",
             isPresented: bannerBinding,
@@ -82,7 +82,7 @@ struct MainTabView: View {
                 MeView()
             }
         }
-        .tint(Palette.amber)
+        .tint(Palette.accent)
         .toolbarBackground(Palette.background, for: .tabBar)
         .toolbarBackground(.visible, for: .tabBar)
         .onChange(of: scenePhase) { _, phase in

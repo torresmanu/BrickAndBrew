@@ -16,7 +16,7 @@ struct StreakBadgeView: View {
                 Text("\(streak.current)")
                     .font(.caption.weight(.semibold).monospacedDigit())
             }
-            .foregroundStyle(streak.isAtRisk(now: now, calendar: calendar) ? Palette.muted : Palette.cream)
+            .foregroundStyle(streak.isAtRisk(now: now, calendar: calendar) ? Palette.secondaryText : Palette.accent)
             .accessibilityElement(children: .combine)
             .accessibilityLabel(accessibilityText)
         }

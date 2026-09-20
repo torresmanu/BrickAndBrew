@@ -5,34 +5,43 @@ struct WelcomeView: View {
     @Environment(AppSession.self) private var session
 
     var body: some View {
-        VStack(spacing: Spacing.lg) {
-            Spacer()
-            BrandMark()
-                .foregroundStyle(Palette.white)
-                .frame(width: 96, height: 96)
+        ZStack(alignment: .bottom) {
+            Image(BrandPhoto.welcomeHero)
+                .resizable()
+                .scaledToFill()
+                .ignoresSafeArea()
+                .overlay {
+                    LinearGradient(
+                        colors: [Color.clear, Palette.ink.opacity(0.35), Palette.ink],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                    .ignoresSafeArea()
+                }
                 .accessibilityHidden(true)
-            Text("Brick & Brew")
-                .font(Typography.wordmark)
-                .tracking(-1)
-                .foregroundStyle(Palette.cream)
-            Text("The crew scoreboard for triathlon training and well-earned beers.")
-                .font(Typography.body)
-                .foregroundStyle(Palette.muted)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, Spacing.xl)
-            Spacer()
-            if session.isBusy {
-                LoadingView(message: "Signing in…")
-                    .frame(height: 120)
-            } else {
-                SignInWithAppleButton(.signIn, onRequest: configure, onCompletion: complete)
-                    .signInWithAppleButtonStyle(.white)
-                    .frame(height: 52)
-                    .clipShape(RoundedRectangle(cornerRadius: Radius.object, style: .continuous))
-                    .accessibilityLabel("Sign in with Apple")
+
+            VStack(alignment: .leading, spacing: Spacing.lg) {
+                BrandWordmark()
+                Text("SPORT TAKEN SERIOUSLY.\nEVERYTHING AFTER, LESS SO.")
+                    .font(Typography.body)
+                    .foregroundStyle(Palette.paper)
+                    .fixedSize(horizontal: false, vertical: true)
+
+                if session.isBusy {
+                    LoadingView(message: "Signing in…")
+                        .frame(height: 120)
+                } else {
+                    SignInWithAppleButton(.signIn, onRequest: configure, onCompletion: complete)
+                        .signInWithAppleButtonStyle(.white)
+                        .frame(height: 52)
+                        .clipShape(RoundedRectangle(cornerRadius: Radius.control, style: .continuous))
+                        .accessibilityLabel("Sign in with Apple")
+                }
             }
+            .padding(Spacing.lg)
+            .padding(.bottom, Spacing.md)
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .padding(Spacing.lg)
     }
 
     private func configure(_ request: ASAuthorizationAppleIDRequest) {

@@ -8,11 +8,13 @@ struct RankRowView: View {
     let avatars: AvatarCache
 
     var body: some View {
-        HStack(spacing: Spacing.md) {
-            Text("\(rank)")
-                .font(.headline.monospacedDigit())
-                .foregroundStyle(rank <= 3 ? Palette.amber : Palette.muted)
-                .frame(width: 28, alignment: .center)
+        HStack(alignment: .center, spacing: Spacing.md) {
+            Text(Formatters.rank(rank))
+                .font(Typography.displayM)
+                .foregroundStyle(rankColor)
+                .frame(width: 56, alignment: .leading)
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
                 .accessibilityHidden(true)
 
             AvatarView(
@@ -24,9 +26,10 @@ struct RankRowView: View {
 
             VStack(alignment: .leading, spacing: 2) {
                 HStack(spacing: Spacing.xs) {
-                    Text(entry.displayName)
-                        .font(.headline)
-                        .foregroundStyle(Palette.cream)
+                    Text(entry.displayName.uppercased())
+                        .font(Typography.label)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(Palette.text)
                         .lineLimit(1)
                     StreakBadgeView(
                         kind: board.streakKind,
@@ -34,27 +37,35 @@ struct RankRowView: View {
                     )
                     .layoutPriority(1)
                 }
-                Text(entry.detail(for: board))
-                    .font(.caption)
-                    .foregroundStyle(Palette.muted)
+                Text(entry.detail(for: board).uppercased())
+                    .font(Typography.metadata)
+                    .foregroundStyle(Palette.secondaryText)
+                    .tracking(1.2)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .accessibilityElement(children: .combine)
             .accessibilityLabel(accessibilityText)
 
-            Text(Formatters.points(entry.points(for: board)))
-                .font(.subheadline.weight(.semibold).monospacedDigit())
-                .foregroundStyle(Palette.amber)
-                .layoutPriority(1)
-                .accessibilityHidden(true)
+            MetricView(
+                value: Formatters.pointsValue(entry.points(for: board)),
+                unit: "PTS",
+                valueFont: Typography.title,
+                unitFont: Typography.metadata,
+                valueColor: isCurrentUser ? Palette.accent : Palette.text,
+                unitColor: Palette.secondaryText,
+                alignment: .trailing
+            )
+            .layoutPriority(1)
+            .accessibilityHidden(true)
         }
-        .padding(Spacing.md)
-        .background(isCurrentUser ? Palette.surfaceElevated : Palette.surface)
-        .clipShape(RoundedRectangle(cornerRadius: Radius.object, style: .continuous))
-        .overlay {
-            RoundedRectangle(cornerRadius: Radius.object, style: .continuous)
-                .stroke(isCurrentUser ? Palette.amber.opacity(0.45) : Color.clear, lineWidth: 1)
+        .padding(.vertical, Spacing.sm)
+        .overlay(alignment: .bottom) {
+            Hairline()
         }
+    }
+
+    private var rankColor: Color {
+        isCurrentUser ? Palette.accent : Palette.text
     }
 
     private var accessibilityText: String {

@@ -43,7 +43,7 @@ struct AvatarView: View {
                 } else {
                     Text(AvatarImageProcessor.initials(from: displayName))
                         .font(.system(size: size * 0.36, weight: .semibold))
-                        .foregroundStyle(Palette.cream)
+                        .foregroundStyle(Palette.text)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .background(Palette.surfaceElevated)
                 }
@@ -53,7 +53,7 @@ struct AvatarView: View {
                 Circle()
                     .fill(Palette.background.opacity(0.55))
                 ProgressView()
-                    .tint(Palette.amber)
+                    .tint(Palette.text)
             }
         }
         .frame(width: size, height: size)
@@ -109,7 +109,7 @@ private struct AvatarPreviewView: View {
                 )
                 Text(displayName)
                     .font(Typography.heading2)
-                    .foregroundStyle(Palette.cream)
+                    .foregroundStyle(Palette.text)
                     .multilineTextAlignment(.center)
                 Spacer()
             }
@@ -119,7 +119,7 @@ private struct AvatarPreviewView: View {
 
             Button("Close", action: close)
                 .font(Typography.body.weight(.semibold))
-                .foregroundStyle(Palette.cream)
+                .foregroundStyle(Palette.text)
                 .padding(Spacing.md)
                 .accessibilityLabel("Close profile photo")
         }

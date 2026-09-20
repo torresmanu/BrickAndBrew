@@ -1,5 +1,6 @@
 import Foundation
 
+/// Vertical rhythm for the product. Prefer these over one-off paddings.
 enum Spacing {
     static let xxs: CGFloat = 4
     static let xs: CGFloat = 8
@@ -8,4 +9,5 @@ enum Spacing {
     static let lg: CGFloat = 24
     static let xl: CGFloat = 32
     static let xxl: CGFloat = 48
+    static let display: CGFloat = 64
 }

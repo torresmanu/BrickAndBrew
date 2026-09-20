@@ -10,6 +10,7 @@ final class LogBeerViewModel {
     var isSaving = false
     var bannerMessage: String?
     var cheerMessage: String?
+    var lastLoggedCount: Int = 0
     var pintStreak: Streak = .empty
     var pendingPhotoJPEG: Data?
     var isCameraPresented = false
@@ -115,6 +116,7 @@ final class LogBeerViewModel {
                 throw BrickError.missingProfile
             }
             let jpeg = pendingPhotoJPEG
+            lastLoggedCount = count
             let beer = Beer(
                 id: UUID().uuidString,
                 userId: profile.id,

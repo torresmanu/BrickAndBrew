@@ -53,48 +53,66 @@ private struct CrewLoadedView: View {
     @Bindable var viewModel: CrewViewModel
 
     var body: some View {
-        VStack(spacing: Spacing.md) {
-            boardPicker
+        VStack(spacing: 0) {
+            BoardFilterBar(
+                boards: LeaderboardBoard.allCases,
+                selected: viewModel.board,
+                action: viewModel.selectBoard
+            )
+            .padding(.top, Spacing.xs)
+            .padding(.bottom, Spacing.sm)
+
             if let staleMessage = viewModel.staleMessage {
-                Text(staleMessage)
-                    .font(.caption)
-                    .foregroundStyle(Palette.muted)
+                Text(staleMessage.uppercased())
+                    .font(Typography.metadata)
+                    .foregroundStyle(Palette.secondaryText)
+                    .tracking(1.2)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, Spacing.md)
+                    .padding(.bottom, Spacing.xs)
             }
+
             content
         }
-        .padding(.top, Spacing.sm)
         .refreshable(action: refresh)
-    }
-
-    private var boardPicker: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: Spacing.xs) {
-                ForEach(LeaderboardBoard.allCases) { board in
-                    BoardChip(
-                        title: board.title,
-                        isSelected: viewModel.board == board,
-                        action: { viewModel.selectBoard(board) }
-                    )
-                }
-            }
-            .padding(.horizontal, Spacing.md)
-        }
     }
 
     @ViewBuilder
     private var content: some View {
         List {
+            if case .loaded = viewModel.state, let standing = currentStanding {
+                Section {
+                    CrewStandingHeader(
+                        name: session.profile?.displayName ?? standing.entry.displayName,
+                        rank: standing.rank,
+                        entry: standing.entry,
+                        board: viewModel.board
+                    )
+                    .listRowInsets(headerInsets)
+                    .listRowBackground(Color.clear)
+                    .listRowSeparator(.hidden)
+                }
+            }
+
             Section {
                 boardSection
+            } header: {
+                SectionHeader(title: "Club leaderboard")
+                    .textCase(nil)
+                    .listRowInsets(EdgeInsets(top: Spacing.md, leading: Spacing.md, bottom: Spacing.xs, trailing: Spacing.md))
             }
-            Section("Crew pints") {
+
+            Section {
                 pintSection
+            } header: {
+                SectionHeader(title: "Crew pints")
+                    .textCase(nil)
+                    .listRowInsets(EdgeInsets(top: Spacing.lg, leading: Spacing.md, bottom: Spacing.xs, trailing: Spacing.md))
             }
         }
         .listStyle(.plain)
         .scrollContentBackground(.hidden)
+        .listSectionSeparator(.hidden)
     }
 
     @ViewBuilder
@@ -180,8 +198,20 @@ private struct CrewLoadedView: View {
         }
     }
 
+    private var currentStanding: (rank: Int, entry: LeaderboardEntry)? {
+        guard let userId = viewModel.currentUserId,
+              let index = viewModel.ranked.firstIndex(where: { $0.userId == userId }) else {
+            return nil
+        }
+        return (index + 1, viewModel.ranked[index])
+    }
+
     private var listInsets: EdgeInsets {
-        EdgeInsets(top: 6, leading: Spacing.md, bottom: 6, trailing: Spacing.md)
+        EdgeInsets(top: 0, leading: Spacing.md, bottom: 0, trailing: Spacing.md)
+    }
+
+    private var headerInsets: EdgeInsets {
+        EdgeInsets(top: Spacing.sm, leading: Spacing.md, bottom: Spacing.md, trailing: Spacing.md)
     }
 
     private func retry() {
@@ -201,23 +231,73 @@ private struct CrewLoadedView: View {
     }
 }
 
-private struct BoardChip: View {
-    let title: String
-    let isSelected: Bool
-    let action: () -> Void
+/// Home standing: greeting, rank as graphic, points as the primary metric.
+private struct CrewStandingHeader: View {
+    let name: String
+    let rank: Int
+    let entry: LeaderboardEntry
+    let board: LeaderboardBoard
 
     var body: some View {
-        Button(action: action) {
-            Text(title)
-                .font(Typography.caption)
-                .fontWeight(.semibold)
-                .padding(.horizontal, Spacing.md)
-                .padding(.vertical, Spacing.xs)
-                .foregroundStyle(isSelected ? Palette.background : Palette.cream)
-                .background(isSelected ? Palette.amber : Palette.surface)
-                .clipShape(RoundedRectangle(cornerRadius: Radius.object, style: .continuous))
+        VStack(alignment: .leading, spacing: Spacing.sm) {
+            Text(GreetingCopy.headline(name: name))
+                .font(Typography.metadata)
+                .foregroundStyle(Palette.secondaryText)
+                .tracking(1.8)
+            Text(Formatters.rank(rank))
+                .font(Typography.displayXL)
+                .foregroundStyle(Palette.accent)
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
+            MetricView(
+                value: Formatters.pointsValue(entry.points(for: board)),
+                unit: "PTS",
+                valueFont: Typography.displayL,
+                valueColor: Palette.text
+            )
+            Text(metaLine)
+                .font(Typography.metadata)
+                .foregroundStyle(Palette.secondaryText)
+                .tracking(1.4)
+                .fixedSize(horizontal: false, vertical: true)
+            Hairline()
+                .padding(.top, Spacing.xs)
         }
-        .buttonStyle(.plain)
-        .accessibilityAddTraits(isSelected ? .isSelected : [])
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(accessibilityText)
+    }
+
+    private var metaLine: String {
+        let boardTitle = board.title.uppercased()
+        switch board {
+        case .overall:
+            return "\(boardTitle)  ·  \(volumeLine)  ·  THIS SEASON"
+        case .swim, .run, .ride:
+            return "\(boardTitle)  ·  THIS SEASON"
+        case .beers:
+            return "\(boardTitle)  ·  \(Formatters.beerCount(entry.beerCount).uppercased())  ·  THIS SEASON"
+        }
+    }
+
+    private var volumeLine: String {
+        var parts: [String] = []
+        if entry.swimMeters > 0 {
+            parts.append("\(Formatters.distanceValue(meters: entry.swimMeters)) KM SWIM")
+        }
+        if entry.rideMeters > 0 {
+            parts.append("\(Formatters.distanceValue(meters: entry.rideMeters)) KM BIKE")
+        }
+        if entry.runMeters > 0 {
+            parts.append("\(Formatters.distanceValue(meters: entry.runMeters)) KM RUN")
+        }
+        if entry.beerCount > 0 {
+            parts.append(Formatters.beerCount(entry.beerCount).uppercased())
+        }
+        return parts.isEmpty ? "NO VOLUME YET" : parts.joined(separator: "  ·  ")
+    }
+
+    private var accessibilityText: String {
+        "\(GreetingCopy.headline(name: name)). Rank \(rank). \(Formatters.points(entry.points(for: board))). \(metaLine)"
     }
 }

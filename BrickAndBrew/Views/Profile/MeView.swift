@@ -129,13 +129,16 @@ private struct MeLoadedView: View {
                     cache: session.avatars
                 )
 
-                VStack(alignment: .leading, spacing: Spacing.xs) {
-                    Text(viewModel.displayName)
-                        .font(.title2.bold())
-                        .foregroundStyle(Palette.cream)
-                    Text("Crew code \(viewModel.inviteCode)")
-                        .font(.subheadline)
-                        .foregroundStyle(Palette.muted)
+                VStack(alignment: .leading, spacing: Spacing.xxs) {
+                    Text(viewModel.displayName.uppercased())
+                        .font(Typography.title)
+                        .foregroundStyle(Palette.text)
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.7)
+                    Text("CREW CODE  \(viewModel.inviteCode)")
+                        .font(Typography.metadata)
+                        .foregroundStyle(Palette.secondaryText)
+                        .tracking(1.4)
                         .textSelection(.enabled)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -164,7 +167,7 @@ private struct MeLoadedView: View {
                     .frame(maxWidth: .infinity, minHeight: 140)
                     .listRowInsets(streakRowInsets)
                     .listRowSeparator(.hidden)
-                    .listRowBackground(Palette.background)
+                    .listRowBackground(Color.clear)
             case .empty:
                 EmptyStateView(
                     title: StreakCopy.emptyTitle,
@@ -174,19 +177,19 @@ private struct MeLoadedView: View {
                 .frame(maxWidth: .infinity, minHeight: 180)
                 .listRowInsets(streakRowInsets)
                 .listRowSeparator(.hidden)
-                .listRowBackground(Palette.background)
+                .listRowBackground(Color.clear)
             case .failed(let message):
                 ErrorStateView(message: message, retry: retryStreaks)
                     .frame(maxWidth: .infinity, minHeight: 180)
                     .listRowInsets(streakRowInsets)
                     .listRowSeparator(.hidden)
-                    .listRowBackground(Palette.background)
+                    .listRowBackground(Color.clear)
             case .loaded(let set):
                 ForEach(StreakKind.allCases) { kind in
                     StreakCardView(kind: kind, streak: set.streak(for: kind))
                         .listRowInsets(streakRowInsets)
                         .listRowSeparator(.hidden)
-                        .listRowBackground(Palette.background)
+                        .listRowBackground(Color.clear)
                 }
             }
         } header: {
@@ -194,7 +197,7 @@ private struct MeLoadedView: View {
         } footer: {
             if case .loaded = viewModel.streakState {
                 Text(StreakCopy.brickSyncLag)
-                    .foregroundStyle(Palette.muted)
+                    .foregroundStyle(Palette.secondaryText)
             }
         }
     }
@@ -206,13 +209,13 @@ private struct MeLoadedView: View {
     private var remindersSection: some View {
         Section {
             Toggle("Pint reminder", isOn: reminderBinding)
-                .tint(.green)
-                .foregroundStyle(Palette.cream)
+                .tint(Palette.accent)
+                .foregroundStyle(Palette.text)
         } header: {
             Text("Reminders")
         } footer: {
-            Text(StreakCopy.pintReminderFooter)
-                .foregroundStyle(Palette.muted)
+                Text(StreakCopy.pintReminderFooter)
+                    .foregroundStyle(Palette.secondaryText)
         }
         .listRowBackground(Palette.surface)
     }
@@ -233,13 +236,13 @@ private struct MeLoadedView: View {
             if viewModel.isStravaConnected {
                 LabeledContent("Athlete", value: connectedAthleteName)
                 Text(viewModel.lastSyncText)
-                    .foregroundStyle(Palette.muted)
+                    .foregroundStyle(Palette.secondaryText)
                 if viewModel.isSyncing {
                     HStack {
                         ProgressView()
-                            .tint(Palette.amber)
+                            .tint(Palette.accent)
                         Text("Syncing activities…")
-                            .foregroundStyle(Palette.muted)
+                            .foregroundStyle(Palette.secondaryText)
                     }
                 } else {
                     Button("Sync now", action: syncNow)
@@ -247,7 +250,7 @@ private struct MeLoadedView: View {
                 }
             } else {
                 Text("Connect Strava to pull swim, bike, and run onto the crew board.")
-                    .foregroundStyle(Palette.muted)
+                    .foregroundStyle(Palette.secondaryText)
                 if AppConfig.isStravaConfigured {
                     Button("Connect with Strava", action: connect)
                         .foregroundStyle(Palette.stravaOrange)
@@ -266,7 +269,7 @@ private struct MeLoadedView: View {
             Button("Delete account", role: .destructive, action: showDeleteAccount)
         } footer: {
             Text("Delete account removes your profile, activities, beers, and pint photos from the crew board.")
-                .foregroundStyle(Palette.muted)
+                .foregroundStyle(Palette.secondaryText)
         }
         .listRowBackground(Palette.surface)
     }
@@ -396,94 +399,5 @@ private struct AvatarPickerData: Transferable {
         DataRepresentation(importedContentType: .image) { data in
             AvatarPickerData(data: data)
         }
-    }
-}
-
-private struct EditDisplayNameSheet: View {
-    @Bindable var viewModel: MeViewModel
-    @Environment(\.dismiss) private var dismiss
-    @FocusState private var isNameFocused: Bool
-
-    var body: some View {
-        NavigationStack {
-            VStack(alignment: .leading, spacing: Spacing.md) {
-                Text("This name shows on the leaderboard. Keep it recognizable.")
-                    .font(Typography.body)
-                    .foregroundStyle(Palette.muted)
-
-                TextField("Display name", text: $viewModel.draftName)
-                    .textContentType(.nickname)
-                    .textInputAutocapitalization(.words)
-                    .submitLabel(.done)
-                    .focused($isNameFocused)
-                    .padding(Spacing.md)
-                    .background(Palette.surfaceElevated)
-                    .clipShape(RoundedRectangle(cornerRadius: Radius.object, style: .continuous))
-                    .foregroundStyle(Palette.cream)
-                    .disabled(viewModel.isSavingName)
-                    .onChange(of: viewModel.draftName, limitDraftName)
-                    .onSubmit(save)
-
-                Text("\(DisplayName.normalized(viewModel.draftName).count)/\(DisplayName.maxLength)")
-                    .font(Typography.caption)
-                    .foregroundStyle(Palette.muted)
-
-                if let message = viewModel.nameEditMessage {
-                    Text(message)
-                        .font(Typography.body)
-                        .foregroundStyle(Palette.danger)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-
-                if viewModel.isSavingName {
-                    LoadingView(message: "Saving your name…")
-                        .frame(maxHeight: 120)
-                }
-
-                Spacer()
-            }
-            .padding(Spacing.md)
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-            .background(Palette.background.ignoresSafeArea())
-            .navigationTitle("Edit name")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel", action: close)
-                        .disabled(viewModel.isSavingName)
-                }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Save", action: save)
-                        .disabled(viewModel.canSaveName == false)
-                }
-            }
-        }
-        .presentationDetents([.medium])
-        .presentationDragIndicator(.visible)
-        .presentationBackground(Palette.background)
-        .interactiveDismissDisabled(viewModel.isSavingName)
-        .onAppear {
-            isNameFocused = true
-        }
-    }
-
-    private func limitDraftName(_ oldValue: String, _ newValue: String) {
-        if newValue.count > DisplayName.maxLength {
-            viewModel.draftName = String(newValue.prefix(DisplayName.maxLength))
-        }
-    }
-
-    private func save() {
-        guard viewModel.canSaveName else { return }
-        Task {
-            let didSave = await viewModel.saveDisplayName()
-            if didSave {
-                dismiss()
-            }
-        }
-    }
-
-    private func close() {
-        dismiss()
     }
 }
