@@ -11,7 +11,7 @@
   <meta property="og:title" content="Brick &amp; Brew" />
   <meta property="og:description" content="Sport taken seriously. Everything after, less so." />
   <meta property="og:url" content="https://torresmanu.github.io/BrickAndBrew/" />
-  <meta property="og:image" content="https://torresmanu.github.io/BrickAndBrew/assets/photos/hero-wide.jpg" />
+  <meta property="og:image" content="https://torresmanu.github.io/BrickAndBrew/assets/photos/hero-wide.jpg?v=3" />
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="icon" href="assets/favicon.svg?v=2" type="image/svg+xml" />
   <link rel="icon" href="assets/favicon-32.png?v=2" type="image/png" sizes="32x32" />
@@ -47,30 +47,16 @@
   <main id="content">
     <section class="hero" aria-label="Brick and Brew">
       <div class="hero-media">
-        <img
-          src="assets/photos/hero-wide.jpg"
-          alt="Friends toasting beers on a harbour after training, shot wide so the bottles sit in the foreground."
-          width="1920"
-          height="1280"
-          fetchpriority="high"
-          data-parallax
-        />
-      </div>
-      <div class="hero-shade" aria-hidden="true"></div>
-      <div class="hero-copy">
-        <div class="hero-bottom">
-          <div>
-            <h1 class="display hero-headline">Train. Drink. Repeat.</h1>
-            <div class="hero-actions">
-              <a class="btn btn-primary" href="#board">Join the club →</a>
-              <a class="btn btn-ghost" href="#formula">See the index →</a>
-            </div>
-          </div>
-          <aside class="hero-aside">
-            <p>BCN / ES</p>
-            <p>Sat / 20 Sep</p>
-          </aside>
-        </div>
+        <picture>
+          <source type="image/webp" srcset="assets/photos/hero-wide.webp?v=3" />
+          <img
+            src="assets/photos/hero-wide.jpg?v=3"
+            alt="Brick and Brew harbour toast: friends in kit clinking bottles after training. The still already carries the wordmark and slogans."
+            width="1920"
+            height="1280"
+            fetchpriority="high"
+          />
+        </picture>
       </div>
     </section>
 
@@ -91,9 +77,13 @@
       <div class="grid">
         <div class="span-8" data-reveal>
           <p class="kicker">01 — The club</p>
-          <h2 class="premise-title">Sport taken seriously. Everything after, less so.</h2>
+          <h1 class="premise-title">Sport taken seriously. Everything after, less so.</h1>
           <hr class="premise-rule" />
           <p class="lede">A private scoreboard for people who run, ride and swim hard, then have beers together. Your friends are the competition.</p>
+          <div class="cta-actions">
+            <a class="btn btn-primary" href="#board">Join the club →</a>
+            <a class="btn btn-ghost" href="#formula">See the index →</a>
+          </div>
         </div>
         <div class="span-12 weight-rail">
           <div class="stat"><span class="stat-value">×10</span><span class="stat-label">Swim</span></div>
@@ -169,27 +159,17 @@
     </section>
 
     <section class="section" data-density="loud" aria-label="Community">
-      <figure class="photo-stage is-night">
-        <img
-          src="assets/photos/night-cheers.jpg"
-          alt="A crew sitting on the pavement at night, clinking Brick and Brew bottles over an open cooler."
-          width="1920"
-          height="1280"
-          loading="lazy"
-          data-parallax
-          data-reveal="crop"
-        />
-        <div class="photo-stage-shade" aria-hidden="true"></div>
-        <figcaption class="photo-stage-copy">
-          <div>
-            <p class="kicker">03 — After</p>
-            <h2>Good people. Great beers.</h2>
-          </div>
-          <div class="meta-stack">
-            <p class="lockup-meta">Train hard. Drink well.</p>
-            <p class="lockup-meta">07:42 PM / Post session</p>
-          </div>
-        </figcaption>
+      <figure class="photo-stage">
+        <picture>
+          <source type="image/webp" srcset="assets/photos/night-cheers.webp?v=3" />
+          <img
+            src="assets/photos/night-cheers.jpg?v=3"
+            alt="A crew sitting on the pavement at night, clinking Brick and Brew bottles over an open cooler. The still already carries the wordmark."
+            width="1920"
+            height="1280"
+            loading="lazy"
+          />
+        </picture>
       </figure>
     </section>
 
@@ -225,26 +205,17 @@
     </section>
 
     <section class="section" data-density="loud" aria-label="Session table">
-      <figure class="photo-stage is-table">
-        <img
-          src="assets/photos/table-session.jpg"
-          alt="A crowded post-training table: beers in the foreground, tacos, a cycling helmet, and friends still in kit."
-          width="1920"
-          height="1280"
-          loading="lazy"
-          data-parallax
-          data-reveal="crop"
-        />
-        <div class="photo-stage-shade" aria-hidden="true"></div>
-        <figcaption class="photo-stage-copy">
-          <div>
-            <p class="kicker">05 — One more round</p>
-            <h2>Same struggles. Better beers.</h2>
-          </div>
-          <div class="meta-stack">
-            <p class="lockup-meta">Swim ✓ Ride ✓ Run ✓ Beer ✓</p>
-          </div>
-        </figcaption>
+      <figure class="photo-stage">
+        <picture>
+          <source type="image/webp" srcset="assets/photos/table-session.webp?v=3" />
+          <img
+            src="assets/photos/table-session.jpg?v=3"
+            alt="A crowded post-training table: beers in the foreground, tacos, a cycling helmet, and friends still in kit. The still already carries the Brick and Brew lockup and slogans."
+            width="1920"
+            height="1280"
+            loading="lazy"
+          />
+        </picture>
       </figure>
     </section>
 
@@ -304,15 +275,6 @@
     </section>
 
     <section class="cta-finale" aria-label="Join">
-      <img
-        src="assets/photos/table-session.jpg"
-        alt="A pint in the foreground at a crowded post-training table."
-        width="1920"
-        height="1280"
-        loading="lazy"
-        data-parallax
-      />
-      <div class="cta-finale-shade" aria-hidden="true"></div>
       <div class="cta-finale-copy">
         <p class="kicker">08 — Invite only</p>
         <h2>One more round.</h2>

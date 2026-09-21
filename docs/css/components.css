@@ -125,17 +125,8 @@ main,
   height: var(--header-height);
   display: flex;
   align-items: center;
-  border-bottom: 1px solid transparent;
-  background: transparent;
-  transition:
-    background var(--duration-slow) var(--ease-standard),
-    border-color var(--duration-slow) var(--ease-standard);
-}
-
-.site-header.is-scrolled {
-  background: color-mix(in srgb, var(--color-ink-900) 92%, transparent);
-  border-bottom-color: var(--color-border-default);
-  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--color-border-default);
+  background: var(--color-ink-900);
 }
 
 .nav-bar {
@@ -396,8 +387,7 @@ main,
 
 .photo-frame img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
   display: block;
 }
 

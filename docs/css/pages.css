@@ -4,83 +4,31 @@
  *
  * Rhythm: quiet → loud → quiet → loud.
  * Structure the type. Free the photography.
+ * Stills already carry the wordmark — never overlay type or dimming on them.
  */
 
 .hero {
-  position: relative;
-  min-height: 100svh;
+  margin-top: var(--header-height);
   display: grid;
-  align-items: stretch;
-  overflow: hidden;
-  color: var(--color-paper-100);
+  align-items: center;
+  background: var(--color-ink-900);
 }
 
-.hero-media {
-  position: absolute;
-  inset: 0;
+.hero-media picture,
+.photo-stage picture,
+.lost-media picture {
+  display: block;
 }
 
-.hero-media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: 62% 48%;
-}
-
-.hero-shade {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(to bottom, rgba(10, 10, 10, 0.5) 0%, transparent 24%),
-    linear-gradient(to top, rgba(10, 10, 10, 0.78) 0%, transparent 34%);
-  pointer-events: none;
-}
-
-.hero-copy {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  min-height: 100svh;
-  padding:
-    calc(var(--header-height) + var(--space-4))
-    var(--gutter)
-    var(--space-6);
-  width: min(var(--width-page), calc(100% - var(--gutter) * 2));
+.hero-media img,
+.photo-stage img {
+  display: block;
+  /* Fit the full 3:2 still in the viewport so baked-in lockups are never cropped. */
+  width: calc((100svh - var(--header-height)) * 3 / 2);
+  max-width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
   margin-inline: auto;
-}
-
-.hero-bottom {
-  display: grid;
-  grid-template-columns: 1.5fr 0.5fr;
-  gap: var(--space-6);
-  align-items: end;
-}
-
-.hero-headline {
-  font-size: clamp(2.8rem, 8vw, 6.4rem);
-  max-width: 14ch;
-}
-
-.hero-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-3);
-  margin-top: var(--space-5);
-}
-
-.hero-aside {
-  justify-self: end;
-  text-align: right;
-  font-family: var(--font-mono);
-  font-size: var(--font-size-caption);
-  letter-spacing: var(--tracking-caps);
-  text-transform: uppercase;
-}
-
-.hero-aside p + p {
-  margin-top: var(--space-2);
 }
 
 .section {
@@ -128,6 +76,10 @@
   background: var(--color-accent-default);
   border: 0;
   margin: var(--space-5) 0;
+}
+
+.section .cta-actions {
+  margin-top: var(--space-5);
 }
 
 .weight-rail {
@@ -181,57 +133,10 @@
 }
 
 .photo-stage {
-  position: relative;
-  min-height: 100svh;
-  overflow: hidden;
-  color: var(--color-paper-100);
-}
-
-.photo-stage img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 120%;
-  object-fit: cover;
-}
-
-.photo-stage.is-table img {
-  object-position: 42% 55%;
-}
-
-.photo-stage.is-night img {
-  object-position: 68% 40%;
-}
-
-.photo-stage-shade {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(105deg, rgba(10, 10, 10, 0.58) 0%, rgba(10, 10, 10, 0.12) 42%, transparent 62%),
-    linear-gradient(to top, rgba(10, 10, 10, 0.5) 0%, transparent 34%);
-  pointer-events: none;
-}
-
-.photo-stage-copy {
-  position: relative;
-  z-index: 1;
-  min-height: 100svh;
+  margin: 0;
   display: grid;
-  align-content: space-between;
-  padding: var(--space-8) var(--gutter);
-  width: min(var(--width-page), calc(100% - var(--gutter) * 2));
-  margin-inline: auto;
-}
-
-.photo-stage-copy h2 {
-  font-size: clamp(3.4rem, 12vw, 9rem);
-  max-width: 10ch;
-}
-
-.photo-stage-copy .meta-stack {
-  display: grid;
-  gap: var(--space-2);
-  justify-items: start;
+  align-items: center;
+  background: var(--color-ink-900);
 }
 
 .steps {
@@ -273,50 +178,25 @@
 }
 
 .cta-finale {
-  position: relative;
-  min-height: 88svh;
-  display: grid;
-  align-content: end;
-  overflow: hidden;
   color: var(--color-paper-100);
-}
-
-.cta-finale img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 115%;
-  object-fit: cover;
-  object-position: 50% 80%;
-}
-
-.cta-finale-shade {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(10, 10, 10, 0.82) 0%, rgba(10, 10, 10, 0.2) 55%, rgba(10, 10, 10, 0.35) 100%);
+  background: var(--color-ink-900);
 }
 
 .cta-finale-copy {
-  position: relative;
-  z-index: 1;
-  padding: var(--space-9) var(--gutter);
+  padding: var(--space-10) var(--gutter);
   width: min(var(--width-page), calc(100% - var(--gutter) * 2));
   margin-inline: auto;
 }
 
-.hero .lede,
-.photo-stage .lede,
 .cta-finale .lede,
 .lost .lede {
   color: color-mix(in srgb, var(--color-paper-100) 82%, transparent);
 }
 
-.hero .btn-ghost,
 .cta-finale .btn-ghost,
 .lost .btn-ghost {
   color: var(--color-paper-100);
   border-color: color-mix(in srgb, var(--color-paper-100) 55%, transparent);
-  background: color-mix(in srgb, var(--color-ink-900) 42%, transparent);
 }
 
 .cta-finale h2 {
@@ -388,33 +268,35 @@
 .lost {
   min-height: 100svh;
   display: grid;
-  align-content: end;
-  position: relative;
-  overflow: hidden;
+  grid-template-columns: 1.2fr 0.8fr;
   color: var(--color-paper-100);
-  padding: var(--space-8) var(--gutter);
+  background: var(--color-ink-900);
 }
 
-.lost img {
-  position: absolute;
-  inset: 0;
+.lost-media {
+  min-height: 100svh;
+  overflow: hidden;
+  background: var(--color-ink-900);
+}
+
+.lost-media picture {
+  height: 100%;
+  min-height: 100svh;
+}
+
+.lost-media img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: 70% 40%;
-}
-
-.lost-shade {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(10, 10, 10, 0.86), rgba(10, 10, 10, 0.25));
+  min-height: 100svh;
+  object-fit: contain;
+  object-position: center;
+  background: var(--color-ink-900);
 }
 
 .lost-copy {
-  position: relative;
-  z-index: 1;
-  width: min(var(--width-page), calc(100% - var(--gutter) * 2));
-  margin-inline: auto;
+  display: grid;
+  align-content: center;
+  padding: var(--space-8) var(--gutter);
 }
 
 .lost h1 {
@@ -538,7 +420,7 @@
 
 .photo-specimens {
   display: grid;
-  grid-template-columns: 1.4fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: var(--space-4);
 }
 
@@ -548,9 +430,8 @@
 
 .photo-specimens img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  min-height: 280px;
+  height: auto;
+  display: block;
 }
 
 .logo-caption {
@@ -565,23 +446,21 @@
   margin-top: var(--space-5);
 }
 
+@media (min-width: 961px) {
+  .hero,
+  .photo-stage {
+    min-height: calc(100svh - var(--header-height));
+  }
+}
+
 @media (max-width: 960px) {
-  .hero-bottom,
   .formula-grid,
   .board-layout,
   .steps,
   .features,
-  .photo-specimens {
+  .photo-specimens,
+  .lost {
     grid-template-columns: 1fr;
-  }
-
-  .hero-aside {
-    justify-self: start;
-    text-align: left;
-  }
-
-  .hero-headline {
-    font-size: clamp(3.4rem, 18vw, 6.5rem);
   }
 
   .weight-rail {
@@ -596,30 +475,23 @@
     text-align: left;
   }
 
-  .photo-stage,
-  .photo-stage-copy,
-  .cta-finale {
-    min-height: 88svh;
+  .lost-media {
+    min-height: 0;
+  }
+
+  .lost-media picture,
+  .lost-media img {
+    min-height: 0;
+    height: auto;
   }
 }
 
 @media (max-width: 720px) {
-  .hero-copy {
-    padding-top: calc(var(--header-height) + var(--space-4));
-  }
-
-  .hero-top .lockup-word {
-    font-size: clamp(3.2rem, 16vw, 5.2rem);
-    max-width: none;
-    overflow: hidden;
-  }
-
   .section[data-density="quiet"] {
     padding: var(--space-8) 0;
   }
 
   .premise-title,
-  .photo-stage-copy h2,
   .cta-finale h2 {
     overflow-wrap: normal;
     word-break: keep-all;
