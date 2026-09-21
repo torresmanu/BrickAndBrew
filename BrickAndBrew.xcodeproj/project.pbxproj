@@ -52,6 +52,7 @@
 		7561E904A8DA9030256E433C /* OFL.txt in Resources */ = {isa = PBXBuildFile; fileRef = 14FBE5BAFFE1B85A111F41B9 /* OFL.txt */; };
 		76C04B8CE286862672FB1E2A /* BarlowCondensed-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7E9C221B318862696F978839 /* BarlowCondensed-Bold.ttf */; };
 		78A867C803CEC5B4D4DF53A4 /* Team.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB0F07DC830D22FDCD04E87 /* Team.swift */; };
+		7A1F9D2E6C4B80A31D5E47B8 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C8E17A94B2D61F0E8A4C519 /* SplashView.swift */; };
 		7E61488C04879DAF74E92CD1 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59FA86769D451FD129E893D8 /* AppConfig.swift */; };
 		80C8606F4363F4394CA4C6D3 /* PintReminderPlanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 588ACA0F7174779C93948B9A /* PintReminderPlanner.swift */; };
 		8195A977B45AED00FB51120C /* CrewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9311672746C5C464080BC4 /* CrewView.swift */; };
@@ -134,6 +135,7 @@
 		3A041A4CF46E2AE22FEFF219 /* BrickAndBrew.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BrickAndBrew.entitlements; sourceTree = "<group>"; };
 		3A660B58F839C19C0D9BB622 /* InviteCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteCode.swift; sourceTree = "<group>"; };
 		3AF9F55E8B0F3B58C50C14D1 /* IBMPlexMono-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "IBMPlexMono-Regular.ttf"; sourceTree = "<group>"; };
+		3C8E17A94B2D61F0E8A4C519 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		3DB08807539B38BC5440CFD5 /* MeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeViewModel.swift; sourceTree = "<group>"; };
 		4103667047C68EE715C45AE4 /* AppSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSession.swift; sourceTree = "<group>"; };
 		470E3E9A099EB1D62E210064 /* PintReminderScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PintReminderScheduler.swift; sourceTree = "<group>"; };
@@ -175,7 +177,7 @@
 		B53DCFB1A467F4A2D29887AC /* OFL-Barlow.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "OFL-Barlow.txt"; sourceTree = "<group>"; };
 		B72F882274A7C303BD2F109F /* IBMPlexMono-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "IBMPlexMono-Medium.ttf"; sourceTree = "<group>"; };
 		B9734F65635040C3DDA78303 /* ActivityMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityMapper.swift; sourceTree = "<group>"; };
-		C86C8E7CA564490531582340 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		C86C8E7CA564490531582340 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		D2EFBC78E7C9AD1F95FA7935 /* Spacing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spacing.swift; sourceTree = "<group>"; };
 		D3DFECE5A2B31B1A4974AE62 /* BrandChrome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandChrome.swift; sourceTree = "<group>"; };
 		DA9B8C48E4958C4CE0B632E5 /* Scoring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scoring.swift; sourceTree = "<group>"; };
@@ -187,7 +189,7 @@
 		E1C18585E08F3F4966990A09 /* BarlowCondensed-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BarlowCondensed-BoldItalic.ttf"; sourceTree = "<group>"; };
 		E36ADEE30FF86916B6772F42 /* CloudKitKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitKey.swift; sourceTree = "<group>"; };
 		E50832BD4332201312788BB7 /* IBMPlexMono-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "IBMPlexMono-Bold.ttf"; sourceTree = "<group>"; };
-		EADF2F6A20DE4307A72B0892 /* BrickAndBrew.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = BrickAndBrew.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		EADF2F6A20DE4307A72B0892 /* BrickAndBrew.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BrickAndBrew.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EAF6737883C6B0C1D7754359 /* LaunchEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchEnvironment.swift; sourceTree = "<group>"; };
 		EE403F61D143D8C5964D1545 /* ScoringAndMappingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoringAndMappingTests.swift; sourceTree = "<group>"; };
 		F093A363E39425AF6FA609E4 /* StreakBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakBadgeView.swift; sourceTree = "<group>"; };
@@ -395,6 +397,7 @@
 				4B97AD429451871644A7AFDE /* ConnectStravaView.swift */,
 				87484693F47BC3D18E16A346 /* DisplayNameView.swift */,
 				799324DE9E35F0ECFF9D0A74 /* JoinCrewView.swift */,
+				3C8E17A94B2D61F0E8A4C519 /* SplashView.swift */,
 				5B16721A4C03E76E56822295 /* WelcomeView.swift */,
 			);
 			path = Onboarding;
@@ -588,6 +591,7 @@
 				6E3AC34B879F2D85F909510C /* ScoringGuideView.swift in Sources */,
 				509AFC7B930F2799C0639B85 /* SectionHeader.swift in Sources */,
 				E4FFE262A7DE68BF034208AF /* Spacing.swift in Sources */,
+				7A1F9D2E6C4B80A31D5E47B8 /* SplashView.swift in Sources */,
 				4E100A9CE2B88FEDBE21E3F8 /* SportKind.swift in Sources */,
 				C24A94D98A0E1E505D7BB562 /* StateViews.swift in Sources */,
 				5DFA723DEF63AECA5955A328 /* StravaModels.swift in Sources */,
@@ -630,7 +634,7 @@
 				CODE_SIGN_ENTITLEMENTS = BrickAndBrew/BrickAndBrew.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = DTF4NR87GG;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -752,7 +756,7 @@
 				CODE_SIGN_ENTITLEMENTS = BrickAndBrew/BrickAndBrew.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = DTF4NR87GG;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_TESTABILITY = YES;

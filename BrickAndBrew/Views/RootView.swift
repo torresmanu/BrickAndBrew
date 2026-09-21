@@ -7,7 +7,11 @@ struct RootView: View {
         Group {
             switch session.phase {
             case .launching:
-                LoadingView(message: "Opening the taproom…")
+                if session.hasStoredSession {
+                    SplashView()
+                } else {
+                    LoadingView(message: "Opening the taproom…")
+                }
             case .iCloudUnavailable:
                 ErrorStateView(
                     message: BrickError.iCloudUnavailable.localizedDescription,
@@ -78,8 +82,15 @@ struct MainTabView: View {
                         .renderingMode(.original)
                 }
             }
-            Tab("Me", systemImage: "person.crop.circle", value: AppTab.me) {
+            Tab(value: AppTab.me) {
                 MeView()
+            } label: {
+                Label {
+                    Text("Me")
+                } icon: {
+                    Image(uiImage: meTabIcon)
+                        .renderingMode(.original)
+                }
             }
         }
         .tint(Palette.accent)
@@ -94,5 +105,16 @@ struct MainTabView: View {
         .onReceive(NotificationCenter.default.publisher(for: .openLogTab)) { _ in
             session.selectedTab = .log
         }
+    }
+
+    /// Original-color circular photo so the tab bar does not flatten it to a template glyph.
+    private var meTabIcon: UIImage {
+        _ = session.avatars.generation
+        let profile = session.profile
+        let photo = profile.flatMap { session.avatars.image(for: $0.id) }
+        return TabBarAvatar.image(
+            photo: photo,
+            displayName: profile?.displayName ?? "Me"
+        )
     }
 }

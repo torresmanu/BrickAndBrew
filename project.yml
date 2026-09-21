@@ -29,7 +29,7 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.brickandbrew.app
         PRODUCT_NAME: BrickAndBrew
         MARKETING_VERSION: "2.0.0"
-        CURRENT_PROJECT_VERSION: "4"
+        CURRENT_PROJECT_VERSION: "5"
         DEVELOPMENT_TEAM: DTF4NR87GG
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_FILE: BrickAndBrew/Info.plist

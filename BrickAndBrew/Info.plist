@@ -55,6 +55,9 @@
 		<string>BarlowCondensed-BoldItalic.ttf</string>
 	</array>
 	<key>UILaunchScreen</key>
-	<dict/>
+	<dict>
+		<key>UIColorName</key>
+		<string>LaunchBackground</string>
+	</dict>
 </dict>
 </plist>

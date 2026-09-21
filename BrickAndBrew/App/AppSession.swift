@@ -1,5 +1,6 @@
 import AuthenticationServices
 import Foundation
+import UIKit
 
 enum SessionPhase: Equatable {
     case launching
@@ -27,6 +28,8 @@ final class AppSession {
     var isBusy = false
     var bannerMessage: String?
     var selectedTab: AppTab = .crew
+    /// True when Keychain already has an Apple user id. Drives the returning-user splash.
+    private(set) var hasStoredSession = false
 
     let auth = AuthService()
     let avatars: AvatarCache
@@ -40,6 +43,7 @@ final class AppSession {
         avatars = avatarCache
         beerPhotos = photoCache
         cloudKit = CloudKitService(avatars: avatarCache, beerPhotos: photoCache)
+        hasStoredSession = (try? auth.storedAppleUserId())?.isEmpty == false
     }
 
     func bootstrap() async {
@@ -47,9 +51,14 @@ final class AppSession {
             phase = .needsAppleSignIn
             return
         }
+
+        let splashStarted = ContinuousClock.now
+        let returningUser = hasStoredSession
+
         do {
             try await cloudKit.requireICloud()
             guard let userId = try auth.storedAppleUserId() else {
+                hasStoredSession = false
                 phase = .needsAppleSignIn
                 return
             }
@@ -57,16 +66,21 @@ final class AppSession {
             let state = await auth.credentialState(for: userId)
             guard state == .authorized else {
                 try? auth.signOut()
+                hasStoredSession = false
                 phase = .needsAppleSignIn
                 return
             }
 
+            let next: SessionPhase
             if let existing = try await cloudKit.fetchProfile(appleUserId: userId) {
                 profile = existing
-                try await advance(from: existing)
+                next = try await resolvedPhase(from: existing)
             } else {
-                phase = .needsDisplayName
+                next = .needsDisplayName
             }
+            // Keep the splash on screen long enough to read, unless Reduce Motion is on.
+            await holdReturningSplash(started: splashStarted, shouldHold: returningUser)
+            phase = next
         } catch let error as BrickError where error == .iCloudUnavailable {
             phase = .iCloudUnavailable
         } catch {
@@ -86,6 +100,7 @@ final class AppSession {
             do {
                 try await cloudKit.requireICloud()
                 try auth.persistAppleUserId(credential.user)
+                hasStoredSession = true
                 let formatted = PersonNameComponentsFormatter().string(from: credential.fullName ?? PersonNameComponents())
                 let trimmed = formatted.trimmingCharacters(in: .whitespacesAndNewlines)
                 suggestedName = trimmed.isEmpty ? "" : trimmed
@@ -242,6 +257,7 @@ final class AppSession {
         team = nil
         suggestedName = ""
         selectedTab = .crew
+        hasStoredSession = false
         phase = .needsAppleSignIn
     }
 
@@ -285,17 +301,29 @@ final class AppSession {
     }
 
     private func advance(from profile: Profile) async throws {
+        phase = try await resolvedPhase(from: profile)
+    }
+
+    private func resolvedPhase(from profile: Profile) async throws -> SessionPhase {
         if profile.displayName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            phase = .needsDisplayName
-            return
+            return .needsDisplayName
         }
         if profile.teamId.isEmpty {
-            phase = .needsJoinCrew
-            return
+            return .needsJoinCrew
         }
         if let loaded = try await cloudKit.fetchTeam(recordName: profile.teamId) {
             team = loaded
         }
-        phase = team == nil ? .needsJoinCrew : .ready
+        return team == nil ? .needsJoinCrew : .ready
     }
+
+    /// Returning launches get a short brand beat. Skip the extra wait when Reduce Motion is on.
+    private func holdReturningSplash(started: ContinuousClock.Instant, shouldHold: Bool) async {
+        guard shouldHold, UIAccessibility.isReduceMotionEnabled == false else { return }
+        let remaining = Self.returningSplashHold - started.duration(to: .now)
+        guard remaining > .zero else { return }
+        try? await Task.sleep(for: remaining)
+    }
+
+    private static let returningSplashHold: Duration = .milliseconds(1100)
 }

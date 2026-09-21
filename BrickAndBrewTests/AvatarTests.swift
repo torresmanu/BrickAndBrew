@@ -2,6 +2,7 @@ import CoreGraphics
 import Foundation
 import ImageIO
 import Testing
+import UIKit
 import UniformTypeIdentifiers
 @testable import BrickAndBrew
 
@@ -11,6 +12,13 @@ struct AvatarImageProcessorTests {
         #expect(AvatarImageProcessor.initials(from: "Alex") == "A")
         #expect(AvatarImageProcessor.initials(from: "  ") == "?")
         #expect(AvatarImageProcessor.initials(from: "") == "?")
+    }
+
+    @Test func tabBarAvatarIsASquareOriginalImage() {
+        let image = TabBarAvatar.image(photo: nil, displayName: "Alex Rivera")
+        #expect(image.size.width == TabBarAvatar.pointSize)
+        #expect(image.size.height == TabBarAvatar.pointSize)
+        #expect(image.renderingMode == .alwaysOriginal)
     }
 
     @Test func cropsNonSquareImageToSquareJPEGWithinMaxSize() throws {
