@@ -6,8 +6,8 @@
  * uses the same Total Index the iPhone app computes.
  */
 const WEIGHTS = Object.freeze({
-  swim: 10,
-  run: 3,
+  swim: 26,
+  run: 4,
   ride: 1,
   beer: 12,
   coveragePerBeer: 20,

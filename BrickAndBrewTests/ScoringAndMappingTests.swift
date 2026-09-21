@@ -4,14 +4,14 @@ import Testing
 @testable import BrickAndBrew
 
 struct ScoringTests {
-    @Test func swimKilometerIsWorthTen() {
+    @Test func swimKilometerIsWorthTwentySix() {
         let points = Scoring.trainingPoints(meters: 1000, sport: .swim)
-        #expect(points == 10)
+        #expect(points == 26)
     }
 
-    @Test func runKilometerIsWorthThree() {
+    @Test func runKilometerIsWorthFour() {
         let points = Scoring.trainingPoints(meters: 1000, sport: .run)
-        #expect(points == 3)
+        #expect(points == 4)
     }
 
     @Test func rideKilometerIsWorthOne() {
@@ -46,9 +46,9 @@ struct ScoringTests {
             rideMeters: 1000,
             beerCount: 2
         )
-        // Training 14 is inside 40 covered points, so no grind tax: 10 + 3 + 1 + 24.
+        // Training 31 is inside 40 covered points, so no grind tax: 26 + 4 + 1 + 24.
         #expect(entry.grindTax == 0)
-        #expect(entry.totalIndex == 38)
+        #expect(entry.totalIndex == 55)
     }
 
     @Test func grindTaxHitsUncoveredTraining() {
@@ -64,8 +64,8 @@ struct ScoringTests {
             rideMeters: 0,
             beerCount: 0
         )
-        // 100 training points, no coverage, tax 125 → −25.
-        #expect(index == -25)
+        // 260 training points, no coverage, tax 325 → −65.
+        #expect(index == -65)
     }
 
     @Test func extraBeersBeatExtraKilometersOnTheIndex() {
@@ -94,7 +94,7 @@ struct ScoringTests {
 
     @Test func compactNumberKeepsGuideCopyReadable() {
         #expect(Formatters.compactNumber(12) == "12")
-        #expect(Formatters.compactNumber(Scoring.trainingPointsCoveredPerBeer / Scoring.runPointsPerKilometer) == "6.7")
+        #expect(Formatters.compactNumber(Scoring.trainingPointsCoveredPerBeer / Scoring.runPointsPerKilometer) == "5")
     }
 
     @Test func signedPointsValueKeepsReceiptSigns() {
@@ -128,8 +128,8 @@ struct ScoreBreakdownTests {
         )
         let breakdown = entry.scoreBreakdown(for: .overall)
         #expect(breakdown.lines.map(\.id) == ["swim", "ride", "run", "beers"])
-        #expect(breakdown.lines.map(\.points) == [10, 1, 3, 24])
-        #expect(breakdown.total == 38)
+        #expect(breakdown.lines.map(\.points) == [26, 1, 4, 24])
+        #expect(breakdown.total == 55)
         #expect(breakdown.lines.reduce(0) { $0 + $1.points } == breakdown.total)
         #expect(breakdown.footnote == "Pints cover the training load. No grind tax.")
     }
@@ -176,8 +176,8 @@ struct ScoreBreakdownTests {
             beerCount: 0
         )
         let breakdown = entry.scoreBreakdown(for: .overall)
-        #expect(breakdown.lines.map(\.points) == [100, -100, -25])
-        #expect(breakdown.total == -25)
+        #expect(breakdown.lines.map(\.points) == [260, -260, -65])
+        #expect(breakdown.total == -65)
         #expect(breakdown.total == entry.totalIndex)
         #expect(breakdown.footnote.contains("No pints this season"))
     }

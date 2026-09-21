@@ -6,13 +6,13 @@ import Foundation
 /// beers score hard, each pint covers a slice of training, and uncovered
 /// kilometers take a grind tax so stacking swim / bike / run cannot buy the board.
 enum Scoring: Sendable {
-    static let swimPointsPerKilometer = 10.0
-    static let runPointsPerKilometer = 3.0
+    static let swimPointsPerKilometer = 26.0
+    static let runPointsPerKilometer = 4.0
     static let ridePointsPerKilometer = 1.0
     static let pointsPerBeer = 12.0
     static let metersPerKilometer = 1000.0
 
-    /// Training points one beer covers at full value (2 km swim, ~6.7 km run, or 20 km bike).
+    /// Training points one beer covers at full value (~0.8 km swim, 5 km run, or 20 km bike).
     static let trainingPointsCoveredPerBeer = 20.0
 
     /// Extra tax on uncovered training, on top of dropping that volume from the Index.
