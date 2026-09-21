@@ -38,3 +38,42 @@ enum BrandChrome {
         UITableView.appearance().separatorColor = UIColor(Palette.hairline)
     }
 }
+
+extension View {
+    /// Sheet root: iOS 26 keeps the system Liquid Glass; iOS 18 fills with brand ink.
+    func brandGlassSheet() -> some View {
+        modifier(BrandGlassSheetModifier())
+    }
+
+    /// Stack content: hide the opaque nav fill so glass can show through the title bar.
+    func brandGlassSheetContent() -> some View {
+        modifier(BrandGlassSheetContentModifier())
+    }
+}
+
+private struct BrandGlassSheetModifier: ViewModifier {
+    @ViewBuilder
+    func body(content: Content) -> some View {
+        if #available(iOS 26, *) {
+            content
+        } else {
+            content
+                .presentationBackground(Palette.background)
+        }
+    }
+}
+
+private struct BrandGlassSheetContentModifier: ViewModifier {
+    @ViewBuilder
+    func body(content: Content) -> some View {
+        if #available(iOS 26, *) {
+            content
+                .toolbarBackground(.hidden, for: .navigationBar)
+                .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
+                .containerBackground(.clear, for: .navigation)
+        } else {
+            content
+                .background(Palette.background.ignoresSafeArea())
+        }
+    }
+}

@@ -18,7 +18,6 @@ struct ScoringGuideView: View {
                 .padding(Spacing.md)
                 .padding(.bottom, Spacing.lg)
             }
-            .background(Palette.background.ignoresSafeArea())
             .navigationTitle("How points work")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -26,10 +25,11 @@ struct ScoringGuideView: View {
                     Button("Done", action: close)
                 }
             }
+            .brandGlassSheetContent()
         }
         .presentationDetents([.medium, .large])
         .presentationDragIndicator(.visible)
-        .presentationBackground(Palette.background)
+        .brandGlassSheet()
     }
 
     private var intro: some View {

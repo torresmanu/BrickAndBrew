@@ -24,7 +24,6 @@ struct ScoreBreakdownView: View {
                 .padding(Spacing.md)
                 .padding(.bottom, Spacing.lg)
             }
-            .background(Palette.background.ignoresSafeArea())
             .navigationTitle(navigationTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -32,10 +31,11 @@ struct ScoreBreakdownView: View {
                     Button("Done", action: close)
                 }
             }
+            .brandGlassSheetContent()
         }
         .presentationDetents([.medium, .large])
         .presentationDragIndicator(.visible)
-        .presentationBackground(Palette.background)
+        .brandGlassSheet()
     }
 
     private var breakdown: ScoreBreakdown {
