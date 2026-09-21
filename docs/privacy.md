@@ -1,6 +1,6 @@
 # Privacy Policy for Brick & Brew
 
-Last updated: 18 September 2026
+Last updated: 21 September 2026
 
 Brick & Brew is a private crew app for friends training for a triathlon. It is not a public social network.
 
@@ -15,6 +15,7 @@ Brick & Brew is provided by the app developer who invited you to TestFlight. Con
 - **Training.** When you connect Strava, we read your activity summaries (sport, start time, distance, moving time, elevation, average and max heart rate). We do not request permission to post to Strava and we do not download heart-rate streams.
 - **Beers.** Counts, timestamps, optional notes, and optional photos you take with the camera. Teammates on your crew can see those photos on the crew board.
 - **Technical.** Tokens needed to talk to Strava are stored in the iOS Keychain on your device. Crew records are stored in Apple CloudKit.
+- **Waitlist.** If you join from the website, we store the email you submit so we can send a TestFlight invite. We do not use it for a newsletter or ads.
 
 ## Why we collect it
 
@@ -27,20 +28,25 @@ All of the above is used only to sign you in, sync your own training, let you lo
 
 The Cloudflare Worker used for Strava OAuth sees a one-time authorization code or a refresh token only to exchange it with Strava. It does not keep a database of athletes.
 
+Waitlist emails are stored in a separate Cloudflare Worker (Cloudflare KV), keyed by a hash of the address, until we send the invite or you ask us to delete it.
+
 ## Sharing
 
 We share data with:
 
 - **Apple** (Sign in with Apple, CloudKit, TestFlight).
 - **Strava** (when you choose Connect with Strava), under Strava's terms and privacy policy.
+- **Cloudflare** (waitlist email storage only).
 
-We do not share your crew board with advertisers.
+We do not share your crew board or waitlist with advertisers.
 
 ## Retention
 
 Disconnect Strava in the Me tab to delete tokens from the Keychain and clear the Strava athlete id on your profile. Sign out removes the local session only.
 
 To delete your account, open the Me tab and choose **Delete account**. That removes your CloudKit profile (including your photo), activities, beers, and pint photos from the crew board and signs you out. The crew itself stays for teammates. Deletion is immediate.
+
+To leave the waitlist, email the developer listed on the App Store Connect record for Brick & Brew and we will delete that address.
 
 ## Your choices
 

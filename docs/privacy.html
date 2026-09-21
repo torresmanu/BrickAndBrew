@@ -31,7 +31,7 @@
         <a href="index.html#board">Board</a>
         <a href="brand.html">Brand</a>
         <a href="privacy.html" aria-current="page">Privacy</a>
-        <a class="btn btn-ghost" href="https://github.com/torresmanu/BrickAndBrew" rel="noopener noreferrer">GitHub</a>
+        <a class="btn btn-primary" href="index.html#waitlist">Join waitlist</a>
       </nav>
     </div>
   </header>
@@ -39,7 +39,7 @@
   <main id="content" class="doc">
     <p class="eyebrow">Legal</p>
     <h1>Privacy Policy</h1>
-    <p class="updated">Last updated: 17 September 2026</p>
+    <p class="updated">Last updated: 21 September 2026</p>
     <p>Brick &amp; Brew is a private crew app for friends training for a triathlon. It is not a public social network.</p>
 
     <h2>Who we are</h2>
@@ -52,6 +52,7 @@
       <li><strong>Training.</strong> When you connect Strava, we read activity summaries (sport, start time, distance, moving time, elevation, average and max heart rate). We do not post to Strava and we do not download heart-rate streams.</li>
       <li><strong>Beers.</strong> Counts, timestamps, and optional notes you enter in the app.</li>
       <li><strong>Technical.</strong> Strava tokens live in the iOS Keychain. Crew records live in Apple CloudKit.</li>
+      <li><strong>Waitlist.</strong> If you join from the website, we store the email you submit so we can send a TestFlight invite. We do not use it for a newsletter or ads.</li>
     </ul>
 
     <h2>Why we collect it</h2>
@@ -60,12 +61,14 @@
     <h2>Where it is stored</h2>
     <p>Strava tokens stay on-device. Profiles, activities, beers, and the team record are stored in CloudKit (public database, filtered by crew invite code). That is a small private-crew design, not bank-level isolation.</p>
     <p>The Cloudflare Worker used for Strava OAuth exchanges a one-time code or refresh token with Strava. It does not keep an athlete database.</p>
+    <p>Waitlist emails are stored in a separate Cloudflare Worker (Cloudflare KV), keyed by a hash of the address, until we send the invite or you ask us to delete it.</p>
 
     <h2>Sharing</h2>
-    <p>We share data with Apple (Sign in with Apple, CloudKit, TestFlight) and, if you connect it, Strava. We do not share the crew board with advertisers.</p>
+    <p>We share data with Apple (Sign in with Apple, CloudKit, TestFlight) and, if you connect it, Strava. Waitlist storage uses Cloudflare. We do not share the crew board or waitlist with advertisers.</p>
 
     <h2>Retention and choices</h2>
     <p>Disconnect Strava in the Me tab to delete tokens from Keychain. Sign out removes the local session only. To delete your account, open Me and choose <strong>Delete account</strong>. That immediately removes your CloudKit profile, activities, and beers from the crew board and signs you out. The crew stays for teammates. Skipping Strava and logging beers only is supported.</p>
+    <p>To leave the waitlist, email the developer listed on the App Store Connect record for Brick &amp; Brew and we will delete that address.</p>
 
     <h2>Children</h2>
     <p>The app is intended for adults on a private TestFlight crew and is not directed at children under 13.</p>
@@ -79,6 +82,7 @@
       <p>© <span id="year">2026</span> Brick &amp; Brew.</p>
       <div class="footer-links">
         <a href="index.html">Home</a>
+        <a href="index.html#waitlist">Waitlist</a>
         <a href="brand.html">Brand</a>
         <a href="https://github.com/torresmanu/BrickAndBrew" rel="noopener noreferrer">GitHub</a>
       </div>

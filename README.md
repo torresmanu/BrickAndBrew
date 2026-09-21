@@ -4,7 +4,7 @@ iPhone app for a private triathlon crew: Sign in with Apple, sync swim / bike / 
 
 **Total Index** = training + beers × 12 − grind tax. Each beer covers 20 training points; uncovered swim / bike / run is stripped and taxed at 25%.
 
-There is no paid backend. CloudKit holds the crew board. A free Cloudflare Worker exists only so the Strava client secret never ships in the iOS app.
+There is no paid backend. CloudKit holds the crew board. Cloudflare Workers cover Strava OAuth (so the client secret never ships in the iOS app) and the public waitlist.
 
 ## Architecture
 
@@ -24,6 +24,7 @@ Views → ViewModels → Services → CloudKit / Strava / Keychain
 | `BrickAndBrew/` | SwiftUI app (iOS 18+) |
 | `BrickAndBrewTests/` | Scoring, Strava mapping, season-window tests |
 | `worker/strava-oauth/` | Cloudflare Worker (`POST /token`, `POST /refresh`) |
+| `worker/waitlist/` | Cloudflare Worker (`POST /waitlist`) + KV |
 | `docs/` | Marketing site + privacy policy (GitHub Pages) |
 
 ## One-time setup
@@ -69,7 +70,29 @@ npx wrangler deploy
 
 Copy the `*.workers.dev` URL into `BrickAndBrew/Info.plist` key `STRAVA_OAUTH_WORKER_URL` (no trailing path). The app calls `/token` and `/refresh` on that host.
 
-### 5. Privacy policy URL
+### 5. Waitlist worker (free)
+
+The marketing site posts to this worker instead of linking to a download.
+
+```bash
+cd worker/waitlist
+npx wrangler kv namespace create WAITLIST
+```
+
+Paste the returned id into `worker/waitlist/wrangler.toml`, then:
+
+```bash
+npx wrangler deploy
+```
+
+The homepage form already points at `https://brickandbrew-waitlist.brickandbrew.workers.dev/waitlist`. To read signups:
+
+```bash
+npx wrangler kv key list --binding WAITLIST --prefix email: --remote
+npx wrangler kv key get --binding WAITLIST "<key>" --remote
+```
+
+### 6. Privacy policy URL
 
 The public site is GitHub Pages from the `docs/` folder:
 

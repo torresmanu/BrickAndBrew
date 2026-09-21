@@ -20,8 +20,8 @@ xcuserdata/
 .DS_Store
 
 # Secrets (copy from examples, never commit real values)
-worker/strava-oauth/.dev.vars
-worker/strava-oauth/.wrangler/
+worker/**/.dev.vars
+worker/**/.wrangler/
 *.local.xcconfig
 
 # Fastlane

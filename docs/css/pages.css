@@ -180,6 +180,7 @@
 .cta-finale {
   color: var(--color-paper-100);
   background: var(--color-ink-900);
+  scroll-margin-top: var(--header-height);
 }
 
 .cta-finale-copy {
@@ -189,8 +190,35 @@
 }
 
 .cta-finale .lede,
+.cta-finale .waitlist-result p,
 .lost .lede {
   color: color-mix(in srgb, var(--color-paper-100) 82%, transparent);
+}
+
+.cta-finale .waitlist-field {
+  color: var(--color-paper-100);
+  border-color: color-mix(in srgb, var(--color-paper-100) 55%, transparent);
+}
+
+.cta-finale .waitlist-field::placeholder {
+  color: color-mix(in srgb, var(--color-paper-100) 45%, transparent);
+}
+
+.cta-finale .waitlist-hint,
+.cta-finale .waitlist-status {
+  color: color-mix(in srgb, var(--color-paper-100) 70%, transparent);
+}
+
+.cta-finale .waitlist-status.is-error {
+  color: var(--color-fg-danger);
+}
+
+.cta-finale .waitlist-status.is-success {
+  color: var(--color-fg-success);
+}
+
+.cta-finale .waitlist-form .cta-actions {
+  margin-top: var(--space-4);
 }
 
 .cta-finale .btn-ghost,

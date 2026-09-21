@@ -39,7 +39,7 @@
         <a href="#board">Board</a>
         <a href="brand.html">Brand</a>
         <a href="privacy.html">Privacy</a>
-        <a class="btn btn-ghost" href="https://github.com/torresmanu/BrickAndBrew" rel="noopener noreferrer">GitHub</a>
+        <a class="btn btn-primary" href="#waitlist">Join waitlist</a>
       </nav>
     </div>
   </header>
@@ -81,7 +81,7 @@
           <hr class="premise-rule" />
           <p class="lede">A private scoreboard for people who run, ride and swim hard, then have beers together. Your friends are the competition.</p>
           <div class="cta-actions">
-            <a class="btn btn-primary" href="#board">Join the club →</a>
+            <a class="btn btn-primary" href="#waitlist">Join the waitlist →</a>
             <a class="btn btn-ghost" href="#formula">See the index →</a>
           </div>
         </div>
@@ -274,13 +274,53 @@
       </div>
     </section>
 
-    <section class="cta-finale" aria-label="Join">
+    <section class="cta-finale" id="waitlist" aria-label="Waitlist">
       <div class="cta-finale-copy">
-        <p class="kicker">08 — Invite only</p>
+        <p class="kicker">08 — Waitlist</p>
         <h2>One more round.</h2>
-        <p class="lede">This is not a social network. Share one code. Rank until the season is over — then order another round.</p>
+        <p class="lede">The club is invite-only. Leave your email and we will send a TestFlight seat when the next round opens.</p>
+        <form
+          class="waitlist-form"
+          id="waitlist-form"
+          action="https://brickandbrew-waitlist.brickandbrew.workers.dev/waitlist"
+          method="post"
+          novalidate
+        >
+          <div class="waitlist-honeypot" aria-hidden="true">
+            <label for="waitlist-company">Company</label>
+            <input id="waitlist-company" name="company" type="text" tabindex="-1" autocomplete="off" />
+          </div>
+          <div class="waitlist-row">
+            <label class="visually-hidden" for="waitlist-email">Email</label>
+            <input
+              class="waitlist-field"
+              id="waitlist-email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              inputmode="email"
+              maxlength="254"
+              placeholder="you@crew.com"
+              required
+              aria-describedby="waitlist-hint waitlist-status"
+            />
+            <button class="btn btn-primary" id="waitlist-submit" type="submit">
+              <span class="spinner btn-spinner" hidden aria-hidden="true"></span>
+              <span class="btn-label">Join the waitlist →</span>
+            </button>
+          </div>
+          <p class="waitlist-hint" id="waitlist-hint">We only use this to send your invite. No newsletter.</p>
+          <div class="waitlist-status" id="waitlist-status" role="status" aria-live="polite"></div>
+          <div class="waitlist-result" id="waitlist-success" hidden>
+            <p class="kicker">You're on the list</p>
+            <h3>We'll ping you.</h3>
+            <p>When the next TestFlight round opens, that email gets a seat.</p>
+          </div>
+        </form>
+        <noscript>
+          <p class="waitlist-hint">Turn on JavaScript to join the waitlist from this page.</p>
+        </noscript>
         <div class="cta-actions">
-          <a class="btn btn-primary" href="https://github.com/torresmanu/BrickAndBrew" rel="noopener noreferrer">Get the app →</a>
           <a class="btn btn-ghost" href="privacy.html">Read the privacy policy</a>
         </div>
       </div>
@@ -291,6 +331,7 @@
     <div class="wrap footer-grid">
       <p>© <span id="year">2026</span> Brick &amp; Brew. Train hard. Drink well.</p>
       <div class="footer-links">
+        <a href="#waitlist">Waitlist</a>
         <a href="brand.html">Brand</a>
         <a href="privacy.html">Privacy</a>
         <a href="https://github.com/torresmanu/BrickAndBrew" rel="noopener noreferrer">GitHub</a>
@@ -298,5 +339,6 @@
     </div>
   </footer>
   <script src="js/site.js" defer></script>
+  <script src="js/waitlist.js" defer></script>
 </body>
 </html>

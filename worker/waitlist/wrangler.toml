@@ -1,0 +1,8 @@
+name = "brickandbrew-waitlist"
+main = "src/index.js"
+compatibility_date = "2026-09-16"
+workers_dev = true
+
+[[kv_namespaces]]
+binding = "WAITLIST"
+id = "f3313cfecb5548559cd108c9860a9d4c"
