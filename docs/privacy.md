@@ -14,7 +14,7 @@ Brick & Brew is provided by the app developer who invited you to TestFlight. Con
 - **Crew membership.** Invite code and team name so you can share one private board.
 - **Training.** When you connect Strava, we read your activity summaries (sport, start time, distance, moving time, elevation, average and max heart rate). We do not request permission to post to Strava and we do not download heart-rate streams.
 - **Beers.** Counts, timestamps, optional notes, and optional photos you take with the camera. Teammates on your crew can see those photos on the crew board.
-- **Location (optional).** If you turn on Nearby pint in the Me tab, the app reads your location on this iPhone to mark home and work (so we do not ping you on the couch) and to ask Apple Maps whether you are lingering at a bar, brewery, or restaurant between 6:00 pm and 2:00 am. Location is never stored in CloudKit, never shown to teammates, and never used for ads or tracking. Turn the toggle off or clear home/work at any time.
+- **Location (optional).** Nearby pint starts on. The first time you open the crew tabs we ask iOS for Always and Precise Location. If you allow it, the app reads your location on this iPhone to mark home and work (so we do not ping you on the couch) and to ask Apple Maps whether you are lingering at a bar, brewery, or restaurant between 6:00 pm and 2:00 am. Location is never stored in CloudKit, never shown to teammates, and never used for ads or tracking. Turn the toggle off or clear home/work in Me at any time.
 - **Technical.** Tokens needed to talk to Strava are stored in the iOS Keychain on your device. Crew records are stored in Apple CloudKit.
 - **Waitlist.** If you join from the website, we store the email you submit so we can send a TestFlight invite. We do not use it for a newsletter or ads.
 
@@ -55,8 +55,8 @@ To leave the waitlist, email the developer listed on the App Store Connect recor
 - Skip Strava and only log beers.
 - Skip a profile photo; the board shows your initials.
 - Skip a pint photo; you can still log beers without the camera.
-- Leave Nearby pint off; the app never reads location.
-- Turn Nearby pint off later; background location stops.
+- Deny the first-run location prompt; Nearby pint stays off the device.
+- Turn Nearby pint or the 7:00 pm reminder off in Me; background location stops.
 - Skip or clear home and work pins.
 - Disconnect Strava at any time.
 - Sign out at any time.

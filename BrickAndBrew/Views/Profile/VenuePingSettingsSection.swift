@@ -92,13 +92,15 @@ private struct SavedPlaceRow: View {
 
             HStack(spacing: Spacing.md) {
                 Button(setTitle, action: save)
+                    .buttonStyle(.borderless)
                 if hasPlace {
                     Button(VenuePingCopy.clear, role: .destructive, action: clear)
+                        .buttonStyle(.borderless)
                 }
             }
         }
         .disabled(isSaving)
-        .accessibilityElement(children: .combine)
+        .accessibilityElement(children: .contain)
         .accessibilityLabel(accessibilityName)
     }
 

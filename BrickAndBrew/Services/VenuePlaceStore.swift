@@ -16,13 +16,11 @@ enum VenuePlaceKind: String, Sendable {
     case work
 }
 
-/// Opt-in flag for the nearby pint ping. Off until the user asks.
+/// Nearby pint starts on. The user can turn it off in Me.
 enum VenuePingSettings {
-    private static let key = "venuePing.enabled"
-
     static var isEnabled: Bool {
-        get { UserDefaults.standard.bool(forKey: key) }
-        set { UserDefaults.standard.set(newValue, forKey: key) }
+        get { UserDefaults.standard.bool(forKey: ReminderDefaults.venueEnabledKey) }
+        set { UserDefaults.standard.set(newValue, forKey: ReminderDefaults.venueEnabledKey) }
     }
 }
 
@@ -77,7 +75,6 @@ enum VenuePlaceStore {
 
     /// Sign out and account deletion wipe local pins so the next user starts clean.
     static func clearAll() {
-        VenuePingSettings.isEnabled = false
         home = nil
         work = nil
         lastBeerLoggedAt = nil

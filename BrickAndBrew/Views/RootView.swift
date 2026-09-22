@@ -103,6 +103,9 @@ struct MainTabView: View {
                 await session.refreshPintReminderFromCloud()
             }
         }
+        .task {
+            await session.requestFirstRunReminderPermissions()
+        }
         .onReceive(NotificationCenter.default.publisher(for: .openLogTab)) { _ in
             session.selectedTab = .log
         }

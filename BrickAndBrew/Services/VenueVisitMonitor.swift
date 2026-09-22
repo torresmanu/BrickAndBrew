@@ -89,12 +89,21 @@ final class VenueVisitMonitor: NSObject, CLLocationManagerDelegate, @unchecked S
         case .whenInUse, .alwaysReduced:
             break
         }
-        if manager.authorizationStatus == .authorizedWhenInUse {
-            await waitForAuthorizationChange(
-                after: { self.manager.requestAlwaysAuthorization() },
-                resumeIfStillActiveAfter: .seconds(1.2)
-            )
+
+        // iOS never offers Always on the first sheet. The upgrade prompt appears
+        // only after When In Use is granted and the app has used location.
+        _ = try? await currentFix()
+
+        guard manager.authorizationStatus == .authorizedWhenInUse else {
+            return authorization
         }
+
+        // Let the When In Use sheet finish dismissing or the Always sheet is swallowed.
+        try? await Task.sleep(for: .milliseconds(600))
+        await waitForAuthorizationChange(
+            after: { self.manager.requestAlwaysAuthorization() },
+            resumeIfStillActiveAfter: .seconds(4)
+        )
         return authorization
     }
 
@@ -208,7 +217,12 @@ final class VenueVisitMonitor: NSObject, CLLocationManagerDelegate, @unchecked S
             if let resumeIfStillActiveAfter {
                 Task { [weak self] in
                     try? await Task.sleep(for: resumeIfStillActiveAfter)
-                    guard let self, UIApplication.shared.applicationState == .active else { return }
+                    guard let self else { return }
+                    // UIApplication is MainActor-isolated; hop before reading app state.
+                    let isActive = await MainActor.run {
+                        UIApplication.shared.applicationState == .active
+                    }
+                    guard isActive else { return }
                     self.resumeAuthWaiters()
                 }
             }

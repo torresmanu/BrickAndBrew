@@ -249,6 +249,7 @@ final class AppSession {
     func signOut() {
         PintReminderScheduler.cancel()
         VenueVisitMonitor.shared.stopAndClear()
+        ReminderDefaults.resetForSignOut()
         try? auth.signOut()
         CrewCache.clear()
         SyncCursor.clear()
@@ -260,6 +261,27 @@ final class AppSession {
         selectedTab = .crew
         hasStoredSession = false
         phase = .needsAppleSignIn
+    }
+
+    /// Notifications + Always location, once, the first time the crew tabs appear.
+    func requestFirstRunReminderPermissions() async {
+        guard LaunchEnvironment.isRunningUnitTests == false else { return }
+        guard ReminderDefaults.didPromptFirstRun == false else { return }
+        ReminderDefaults.didPromptFirstRun = true
+
+        if PintReminderSettings.isEnabled {
+            let allowed = await PintReminderScheduler.requestAuthorization()
+            if allowed == false {
+                PintReminderSettings.isEnabled = false
+            } else {
+                await refreshPintReminderFromCloud()
+            }
+        }
+
+        if VenuePingSettings.isEnabled {
+            _ = await VenueVisitMonitor.shared.requestAlwaysPrecise()
+            VenueVisitMonitor.shared.refreshMonitoring()
+        }
     }
 
     /// Recomputes the pint ping from CloudKit. Fetch failure leaves a pending request in place.

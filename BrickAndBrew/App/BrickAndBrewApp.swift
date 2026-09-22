@@ -6,6 +6,7 @@ struct BrickAndBrewApp: App {
     @State private var session = AppSession()
 
     init() {
+        ReminderDefaults.prepareFirstRun()
         BrandChrome.apply()
         if LaunchEnvironment.isRunningUnitTests == false {
             UNUserNotificationCenter.current().delegate = PintReminderCenterDelegate.shared

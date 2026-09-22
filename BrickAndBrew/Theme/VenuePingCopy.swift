@@ -4,11 +4,11 @@ import Foundation
 enum VenuePingCopy {
     static let toggleTitle = "Nearby pint"
     static let footer =
-        "Between 6:00 pm and 2:00 am, if you linger at a bar, brewery, or restaurant, we'll ask once whether to log a pint. We skip saved home and work. Location stays on this iPhone and never goes to the crew board."
+        "On from the first time you open the crew. Between 6:00 pm and 2:00 am, if you linger at a bar, brewery, or restaurant, we'll ask once whether to log a pint. We skip saved home and work. Location stays on this iPhone and never goes to the crew board."
     static let denied =
         "Location or notifications are off for Brick & Brew. Turn on Always and Precise Location — and notifications — in iOS Settings if you want the nearby pint ping."
     static let needsAlways =
-        "Nearby pint needs Always location so we can notice a bar while the app is closed. Allow Always in iOS Settings."
+        "The first iOS sheet only offers While Using. If a second sheet asked to Change to Always, pick that. Otherwise open Settings → Brick & Brew → Location → Always."
     static let needsPrecise =
         "Nearby pint needs Precise Location so we can tell a bar from your couch. Turn it on for Brick & Brew in iOS Settings."
     static let pausedAlways = "Paused. Allow Always Location in iOS Settings to resume."

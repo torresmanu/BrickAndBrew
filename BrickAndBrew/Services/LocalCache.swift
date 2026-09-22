@@ -45,11 +45,43 @@ enum SyncCursor {
     }
 }
 
-enum PintReminderSettings {
-    private static let key = "pintReminder.enabled"
+/// Shared keys so both reminders start on until the user turns one off.
+enum ReminderDefaults {
+    static let pintEnabledKey = "pintReminder.enabled"
+    static let venueEnabledKey = "venuePing.enabled"
+    private static let didPromptKey = "reminders.didPromptFirstRun"
 
+    static func register() {
+        UserDefaults.standard.register(defaults: [
+            pintEnabledKey: true,
+            venueEnabledKey: true
+        ])
+    }
+
+    /// First crew-tab visit writes the on defaults and asks iOS for permission once.
+    static var didPromptFirstRun: Bool {
+        get { UserDefaults.standard.bool(forKey: didPromptKey) }
+        set { UserDefaults.standard.set(newValue, forKey: didPromptKey) }
+    }
+
+    static func prepareFirstRun() {
+        register()
+        if didPromptFirstRun == false {
+            PintReminderSettings.isEnabled = true
+            VenuePingSettings.isEnabled = true
+        }
+    }
+
+    static func resetForSignOut() {
+        UserDefaults.standard.removeObject(forKey: pintEnabledKey)
+        UserDefaults.standard.removeObject(forKey: venueEnabledKey)
+        UserDefaults.standard.removeObject(forKey: didPromptKey)
+    }
+}
+
+enum PintReminderSettings {
     static var isEnabled: Bool {
-        get { UserDefaults.standard.bool(forKey: key) }
-        set { UserDefaults.standard.set(newValue, forKey: key) }
+        get { UserDefaults.standard.bool(forKey: ReminderDefaults.pintEnabledKey) }
+        set { UserDefaults.standard.set(newValue, forKey: ReminderDefaults.pintEnabledKey) }
     }
 }
