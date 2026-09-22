@@ -98,6 +98,7 @@ struct MainTabView: View {
         .toolbarBackground(.visible, for: .tabBar)
         .onChange(of: scenePhase) { _, phase in
             guard phase == .active else { return }
+            VenueVisitMonitor.shared.refreshMonitoring()
             Task {
                 await session.refreshPintReminderFromCloud()
             }

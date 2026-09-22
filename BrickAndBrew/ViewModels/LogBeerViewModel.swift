@@ -126,6 +126,7 @@ final class LogBeerViewModel {
                 note: note.trimmingCharacters(in: .whitespacesAndNewlines)
             )
             _ = try await session.cloudKit.saveBeer(beer)
+            VenuePlaceStore.markBeerLogged(at: beer.loggedAt)
             note = ""
             count = 1
             pendingPhotoJPEG = nil
@@ -171,6 +172,10 @@ final class LogBeerViewModel {
             beers: beers,
             seasonStart: seasonStart
         ).pint
+        if let latestToday = beers.filter({ Calendar.current.isDateInToday($0.loggedAt) })
+            .max(by: { $0.loggedAt < $1.loggedAt }) {
+            VenuePlaceStore.markBeerLogged(at: latestToday.loggedAt)
+        }
         Task {
             await PintReminderScheduler.refresh(pint: pintStreak)
         }

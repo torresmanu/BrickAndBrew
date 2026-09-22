@@ -39,7 +39,7 @@
   <main id="content" class="doc">
     <p class="eyebrow">Legal</p>
     <h1>Privacy Policy</h1>
-    <p class="updated">Last updated: 21 September 2026</p>
+    <p class="updated">Last updated: 22 September 2026</p>
     <p>Brick &amp; Brew is a private crew app for friends training for a triathlon. It is not a public social network.</p>
 
     <h2>Who we are</h2>
@@ -50,24 +50,26 @@
       <li><strong>Account.</strong> Sign in with Apple gives us an opaque user identifier and, if you share it, your name. We store a display name you choose so teammates can recognize you on the leaderboard.</li>
       <li><strong>Crew membership.</strong> Invite code and team name so you can share one private board.</li>
       <li><strong>Training.</strong> When you connect Strava, we read activity summaries (sport, start time, distance, moving time, elevation, average and max heart rate). We do not post to Strava and we do not download heart-rate streams.</li>
-      <li><strong>Beers.</strong> Counts, timestamps, and optional notes you enter in the app.</li>
+      <li><strong>Beers.</strong> Counts, timestamps, optional notes, and optional photos you take with the camera. Teammates on your crew can see those photos on the crew board.</li>
+      <li><strong>Location (optional).</strong> If you turn on Nearby pint in the Me tab, the app reads your location on this iPhone to mark home and work (so we do not ping you on the couch) and to ask Apple Maps whether you are lingering at a bar, brewery, or restaurant between 6:00 pm and 2:00 am. Location is never stored in CloudKit, never shown to teammates, and never used for ads or tracking. Turn the toggle off or clear home/work at any time.</li>
       <li><strong>Technical.</strong> Strava tokens live in the iOS Keychain. Crew records live in Apple CloudKit.</li>
       <li><strong>Waitlist.</strong> If you join from the website, we store the email you submit so we can send a TestFlight invite. We do not use it for a newsletter or ads.</li>
     </ul>
 
     <h2>Why we collect it</h2>
-    <p>We use this data only to sign you in, sync your training, let you log beers, and show the crew leaderboard. We do not sell data, run ads, or track you across other companies' apps or websites.</p>
+    <p>Account, training, beers, and crew data are used only to sign you in, sync your training, let you log beers, and show the crew leaderboard (including optional profile photos and pint photos). Location is used only to decide whether to ask you to log a pint. We do not sell data, run ads, or track you across other companies' apps or websites.</p>
 
     <h2>Where it is stored</h2>
-    <p>Strava tokens stay on-device. Profiles, activities, beers, and the team record are stored in CloudKit (public database, filtered by crew invite code). That is a small private-crew design, not bank-level isolation.</p>
+    <p>Strava tokens stay on-device. Optional home and work pins, Nearby pint on/off, and the last local pint-ping day stay on this iPhone and are deleted when you sign out, delete your account, or clear them in Me. Profiles, activities, beers, pint photos, and the team record are stored in CloudKit (public database, filtered by crew invite code). That is a small private-crew design, not bank-level isolation.</p>
     <p>The Cloudflare Worker used for Strava OAuth exchanges a one-time code or refresh token with Strava. It does not keep an athlete database.</p>
     <p>Waitlist emails are stored in a separate Cloudflare Worker (Cloudflare KV), keyed by a hash of the address, until we send the invite or you ask us to delete it.</p>
 
     <h2>Sharing</h2>
-    <p>We share data with Apple (Sign in with Apple, CloudKit, TestFlight) and, if you connect it, Strava. Waitlist storage uses Cloudflare. We do not share the crew board or waitlist with advertisers.</p>
+    <p>We share data with Apple (Sign in with Apple, CloudKit, TestFlight, and — if Nearby pint is on — MapKit place lookup and visit delivery) and, if you connect it, Strava. Waitlist storage uses Cloudflare. We do not share the crew board, waitlist, or location with advertisers.</p>
 
     <h2>Retention and choices</h2>
-    <p>Disconnect Strava in the Me tab to delete tokens from Keychain. Sign out removes the local session only. To delete your account, open Me and choose <strong>Delete account</strong>. That immediately removes your CloudKit profile, activities, and beers from the crew board and signs you out. The crew stays for teammates. Skipping Strava and logging beers only is supported.</p>
+    <p>Disconnect Strava in the Me tab to delete tokens from Keychain. Sign out removes the local session only, including home/work pins and Nearby pint settings. To delete your account, open Me and choose <strong>Delete account</strong>. That immediately removes your CloudKit profile, activities, beers, and pint photos from the crew board, clears on-device location pins, and signs you out. The crew stays for teammates. Skipping Strava and logging beers only is supported. Nearby pint stays off until you turn it on.</p>
+    <p>You can skip a profile photo, skip a pint photo, leave Nearby pint off, clear home and work, disconnect Strava, sign out, or delete your account from Me at any time.</p>
     <p>To leave the waitlist, email the developer listed on the App Store Connect record for Brick &amp; Brew and we will delete that address.</p>
 
     <h2>Children</h2>

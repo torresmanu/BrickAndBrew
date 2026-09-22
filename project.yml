@@ -29,7 +29,7 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.brickandbrew.app
         PRODUCT_NAME: BrickAndBrew
         MARKETING_VERSION: "2.0.0"
-        CURRENT_PROJECT_VERSION: "5"
+        CURRENT_PROJECT_VERSION: "6"
         DEVELOPMENT_TEAM: DTF4NR87GG
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_FILE: BrickAndBrew/Info.plist
@@ -73,6 +73,10 @@ targets:
         CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
         ITSAppUsesNonExemptEncryption: false
         NSCameraUsageDescription: "Brick & Brew uses the camera so you can snap a photo of a pint for the crew board."
+        NSLocationWhenInUseUsageDescription: "Brick & Brew uses your location so you can mark home and work, and so we can check nearby pubs before asking whether to log a pint."
+        NSLocationAlwaysAndWhenInUseUsageDescription: "With Always on, Brick & Brew can notice when you linger at a bar, brewery, or restaurant in the evening and ask if you want to log a pint — even if the app is closed. Location stays on this iPhone. We never send it to the crew board."
+        UIBackgroundModes:
+          - location
         STRAVA_CLIENT_ID: "280004"
         STRAVA_OAUTH_WORKER_URL: "https://brickandbrew-strava.brickandbrew.workers.dev"
         CFBundleURLTypes:

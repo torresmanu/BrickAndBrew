@@ -248,6 +248,7 @@ final class AppSession {
 
     func signOut() {
         PintReminderScheduler.cancel()
+        VenueVisitMonitor.shared.stopAndClear()
         try? auth.signOut()
         CrewCache.clear()
         SyncCursor.clear()

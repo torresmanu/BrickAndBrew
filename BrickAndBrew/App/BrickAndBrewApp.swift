@@ -9,6 +9,7 @@ struct BrickAndBrewApp: App {
         BrandChrome.apply()
         if LaunchEnvironment.isRunningUnitTests == false {
             UNUserNotificationCenter.current().delegate = PintReminderCenterDelegate.shared
+            VenueVisitMonitor.shared.prepare()
         }
     }
 

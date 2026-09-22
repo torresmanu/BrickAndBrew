@@ -67,7 +67,10 @@ final class PintReminderCenterDelegate: NSObject, UNUserNotificationCenterDelega
         _ center: UNUserNotificationCenter,
         didReceive response: UNNotificationResponse
     ) async {
-        guard response.notification.request.identifier == PintReminderPlanner.identifier else { return }
+        let identifier = response.notification.request.identifier
+        guard identifier == PintReminderPlanner.identifier || identifier == VenuePingScheduler.identifier else {
+            return
+        }
         NotificationCenter.default.post(name: .openLogTab, object: nil)
     }
 }

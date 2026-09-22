@@ -15,6 +15,7 @@ Views → ViewModels → Services → CloudKit / Strava / Keychain
 - Identity: Sign in with Apple (Strava is a data source, not the account).
 - Shared data: CloudKit public database, always filtered by `teamId`.
 - Tokens: Keychain (`AfterFirstUnlockThisDeviceOnly`).
+- Nearby pint: on-device visit monitoring + MapKit. Home/work pins stay in UserDefaults; they never go to CloudKit.
 - Leaderboards: computed on-device from CloudKit records. Each phone syncs **its own** Strava activities, so teammates do not share one API quota.
 
 ## Repo layout
@@ -142,12 +143,12 @@ xcodebuild -scheme BrickAndBrew -destination 'platform=iOS Simulator,name=iPhone
 - [ ] Sign in with Apple enabled on the App ID
 - [ ] `STRAVA_CLIENT_ID` and `STRAVA_OAUTH_WORKER_URL` are real values, not placeholders
 - [ ] Worker secrets set; `/token` smoke-tested
-- [ ] Privacy policy live; App Privacy filled in App Store Connect (fitness, health/heart rate from Strava, name, user id, photos/camera — not used for tracking)
+- [ ] Privacy policy live; App Privacy filled in App Store Connect (fitness, health/heart rate from Strava, name, user id, photos/camera, **precise and coarse location** for optional Nearby pint — not used for tracking, not linked for tracking, purpose App Functionality)
 - [ ] Export compliance: `ITSAppUsesNonExemptEncryption` is already `false`
 - [ ] Archive → Distribute App → TestFlight
-- [ ] External testers: add review notes that login is Sign in with Apple, Strava is optional, and beers are logged in-app
+- [ ] External testers / App Review notes: login is Sign in with Apple; Strava is optional; beers are logged in-app; Nearby pint is opt-in in Me → grant **Always** and **Precise Location** → optionally set home/work. Background location is only used to notice lingering at a bar, brewery, or restaurant between 6:00 pm and 2:00 am. Location never leaves the device except Apple Maps POI lookup. App Review cannot simulate a `CLVisit`; the toggle, permission prompts, and home/work pins are the reviewable surface.
 - [ ] Share one invite code with the crew (4–20 letters/numbers). First person to use a new code creates the crew.
 
 ## What v1 does not include
 
-Push notifications, multiple crews, Android, HealthKit, Strava webhooks, chat.
+Remote push notifications, multiple crews, Android, HealthKit, Strava webhooks, chat. Local pint reminders and the optional Nearby pint ping are in.

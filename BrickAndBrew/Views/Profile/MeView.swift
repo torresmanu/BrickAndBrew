@@ -55,7 +55,8 @@ private struct MeLoadedView: View {
         List {
             profileSection
             streaksSection
-            remindersSection
+            PintReminderSettingsSection(viewModel: viewModel)
+            VenuePingSettingsSection(viewModel: viewModel)
             stravaSection
             sessionSection
         }
@@ -65,6 +66,7 @@ private struct MeLoadedView: View {
             await viewModel.loadStreaks()
         }
         .onAppear {
+            viewModel.refreshVenueAuthorization()
             Task {
                 await viewModel.loadStreaks()
             }
@@ -204,31 +206,6 @@ private struct MeLoadedView: View {
 
     private var streakRowInsets: EdgeInsets {
         EdgeInsets(top: 6, leading: Spacing.md, bottom: 6, trailing: Spacing.md)
-    }
-
-    private var remindersSection: some View {
-        Section {
-            Toggle("Pint reminder", isOn: reminderBinding)
-                .tint(Palette.accent)
-                .foregroundStyle(Palette.text)
-        } header: {
-            Text("Reminders")
-        } footer: {
-                Text(StreakCopy.pintReminderFooter)
-                    .foregroundStyle(Palette.secondaryText)
-        }
-        .listRowBackground(Palette.surface)
-    }
-
-    private var reminderBinding: Binding<Bool> {
-        Binding(
-            get: { viewModel.isPintReminderEnabled },
-            set: { enabled in
-                Task {
-                    await viewModel.setPintReminderEnabled(enabled)
-                }
-            }
-        )
     }
 
     private var stravaSection: some View {
