@@ -7,7 +7,7 @@ enum StreakCopy {
     static let emptyMessage = "Log a pint or sync a session to start a streak."
     static let brickSyncLag = "Brick streaks catch up when Strava syncs."
     static let pintReminderTitle = "The tap is waiting"
-    static let pintReminderFooter = "If yesterday's pint is unmatched, we'll ping once at 7:00 pm. Off until you ask."
+    static let pintReminderFooter = "If yesterday's pint is unmatched, we'll ping once at 7:00 pm. On from the first time you open the crew. Turn it off anytime."
     static let pintReminderDenied = "Notifications are off for Brick & Brew. Turn them on in iOS Settings if you want the 7:00 pm pint ping."
 
     static func line(

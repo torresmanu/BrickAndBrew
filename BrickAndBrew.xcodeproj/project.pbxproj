@@ -94,6 +94,14 @@
 		F45990CE15ACCF08CAE3A1E9 /* Streak.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D2E2209CA2F9243743033EE /* Streak.swift */; };
 		F54B75AEE0C290EC78CB3F06 /* IBMPlexMono-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B72F882274A7C303BD2F109F /* IBMPlexMono-Medium.ttf */; };
 		FE2FC28894480BFC0E2123B8 /* EditDisplayNameSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B50F210382326560A360682 /* EditDisplayNameSheet.swift */; };
+		C0DE00000000000000000011 /* VenuePingPlanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE00000000000000000001 /* VenuePingPlanner.swift */; };
+		C0DE00000000000000000012 /* VenuePlaceStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE00000000000000000002 /* VenuePlaceStore.swift */; };
+		C0DE00000000000000000013 /* VenuePlaceClassifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE00000000000000000003 /* VenuePlaceClassifier.swift */; };
+		C0DE00000000000000000014 /* VenuePingScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE00000000000000000004 /* VenuePingScheduler.swift */; };
+		C0DE00000000000000000015 /* VenueVisitMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE00000000000000000005 /* VenueVisitMonitor.swift */; };
+		C0DE00000000000000000016 /* VenuePingCopy.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE00000000000000000006 /* VenuePingCopy.swift */; };
+		C0DE00000000000000000017 /* VenuePingSettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE00000000000000000007 /* VenuePingSettingsSection.swift */; };
+		C0DE00000000000000000018 /* VenuePingPlannerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE00000000000000000008 /* VenuePingPlannerTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -198,6 +206,14 @@
 		F7B56104E874A3B70DBA90F9 /* AvatarTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarTests.swift; sourceTree = "<group>"; };
 		FD3BC54AAE51DF9DEB198025 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		FF6BBFBBEC1780A5C9716388 /* MeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeView.swift; sourceTree = "<group>"; };
+		C0DE00000000000000000001 /* VenuePingPlanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenuePingPlanner.swift; sourceTree = "<group>"; };
+		C0DE00000000000000000002 /* VenuePlaceStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenuePlaceStore.swift; sourceTree = "<group>"; };
+		C0DE00000000000000000003 /* VenuePlaceClassifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenuePlaceClassifier.swift; sourceTree = "<group>"; };
+		C0DE00000000000000000004 /* VenuePingScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenuePingScheduler.swift; sourceTree = "<group>"; };
+		C0DE00000000000000000005 /* VenueVisitMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenueVisitMonitor.swift; sourceTree = "<group>"; };
+		C0DE00000000000000000006 /* VenuePingCopy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenuePingCopy.swift; sourceTree = "<group>"; };
+		C0DE00000000000000000007 /* VenuePingSettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenuePingSettingsSection.swift; sourceTree = "<group>"; };
+		C0DE00000000000000000008 /* VenuePingPlannerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenuePingPlannerTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -206,6 +222,7 @@
 			children = (
 				F7B56104E874A3B70DBA90F9 /* AvatarTests.swift */,
 				EE403F61D143D8C5964D1545 /* ScoringAndMappingTests.swift */,
+				C0DE00000000000000000008 /* VenuePingPlannerTests.swift */,
 			);
 			path = BrickAndBrewTests;
 			sourceTree = "<group>";
@@ -242,6 +259,7 @@
 				0B0CE8B2DCB4BEE364BC4010 /* Radius.swift */,
 				D2EFBC78E7C9AD1F95FA7935 /* Spacing.swift */,
 				AE1161FD6F3E112E8D7DC93D /* StreakCopy.swift */,
+				C0DE00000000000000000006 /* VenuePingCopy.swift */,
 				8764D94CD8DA9BA77BB65DA7 /* Typography.swift */,
 			);
 			path = Theme;
@@ -296,6 +314,10 @@
 				17CBB348F47D17E5C46926BF /* KeychainStore.swift */,
 				4E2F3E7AEC7E70CCD5C2A476 /* LocalCache.swift */,
 				470E3E9A099EB1D62E210064 /* PintReminderScheduler.swift */,
+				C0DE00000000000000000003 /* VenuePlaceClassifier.swift */,
+				C0DE00000000000000000002 /* VenuePlaceStore.swift */,
+				C0DE00000000000000000004 /* VenuePingScheduler.swift */,
+				C0DE00000000000000000005 /* VenueVisitMonitor.swift */,
 				0C4B9D1152FEB69DACBA90B5 /* StravaService.swift */,
 			);
 			path = Services;
@@ -371,6 +393,7 @@
 				1801B024FF3988C1A9AB6A40 /* Leaderboard.swift */,
 				4AD0C341EABD3298204B4659 /* LoadState.swift */,
 				588ACA0F7174779C93948B9A /* PintReminderPlanner.swift */,
+				C0DE00000000000000000001 /* VenuePingPlanner.swift */,
 				A257A121611FD3C8D1938DF1 /* Profile.swift */,
 				A9DA36036DF15190365CAAAE /* ScoreBreakdown.swift */,
 				DA9B8C48E4958C4CE0B632E5 /* Scoring.swift */,
@@ -387,6 +410,7 @@
 			children = (
 				1B50F210382326560A360682 /* EditDisplayNameSheet.swift */,
 				FF6BBFBBEC1780A5C9716388 /* MeView.swift */,
+				C0DE00000000000000000007 /* VenuePingSettingsSection.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -600,6 +624,13 @@
 				40614E2A7168196A648953CE /* StreakBadgeView.swift in Sources */,
 				22F773941AF8487A9A3D1491 /* StreakCardView.swift in Sources */,
 				18F1151782016672309EEEFA /* StreakCopy.swift in Sources */,
+				C0DE00000000000000000016 /* VenuePingCopy.swift in Sources */,
+				C0DE00000000000000000011 /* VenuePingPlanner.swift in Sources */,
+				C0DE00000000000000000014 /* VenuePingScheduler.swift in Sources */,
+				C0DE00000000000000000017 /* VenuePingSettingsSection.swift in Sources */,
+				C0DE00000000000000000013 /* VenuePlaceClassifier.swift in Sources */,
+				C0DE00000000000000000012 /* VenuePlaceStore.swift in Sources */,
+				C0DE00000000000000000015 /* VenueVisitMonitor.swift in Sources */,
 				78A867C803CEC5B4D4DF53A4 /* Team.swift in Sources */,
 				F381804A45C1064C454D62C7 /* Typography.swift in Sources */,
 				EF447A3256E019E04CE48A62 /* WelcomeView.swift in Sources */,
@@ -612,6 +643,7 @@
 			files = (
 				5E5805AA6C5451683E09636B /* AvatarTests.swift in Sources */,
 				5A234EA80C18A041BCC96D2E /* ScoringAndMappingTests.swift in Sources */,
+				C0DE00000000000000000018 /* VenuePingPlannerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
