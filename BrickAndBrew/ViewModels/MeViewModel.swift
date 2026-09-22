@@ -33,8 +33,8 @@ final class MeViewModel {
         } else {
             lastSyncText = "No Strava sync yet"
         }
-        homeLabel = VenuePlaceStore.home.map { VenuePingCopy.placeLine(kind: .home, label: $0.label) }
-        workLabel = VenuePlaceStore.work.map { VenuePingCopy.placeLine(kind: .work, label: $0.label) }
+        homeLabel = VenuePlaceStore.home?.label
+        workLabel = VenuePlaceStore.work?.label
         venueAuthorization = VenueVisitMonitor.shared.authorization
     }
 
@@ -238,8 +238,8 @@ final class MeViewModel {
     func refreshVenueAuthorization() {
         venueAuthorization = VenueVisitMonitor.shared.authorization
         isVenuePingEnabled = VenuePingSettings.isEnabled
-        homeLabel = VenuePlaceStore.home.map { VenuePingCopy.placeLine(kind: .home, label: $0.label) }
-        workLabel = VenuePlaceStore.work.map { VenuePingCopy.placeLine(kind: .work, label: $0.label) }
+        homeLabel = VenuePlaceStore.home?.label
+        workLabel = VenuePlaceStore.work?.label
         VenueVisitMonitor.shared.refreshMonitoring()
     }
 
@@ -305,7 +305,7 @@ final class MeViewModel {
                 label: address
             )
             VenuePlaceStore.setPlace(place, kind: kind)
-            setPlaceLabel(VenuePingCopy.placeLine(kind: kind, label: address), kind: kind)
+            setPlaceLabel(address, kind: kind)
         } catch {
             setPlaceError(VenuePingCopy.fixFailed, kind: kind)
         }

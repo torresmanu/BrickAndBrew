@@ -27,13 +27,6 @@ enum VenuePingCopy {
     static let homeAccessibility = "Home exclusion pin"
     static let workAccessibility = "Work exclusion pin"
 
-    static func placeLine(kind: VenuePlaceKind, label: String) -> String {
-        switch kind {
-        case .home: "Home · \(label)"
-        case .work: "Work · \(label)"
-        }
-    }
-
     static func notificationBody(placeName: String) -> String {
         "Looks like you're at \(placeName). Logging a pint?"
     }
