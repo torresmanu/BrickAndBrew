@@ -34,11 +34,11 @@ struct ScoringGuideView: View {
 
     private var intro: some View {
         VStack(alignment: .leading, spacing: Spacing.sm) {
-            Text("THE INDEX\nIS THE PUB RULE.")
+            Text("THE GOAL IS SIMPLE:\nFITTEST GUY AT THE BAR,\nSTRONGEST DRINKER AT THE GYM.")
                 .font(Typography.displayM)
                 .foregroundStyle(Palette.text)
                 .minimumScaleFactor(0.7)
-            Text("Beers score hard. Each pint covers a slice of training. Stack swim, bike, and run past your beers and the grind tax lands. Tap anyone on the board to see their receipt.")
+            Text("That's the Index, the pub rule. Beers score hard. Each pint covers a slice of training. Stack swim, bike, and run past your beers and the grind tax lands. Tap anyone on the board to see their receipt.")
                 .font(Typography.body)
                 .foregroundStyle(Palette.secondaryText)
                 .fixedSize(horizontal: false, vertical: true)
