@@ -228,6 +228,33 @@ final class CloudKitService {
         try await delete(recordIDs)
     }
 
+    /// Points this user's activities, beers, and pint photos at another crew.
+    /// Only `teamId` is written, so a pint photo asset is left untouched.
+    func moveOwnedRecords(userId: String, fromTeamId: String, toTeamId: String) async throws {
+        guard fromTeamId != toTeamId else { return }
+
+        async let activityRecords = ownedRecords(
+            recordType: CloudKitKey.RecordType.activity,
+            userId: userId,
+            teamId: fromTeamId
+        )
+        async let beerRecords = ownedRecords(
+            recordType: CloudKitKey.RecordType.beer,
+            userId: userId,
+            teamId: fromTeamId
+        )
+        async let photoRecords = ownedRecords(
+            recordType: CloudKitKey.RecordType.beerPhoto,
+            userId: userId,
+            teamId: fromTeamId
+        )
+        let records = try await activityRecords + beerRecords + photoRecords
+        for record in records {
+            stampTeam(record, teamId: toTeamId)
+        }
+        try await modify(records, savePolicy: .changedKeys)
+    }
+
     private func save(_ record: CKRecord) async throws {
         try await modify([record])
     }
@@ -301,12 +328,15 @@ final class CloudKitService {
         return url
     }
 
-    private func modify(_ records: [CKRecord]) async throws {
+    private func modify(
+        _ records: [CKRecord],
+        savePolicy: CKModifyRecordsOperation.RecordSavePolicy = .allKeys
+    ) async throws {
         for chunk in stride(from: 0, to: records.count, by: 400) {
             let slice = Array(records[chunk..<min(chunk + 400, records.count)])
             try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
                 let operation = CKModifyRecordsOperation(recordsToSave: slice, recordIDsToDelete: nil)
-                operation.savePolicy = .allKeys
+                operation.savePolicy = savePolicy
                 operation.qualityOfService = .userInitiated
                 operation.modifyRecordsResultBlock = { result in
                     switch result {
@@ -318,6 +348,31 @@ final class CloudKitService {
                 }
                 database.add(operation)
             }
+        }
+    }
+
+    /// Activity, Beer, and BeerPhoto all store ownership in `userId` / `teamId`.
+    private func ownedRecords(recordType: String, userId: String, teamId: String) async throws -> [CKRecord] {
+        let predicate = NSPredicate(
+            format: "%K == %@ AND %K == %@",
+            CloudKitKey.Activity.userId,
+            userId,
+            CloudKitKey.Activity.teamId,
+            teamId
+        )
+        return try await query(recordType: recordType, predicate: predicate)
+    }
+
+    private func stampTeam(_ record: CKRecord, teamId: String) {
+        switch record.recordType {
+        case CloudKitKey.RecordType.activity:
+            record[CloudKitKey.Activity.teamId] = teamId as CKRecordValue
+        case CloudKitKey.RecordType.beer:
+            record[CloudKitKey.Beer.teamId] = teamId as CKRecordValue
+        case CloudKitKey.RecordType.beerPhoto:
+            record[CloudKitKey.BeerPhoto.teamId] = teamId as CKRecordValue
+        default:
+            break
         }
     }
 

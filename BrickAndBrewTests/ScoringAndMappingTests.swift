@@ -411,6 +411,24 @@ struct InviteCodeTests {
     }
 }
 
+struct CrewSwitchTests {
+    @Test func rejectsTheCrewYouAreAlreadyOn() {
+        #expect(throws: BrickError.alreadyOnCrew) {
+            try CrewSwitch.validatedCode(currentInviteCode: "brick", draft: " BRICK ")
+        }
+    }
+
+    @Test func acceptsADifferentCode() throws {
+        #expect(try CrewSwitch.validatedCode(currentInviteCode: "BRICK", draft: "brew1") == "BREW1")
+    }
+
+    @Test func rejectsAShortCode() {
+        #expect(throws: BrickError.invalidInviteCode) {
+            try CrewSwitch.validatedCode(currentInviteCode: "BRICK", draft: "ab")
+        }
+    }
+}
+
 struct DisplayNameTests {
     @Test func trimsAndRejectsBlankNames() throws {
         #expect(DisplayName.normalized("  Alex  ") == "Alex")

@@ -9,6 +9,9 @@ final class MeViewModel {
     var isSavingName = false
     var draftName = ""
     var nameEditMessage: String?
+    var isSwitchingCrew = false
+    var draftCrewCode = ""
+    var crewEditMessage: String?
     var lastSyncText: String
     var bannerMessage: String?
     var streakState: LoadState<StreakSet> = .loading
@@ -25,6 +28,7 @@ final class MeViewModel {
     var showsOpenSettings = false
 
     private let session: AppSession
+    private var streakLoadGeneration = 0
 
     init(session: AppSession) {
         self.session = session
@@ -63,6 +67,8 @@ final class MeViewModel {
     }
 
     func loadStreaks() async {
+        streakLoadGeneration += 1
+        let generation = streakLoadGeneration
         switch streakState {
         case .loaded, .empty:
             break
@@ -86,9 +92,11 @@ final class MeViewModel {
             )
             // Empty is "never logged this season." Zeros after a gap still get the three cards.
             let hasHistory = seasonBeers.isEmpty == false || mine.isEmpty == false
+            guard generation == streakLoadGeneration else { return }
             streakState = hasHistory ? .loaded(set) : .empty
             await PintReminderScheduler.refresh(pint: set.pint)
         } catch {
+            guard generation == streakLoadGeneration else { return }
             let message = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
             switch streakState {
             case .loaded, .empty:
@@ -198,6 +206,40 @@ final class MeViewModel {
         } catch {
             nameEditMessage = (error as? LocalizedError)?.errorDescription
                 ?? "We couldn't save your name. Check your connection and try again."
+            Haptics.warning()
+            return false
+        }
+    }
+
+    func prepareCrewEdit() {
+        draftCrewCode = ""
+        crewEditMessage = nil
+    }
+
+    var canSwitchCrew: Bool {
+        guard isSwitchingCrew == false else { return false }
+        return (try? CrewSwitch.validatedCode(currentInviteCode: inviteCode, draft: draftCrewCode)) != nil
+    }
+
+    func switchCrew() async -> Bool {
+        guard isSwitchingCrew == false else { return false }
+        isSwitchingCrew = true
+        crewEditMessage = nil
+        defer { isSwitchingCrew = false }
+
+        do {
+            try await session.switchCrew(inviteCode: draftCrewCode)
+            Haptics.success()
+            streakState = .loading
+            await loadStreaks()
+            if case .failed = streakState {
+                return true
+            }
+            bannerMessage = "You're on crew \(inviteCode)."
+            return true
+        } catch {
+            crewEditMessage = (error as? LocalizedError)?.errorDescription
+                ?? "We couldn't switch crews. Check your connection and try again."
             Haptics.warning()
             return false
         }

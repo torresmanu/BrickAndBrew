@@ -18,6 +18,8 @@ final class LogBeerViewModel {
     var photoBeerIds: Set<String> = []
 
     private let session: AppSession
+    private var loadGeneration = 0
+    private var loadedTeamId: String?
 
     init(session: AppSession) {
         self.session = session
@@ -33,11 +35,18 @@ final class LogBeerViewModel {
     }
 
     func load() async {
-        switch state {
-        case .loaded, .empty:
-            break
-        default:
+        loadGeneration += 1
+        let generation = loadGeneration
+        if loadedTeamId != nil && loadedTeamId != session.team?.id {
             state = .loading
+            photoBeerIds = []
+        } else {
+            switch state {
+            case .loaded, .empty:
+                break
+            default:
+                state = .loading
+            }
         }
 
         do {
@@ -48,9 +57,12 @@ final class LogBeerViewModel {
             async let photosTask = session.cloudKit.fetchBeerPhotos(userId: profile.id, teamId: team.id)
             let beers = try await beersTask
             let photos = (try? await photosTask) ?? []
+            guard generation == loadGeneration else { return }
+            loadedTeamId = team.id
             photoBeerIds = Set(photos.map(\.beerId))
             applyBeers(beers, seasonStart: team.seasonStart)
         } catch {
+            guard generation == loadGeneration else { return }
             let message = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
             switch state {
             case .loaded, .empty:

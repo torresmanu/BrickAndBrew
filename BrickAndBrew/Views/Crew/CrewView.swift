@@ -27,6 +27,7 @@ struct CrewView: View {
         .task(id: viewModel != nil) {
             await viewModel?.load(forceSync: true)
         }
+        .onChange(of: session.team?.id, reloadAfterCrewChange)
         .onChange(of: session.profile?.displayName) { _, name in
             guard let name, let userId = session.profile?.id else { return }
             viewModel?.applyDisplayName(name, userId: userId)
@@ -41,6 +42,13 @@ struct CrewView: View {
     private func ensureViewModel() {
         if viewModel == nil {
             viewModel = CrewViewModel(session: session)
+        }
+    }
+
+    private func reloadAfterCrewChange(_ previous: String?, _ current: String?) {
+        guard previous != current, current != nil else { return }
+        Task {
+            await viewModel?.load(forceSync: false)
         }
     }
 }

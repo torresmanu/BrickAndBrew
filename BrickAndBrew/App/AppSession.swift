@@ -167,20 +167,7 @@ final class AppSession {
 
         do {
             guard var current = profile else { throw BrickError.missingProfile }
-            let existing = try await cloudKit.fetchTeam(inviteCode: code)
-            let team: Team
-            if let existing {
-                team = existing
-            } else {
-                team = try await cloudKit.saveTeam(
-                    Team(
-                        id: "team-\(code.lowercased())",
-                        inviteCode: code,
-                        name: AppConfig.defaultTeamName,
-                        seasonStart: Date()
-                    )
-                )
-            }
+            let team = try await resolveTeam(inviteCode: code, seasonStartForNewCrew: Date())
             current.teamId = team.id
             profile = try await cloudKit.saveProfile(current)
             self.team = team
@@ -188,6 +175,66 @@ final class AppSession {
         } catch {
             bannerMessage = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
         }
+    }
+
+    /// Leaves the current crew and joins another. Membership is a single `teamId`,
+    /// so logged training and pints are retargeted onto the new crew first.
+    func switchCrew(inviteCode rawCode: String) async throws {
+        guard var current = profile, let currentTeam = team else {
+            throw BrickError.missingProfile
+        }
+        let code = try CrewSwitch.validatedCode(currentInviteCode: currentTeam.inviteCode, draft: rawCode)
+        try await cloudKit.requireICloud()
+        let nextTeam = try await resolveTeam(inviteCode: code, seasonStartForNewCrew: currentTeam.seasonStart)
+
+        var didMoveRecords = false
+        do {
+            try await cloudKit.moveOwnedRecords(
+                userId: current.id,
+                fromTeamId: currentTeam.id,
+                toTeamId: nextTeam.id
+            )
+            didMoveRecords = true
+            current.teamId = nextTeam.id
+            profile = try await cloudKit.saveProfile(current)
+        } catch let error as BrickError where error == .network || error == .iCloudUnavailable {
+            if didMoveRecords {
+                try? await cloudKit.moveOwnedRecords(
+                    userId: current.id,
+                    fromTeamId: nextTeam.id,
+                    toTeamId: currentTeam.id
+                )
+            }
+            throw error
+        } catch {
+            if didMoveRecords {
+                try? await cloudKit.moveOwnedRecords(
+                    userId: current.id,
+                    fromTeamId: nextTeam.id,
+                    toTeamId: currentTeam.id
+                )
+            }
+            throw BrickError.crewSwitchFailed
+        }
+
+        CrewCache.clear()
+        team = nextTeam
+    }
+
+    /// Finds a crew by invite code, or creates one. A switch passes the season already
+    /// in progress so moved training still falls inside the new crew's window.
+    private func resolveTeam(inviteCode code: String, seasonStartForNewCrew: Date) async throws -> Team {
+        if let existing = try await cloudKit.fetchTeam(inviteCode: code) {
+            return existing
+        }
+        return try await cloudKit.saveTeam(
+            Team(
+                id: "team-\(code.lowercased())",
+                inviteCode: code,
+                name: AppConfig.defaultTeamName,
+                seasonStart: seasonStartForNewCrew
+            )
+        )
     }
 
     func connectStrava() async {
@@ -230,7 +277,10 @@ final class AppSession {
         guard let profile, let team, profile.isStravaConnected else { return 0 }
         let after = SyncCursor.lastSyncAt() ?? team.seasonStart
         let dtos = try await strava.fetchActivities(after: after)
-        let mapped = dtos.compactMap { ActivityMapper.map($0, userId: profile.id, teamId: team.id) }
+        // A crew switch can finish while Strava is in flight. Writing with the old
+        // team id would put those activities back on the crew the user just left.
+        guard let currentTeam = self.team, currentTeam.id == team.id else { return 0 }
+        let mapped = dtos.compactMap { ActivityMapper.map($0, userId: profile.id, teamId: currentTeam.id) }
         try await cloudKit.upsertActivities(mapped)
         SyncCursor.setLastSyncAt(Date())
         return mapped.count

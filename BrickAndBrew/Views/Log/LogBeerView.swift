@@ -21,6 +21,14 @@ struct LogBeerView: View {
         .task(id: viewModel != nil) {
             await viewModel?.load()
         }
+        .onChange(of: session.team?.id, reloadAfterCrewChange)
+    }
+
+    private func reloadAfterCrewChange(_ previous: String?, _ current: String?) {
+        guard previous != current, current != nil else { return }
+        Task {
+            await viewModel?.load()
+        }
     }
 
     private func ensureViewModel() {

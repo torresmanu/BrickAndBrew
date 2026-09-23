@@ -50,6 +50,7 @@ private struct MeLoadedView: View {
     @Binding var confirmRemoveAvatar: Bool
     @Binding var isEditingName: Bool
     @State private var pickerItem: PhotosPickerItem?
+    @State private var isChangingCrew = false
 
     var body: some View {
         List {
@@ -118,6 +119,9 @@ private struct MeLoadedView: View {
         .sheet(isPresented: $isEditingName) {
             EditDisplayNameSheet(viewModel: viewModel)
         }
+        .sheet(isPresented: $isChangingCrew) {
+            ChangeCrewSheet(viewModel: viewModel)
+        }
     }
 
     private var profileSection: some View {
@@ -151,6 +155,8 @@ private struct MeLoadedView: View {
 
             Button("Edit name", action: showEditName)
                 .disabled(viewModel.isSavingName || viewModel.isSavingAvatar)
+            Button("Change crew", action: showChangeCrew)
+                .disabled(viewModel.isSavingName || viewModel.isSavingAvatar || viewModel.isSwitchingCrew)
 
             if viewModel.hasAvatar {
                 Button("Remove photo", role: .destructive, action: showRemoveAvatar)
@@ -330,6 +336,11 @@ private struct MeLoadedView: View {
     private func showEditName() {
         viewModel.prepareNameEdit()
         isEditingName = true
+    }
+
+    private func showChangeCrew() {
+        viewModel.prepareCrewEdit()
+        isChangingCrew = true
     }
 
     private func applyPickerItem(_ item: PhotosPickerItem) async {

@@ -94,6 +94,8 @@
 		F45990CE15ACCF08CAE3A1E9 /* Streak.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D2E2209CA2F9243743033EE /* Streak.swift */; };
 		F54B75AEE0C290EC78CB3F06 /* IBMPlexMono-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B72F882274A7C303BD2F109F /* IBMPlexMono-Medium.ttf */; };
 		FE2FC28894480BFC0E2123B8 /* EditDisplayNameSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B50F210382326560A360682 /* EditDisplayNameSheet.swift */; };
+		6B20F8D3A7C14E95F0D4B8C1 /* ChangeCrewSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C31A9E4B8D24F06A1E5C9D2 /* ChangeCrewSheet.swift */; };
+		4918D6B1E5A92C73D8B296AF /* CrewSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A19E7C2F6B03D84E9C3A7B0 /* CrewSwitch.swift */; };
 		C0DE00000000000000000011 /* VenuePingPlanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE00000000000000000001 /* VenuePingPlanner.swift */; };
 		C0DE00000000000000000012 /* VenuePlaceStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE00000000000000000002 /* VenuePlaceStore.swift */; };
 		C0DE00000000000000000013 /* VenuePlaceClassifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE00000000000000000003 /* VenuePlaceClassifier.swift */; };
@@ -131,6 +133,8 @@
 		1801B024FF3988C1A9AB6A40 /* Leaderboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Leaderboard.swift; sourceTree = "<group>"; };
 		19ECD8717D5734574FF84422 /* IBMPlexSans-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "IBMPlexSans-Medium.ttf"; sourceTree = "<group>"; };
 		1B50F210382326560A360682 /* EditDisplayNameSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDisplayNameSheet.swift; sourceTree = "<group>"; };
+		5A19E7C2F6B03D84E9C3A7B0 /* CrewSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrewSwitch.swift; sourceTree = "<group>"; };
+		7C31A9E4B8D24F06A1E5C9D2 /* ChangeCrewSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeCrewSheet.swift; sourceTree = "<group>"; };
 		1EE7B7F1701B9BDAA78ABB3D /* CrewPintRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrewPintRowView.swift; sourceTree = "<group>"; };
 		23A0DA57412E0CD4B971FA1C /* IBMPlexSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "IBMPlexSans-Regular.ttf"; sourceTree = "<group>"; };
 		23D0E1312B0717D72997ABD7 /* BarlowCondensed-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BarlowCondensed-ExtraBold.ttf"; sourceTree = "<group>"; };
@@ -387,6 +391,7 @@
 				5D0FA5989EB711A99A258507 /* BeerPhoto.swift */,
 				48424ACA259D26F27E396730 /* BrickError.swift */,
 				E36ADEE30FF86916B6772F42 /* CloudKitKey.swift */,
+				5A19E7C2F6B03D84E9C3A7B0 /* CrewSwitch.swift */,
 				84192FD3051FC4DB0E966C5E /* DisplayName.swift */,
 				F1607564A6BB37A4FC39375C /* ImageJPEGProcessor.swift */,
 				3A660B58F839C19C0D9BB622 /* InviteCode.swift */,
@@ -408,6 +413,7 @@
 		AF29954709772F6A337A0C50 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				7C31A9E4B8D24F06A1E5C9D2 /* ChangeCrewSheet.swift */,
 				1B50F210382326560A360682 /* EditDisplayNameSheet.swift */,
 				FF6BBFBBEC1780A5C9716388 /* MeView.swift */,
 				C0DE00000000000000000007 /* VenuePingSettingsSection.swift */,
@@ -575,12 +581,14 @@
 				258F7A72B84091AD569E3932 /* BrickError.swift in Sources */,
 				9921113BD01F4BC1C12A4DC4 /* CameraPicker.swift in Sources */,
 				9F2671835D3FFF2A5EA4DEE0 /* CelebrationView.swift in Sources */,
+				6B20F8D3A7C14E95F0D4B8C1 /* ChangeCrewSheet.swift in Sources */,
 				6864D97F781558246AF54950 /* CloudKitKey.swift in Sources */,
 				DEA437B5ED7EE209AEA83076 /* CloudKitService.swift in Sources */,
 				D3E997919C71E17A4C5EED2D /* ConnectStravaView.swift in Sources */,
 				660E9E8C5950701ECF13630A /* CrewPintRowView.swift in Sources */,
 				8195A977B45AED00FB51120C /* CrewView.swift in Sources */,
 				F21820811E3067C30BC02763 /* CrewViewModel.swift in Sources */,
+				4918D6B1E5A92C73D8B296AF /* CrewSwitch.swift in Sources */,
 				322FDCF3091DA62DBE345F40 /* DisplayName.swift in Sources */,
 				D838F89CB298C5BC24E484B0 /* DisplayNameView.swift in Sources */,
 				FE2FC28894480BFC0E2123B8 /* EditDisplayNameSheet.swift in Sources */,

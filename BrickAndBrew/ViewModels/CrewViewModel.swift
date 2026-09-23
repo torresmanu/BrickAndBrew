@@ -11,6 +11,8 @@ final class CrewViewModel {
 
     private let session: AppSession
     private var hasLoadedOnce = false
+    private var loadGeneration = 0
+    private var loadedTeamId: String?
     private var displayNames: [String: String] = [:]
 
     init(session: AppSession) {
@@ -38,7 +40,19 @@ final class CrewViewModel {
     }
 
     func load(forceSync: Bool) async {
-        if hasLoadedOnce == false, case .loaded = state {
+        loadGeneration += 1
+        let generation = loadGeneration
+        let incomingTeamId = session.team?.id
+        let crewChanged = loadedTeamId != nil && loadedTeamId != incomingTeamId
+
+        if crewChanged {
+            // The previous crew's board is still on screen until this fetch returns.
+            state = .loading
+            pintFeed = .loading
+            staleMessage = nil
+            syncMessage = nil
+            displayNames = [:]
+        } else if hasLoadedOnce == false, case .loaded = state {
             staleMessage = staleMessage ?? "Showing last saved board"
         } else {
             state = .loading
@@ -48,10 +62,12 @@ final class CrewViewModel {
         if forceSync, session.profile?.isStravaConnected == true {
             do {
                 let count = try await session.syncStravaActivities()
+                guard generation == loadGeneration else { return }
                 if count > 0 {
                     syncMessage = count == 1 ? "Synced 1 activity" : "Synced \(count) activities"
                 }
             } catch {
+                guard generation == loadGeneration else { return }
                 let message = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
                 if case .loaded = state {
                     staleMessage = message
@@ -60,6 +76,8 @@ final class CrewViewModel {
                 }
             }
         }
+
+        guard generation == loadGeneration else { return }
 
         guard let team = session.team else {
             state = .failed(BrickError.missingProfile.localizedDescription)
@@ -70,11 +88,13 @@ final class CrewViewModel {
             return
         }
 
-        switch pintFeed {
-        case .loaded, .empty:
-            break
-        default:
-            pintFeed = .loading
+        if crewChanged == false {
+            switch pintFeed {
+            case .loaded, .empty:
+                break
+            default:
+                pintFeed = .loading
+            }
         }
 
         async let profilesTask = session.cloudKit.fetchProfiles(teamId: team.id)
@@ -84,21 +104,32 @@ final class CrewViewModel {
 
         do {
             let profiles = try await profilesTask
-                displayNames = Dictionary(profiles.map { ($0.id, $0.displayName) }, uniquingKeysWith: { _, last in last })
+            let activities = try await activitiesTask
+            let beers = try await beersTask
+            guard generation == loadGeneration else {
+                _ = try? await photosTask
+                return
+            }
+            displayNames = Dictionary(profiles.map { ($0.id, $0.displayName) }, uniquingKeysWith: { _, last in last })
             let entries = LeaderboardBuilder.build(
                 profiles: profiles,
-                activities: try await activitiesTask,
-                beers: try await beersTask,
+                activities: activities,
+                beers: beers,
                 seasonStart: team.seasonStart
             )
             let snapshot = CrewSnapshot(fetchedAt: Date(), seasonStart: team.seasonStart, entries: entries)
             CrewCache.save(snapshot)
             staleMessage = nil
+            loadedTeamId = team.id
             state = entries.isEmpty ? .empty : .loaded(entries)
         } catch {
+            guard generation == loadGeneration else {
+                _ = try? await photosTask
+                return
+            }
             if case .loaded = state {
                 staleMessage = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
-            } else if let snapshot = CrewCache.load(), snapshot.entries.isEmpty == false {
+            } else if crewChanged == false, let snapshot = CrewCache.load(), snapshot.entries.isEmpty == false {
                 state = .loaded(snapshot.entries)
                 staleMessage = "Couldn't refresh. Showing the last saved board."
             } else {
@@ -108,8 +139,10 @@ final class CrewViewModel {
 
         do {
             let photos = try await photosTask
+            guard generation == loadGeneration else { return }
             pintFeed = photos.isEmpty ? .empty : .loaded(photos)
         } catch {
+            guard generation == loadGeneration else { return }
             let message = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
             switch pintFeed {
             case .loaded, .empty:

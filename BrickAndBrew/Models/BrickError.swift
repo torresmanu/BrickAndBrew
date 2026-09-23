@@ -8,6 +8,8 @@ enum BrickError: LocalizedError, Equatable {
     case missingDisplayName
     case displayNameTooLong
     case invalidInviteCode
+    case alreadyOnCrew
+    case crewSwitchFailed
     case missingStravaConfiguration
     case stravaDenied
     case strava(String)
@@ -35,6 +37,10 @@ enum BrickError: LocalizedError, Equatable {
             "Use \(DisplayName.maxLength) characters or fewer."
         case .invalidInviteCode:
             "Use 4–20 letters or numbers for the invite code."
+        case .alreadyOnCrew:
+            "You're already on this crew. Ask a teammate for a different code."
+        case .crewSwitchFailed:
+            "We couldn't switch crews. You're still on this one. Check your connection and try again."
         case .missingStravaConfiguration:
             "Strava is not configured yet. Add your Client ID and Worker URL in Info.plist."
         case .stravaDenied:
