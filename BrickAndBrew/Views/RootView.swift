@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 struct RootView: View {
     @Environment(AppSession.self) private var session
@@ -96,18 +97,36 @@ struct MainTabView: View {
         .tint(Palette.accent)
         .toolbarBackground(Palette.background, for: .tabBar)
         .toolbarBackground(.visible, for: .tabBar)
-        .onChange(of: scenePhase) { _, phase in
-            guard phase == .active else { return }
-            VenueVisitMonitor.shared.refreshMonitoring()
-            Task {
-                await session.refreshPintReminderFromCloud()
-            }
-        }
+        .onChange(of: scenePhase, handleScenePhase)
         .task {
             await session.requestFirstRunReminderPermissions()
         }
-        .onReceive(NotificationCenter.default.publisher(for: .openLogTab)) { _ in
+        .onAppear(perform: openLogTabIfRequested)
+        .onReceive(NotificationCenter.default.publisher(for: .openLogTab), perform: openLogTabFromNotification)
+    }
+
+    /// Location-wake launches can deliver the tap before this view exists, or while
+    /// the scene is still transitioning. Wait until UIKit reports foreground.
+    private func openLogTabIfRequested() {
+        guard LogTabOpenRequest.isPending else { return }
+        Task { @MainActor in
+            await Task.yield()
+            guard UIApplication.shared.applicationState == .active else { return }
+            guard LogTabOpenRequest.consume() else { return }
             session.selectedTab = .log
+        }
+    }
+
+    private func openLogTabFromNotification(_: Notification) {
+        openLogTabIfRequested()
+    }
+
+    private func handleScenePhase(_: ScenePhase, _ phase: ScenePhase) {
+        guard phase == .active else { return }
+        openLogTabIfRequested()
+        VenueVisitMonitor.shared.refreshMonitoring()
+        Task {
+            await session.refreshPintReminderFromCloud()
         }
     }
 

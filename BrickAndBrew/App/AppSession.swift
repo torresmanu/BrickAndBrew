@@ -309,6 +309,7 @@ final class AppSession {
         team = nil
         suggestedName = ""
         selectedTab = .crew
+        LogTabOpenRequest.cancel()
         hasStoredSession = false
         phase = .needsAppleSignIn
     }

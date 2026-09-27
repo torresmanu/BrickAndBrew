@@ -53,6 +53,28 @@ extension Notification.Name {
     static let openLogTab = Notification.Name("brickandbrew.openLogTab")
 }
 
+/// Remembers a pint-notification tap until the crew tabs are foregrounded.
+/// The notification callback is not the main actor; switching tabs there crashes.
+@MainActor
+enum LogTabOpenRequest {
+    private(set) static var isPending = false
+
+    static func arm() {
+        isPending = true
+        NotificationCenter.default.post(name: .openLogTab, object: nil)
+    }
+
+    static func consume() -> Bool {
+        guard isPending else { return false }
+        isPending = false
+        return true
+    }
+
+    static func cancel() {
+        isPending = false
+    }
+}
+
 final class PintReminderCenterDelegate: NSObject, UNUserNotificationCenterDelegate, @unchecked Sendable {
     static let shared = PintReminderCenterDelegate()
 
@@ -68,9 +90,15 @@ final class PintReminderCenterDelegate: NSObject, UNUserNotificationCenterDelega
         didReceive response: UNNotificationResponse
     ) async {
         let identifier = response.notification.request.identifier
+        guard response.actionIdentifier == UNNotificationDefaultActionIdentifier else { return }
         guard identifier == PintReminderPlanner.identifier || identifier == VenuePingScheduler.identifier else {
             return
         }
-        NotificationCenter.default.post(name: .openLogTab, object: nil)
+        // Location pings are delivered while this process is already awake in the
+        // background. Updating SwiftUI from this callback redraws the tab bar off
+        // the main thread and crashes. Arm the request on the next main-actor turn.
+        Task { @MainActor in
+            LogTabOpenRequest.arm()
+        }
     }
 }
