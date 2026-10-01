@@ -65,7 +65,6 @@ struct RootView: View {
 
 struct MainTabView: View {
     @Environment(AppSession.self) private var session
-    @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
         @Bindable var session = session
@@ -97,37 +96,6 @@ struct MainTabView: View {
         .tint(Palette.accent)
         .toolbarBackground(Palette.background, for: .tabBar)
         .toolbarBackground(.visible, for: .tabBar)
-        .onChange(of: scenePhase, handleScenePhase)
-        .task {
-            await session.requestFirstRunReminderPermissions()
-        }
-        .onAppear(perform: openLogTabIfRequested)
-        .onReceive(NotificationCenter.default.publisher(for: .openLogTab), perform: openLogTabFromNotification)
-    }
-
-    /// Location-wake launches can deliver the tap before this view exists, or while
-    /// the scene is still transitioning. Wait until UIKit reports foreground.
-    private func openLogTabIfRequested() {
-        guard LogTabOpenRequest.isPending else { return }
-        Task { @MainActor in
-            await Task.yield()
-            guard UIApplication.shared.applicationState == .active else { return }
-            guard LogTabOpenRequest.consume() else { return }
-            session.selectedTab = .log
-        }
-    }
-
-    private func openLogTabFromNotification(_: Notification) {
-        openLogTabIfRequested()
-    }
-
-    private func handleScenePhase(_: ScenePhase, _ phase: ScenePhase) {
-        guard phase == .active else { return }
-        openLogTabIfRequested()
-        VenueVisitMonitor.shared.refreshMonitoring()
-        Task {
-            await session.refreshPintReminderFromCloud()
-        }
     }
 
     /// Original-color circular photo so the tab bar does not flatten it to a template glyph.

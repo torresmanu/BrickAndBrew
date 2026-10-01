@@ -297,9 +297,6 @@ final class AppSession {
     }
 
     func signOut() {
-        PintReminderScheduler.cancel()
-        VenueVisitMonitor.shared.stopAndClear()
-        ReminderDefaults.resetForSignOut()
         try? auth.signOut()
         CrewCache.clear()
         SyncCursor.clear()
@@ -309,47 +306,8 @@ final class AppSession {
         team = nil
         suggestedName = ""
         selectedTab = .crew
-        LogTabOpenRequest.cancel()
         hasStoredSession = false
         phase = .needsAppleSignIn
-    }
-
-    /// Notifications + Always location, once, the first time the crew tabs appear.
-    func requestFirstRunReminderPermissions() async {
-        guard LaunchEnvironment.isRunningUnitTests == false else { return }
-        guard ReminderDefaults.didPromptFirstRun == false else { return }
-        ReminderDefaults.didPromptFirstRun = true
-
-        if PintReminderSettings.isEnabled {
-            let allowed = await PintReminderScheduler.requestAuthorization()
-            if allowed == false {
-                PintReminderSettings.isEnabled = false
-            } else {
-                await refreshPintReminderFromCloud()
-            }
-        }
-
-        if VenuePingSettings.isEnabled {
-            _ = await VenueVisitMonitor.shared.requestAlwaysPrecise()
-            VenueVisitMonitor.shared.refreshMonitoring()
-        }
-    }
-
-    /// Recomputes the pint ping from CloudKit. Fetch failure leaves a pending request in place.
-    func refreshPintReminderFromCloud() async {
-        guard PintReminderSettings.isEnabled else { return }
-        guard let profile, let team else { return }
-        do {
-            let beers = try await cloudKit.fetchBeers(userId: profile.id, teamId: team.id)
-            let pint = StreakCalculator.summarize(
-                activities: [],
-                beers: beers,
-                seasonStart: team.seasonStart
-            ).pint
-            await PintReminderScheduler.refresh(pint: pint)
-        } catch {
-            return
-        }
     }
 
     /// Deletes CloudKit data for this user, then clears the local session.

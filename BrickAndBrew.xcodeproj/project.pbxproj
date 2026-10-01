@@ -12,6 +12,7 @@
 		1059283F02DAA39E01C1E2EF /* IBMPlexMono-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E50832BD4332201312788BB7 /* IBMPlexMono-Bold.ttf */; };
 		10FC97003725FB7736B3A9C3 /* ImageJPEGProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1607564A6BB37A4FC39375C /* ImageJPEGProcessor.swift */; };
 		1129D347C28FD2E1DFD6C8DA /* OFL-Barlow.txt in Resources */ = {isa = PBXBuildFile; fileRef = B53DCFB1A467F4A2D29887AC /* OFL-Barlow.txt */; };
+		14279580D0CCA8A00F3ADF0C /* ChangeCrewSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3897F93F483C091E34E76570 /* ChangeCrewSheet.swift */; };
 		1604995998A495BCB0D0A231 /* BrickAndBrewApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB57C1DCA7489AF627DADED1 /* BrickAndBrewApp.swift */; };
 		18F1151782016672309EEEFA /* StreakCopy.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1161FD6F3E112E8D7DC93D /* StreakCopy.swift */; };
 		1FDA567FEDD806FC39DAF9EF /* LocalCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E2F3E7AEC7E70CCD5C2A476 /* LocalCache.swift */; };
@@ -25,7 +26,6 @@
 		337E9C867F3F747D833F22AB /* KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17CBB348F47D17E5C46926BF /* KeychainStore.swift */; };
 		38BA47A362C015BA0C2EA6FF /* PhotoPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13F12649FABD06B5E77FBE03 /* PhotoPreviewView.swift */; };
 		40614E2A7168196A648953CE /* StreakBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F093A363E39425AF6FA609E4 /* StreakBadgeView.swift */; };
-		4502C74B31865B915540CB6A /* PintReminderScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470E3E9A099EB1D62E210064 /* PintReminderScheduler.swift */; };
 		45A7E7DD0F52B7481AA6EC34 /* BeerPhotoCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 341B08D261287A5CF6BB523B /* BeerPhotoCache.swift */; };
 		45C0AE8FBB86FE3B12FB9E29 /* IBMPlexSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DE004EA0D822885EDF115F91 /* IBMPlexSans-Bold.ttf */; };
 		4C386F4CC11760658EE779ED /* RankRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98D6671B92FB677A3D788F7B /* RankRowView.swift */; };
@@ -52,9 +52,7 @@
 		7561E904A8DA9030256E433C /* OFL.txt in Resources */ = {isa = PBXBuildFile; fileRef = 14FBE5BAFFE1B85A111F41B9 /* OFL.txt */; };
 		76C04B8CE286862672FB1E2A /* BarlowCondensed-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7E9C221B318862696F978839 /* BarlowCondensed-Bold.ttf */; };
 		78A867C803CEC5B4D4DF53A4 /* Team.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB0F07DC830D22FDCD04E87 /* Team.swift */; };
-		7A1F9D2E6C4B80A31D5E47B8 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C8E17A94B2D61F0E8A4C519 /* SplashView.swift */; };
 		7E61488C04879DAF74E92CD1 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59FA86769D451FD129E893D8 /* AppConfig.swift */; };
-		80C8606F4363F4394CA4C6D3 /* PintReminderPlanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 588ACA0F7174779C93948B9A /* PintReminderPlanner.swift */; };
 		8195A977B45AED00FB51120C /* CrewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9311672746C5C464080BC4 /* CrewView.swift */; };
 		8D7A78698DAC1C3A7F32E07D /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD3BC54AAE51DF9DEB198025 /* AuthService.swift */; };
 		8F13D8224A4EC88985C9B43C /* Leaderboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1801B024FF3988C1A9AB6A40 /* Leaderboard.swift */; };
@@ -67,6 +65,7 @@
 		9F2671835D3FFF2A5EA4DEE0 /* CelebrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51D6A617AE3327EDC12D6CDA /* CelebrationView.swift */; };
 		9FE8A55FAE8107A3CE957201 /* InviteCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A660B58F839C19C0D9BB622 /* InviteCode.swift */; };
 		A29DAD0015B9F40F8DB7F56D /* AvatarImageProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D20CD59C03A1321DD1F3633 /* AvatarImageProcessor.swift */; };
+		AAA515F7F6861ECC09335E90 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D543720E6B70209CBCC8817 /* SplashView.swift */; };
 		AB48B069A52A0A3ADECB8A5E /* Palette.swift in Sources */ = {isa = PBXBuildFile; fileRef = A991E7995A0F9FB5795BC795 /* Palette.swift */; };
 		B4C9E70095F8B50B0EDBC1C7 /* BarlowCondensed-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E1C18585E08F3F4966990A09 /* BarlowCondensed-BoldItalic.ttf */; };
 		B5237F2E105385BF5469EF21 /* Activity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94477C1C6330F5F39820C9EC /* Activity.swift */; };
@@ -78,6 +77,7 @@
 		CCB86A7481DB20B166AC2F3B /* MeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6BBFBBEC1780A5C9716388 /* MeView.swift */; };
 		D3E997919C71E17A4C5EED2D /* ConnectStravaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B97AD429451871644A7AFDE /* ConnectStravaView.swift */; };
 		D838F89CB298C5BC24E484B0 /* DisplayNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87484693F47BC3D18E16A346 /* DisplayNameView.swift */; };
+		DA6CE057B366607D3AFB693A /* CrewSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A54DF7DB3C3FCCA42DE8DBB /* CrewSwitch.swift */; };
 		DDC167A9DDE94BC90F9DF306 /* GreetingCopy.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F91A938C5AC5A39D54C5BA /* GreetingCopy.swift */; };
 		DEA437B5ED7EE209AEA83076 /* CloudKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D741E3AF542F0C73F289A3 /* CloudKitService.swift */; };
 		E166F922C7ACAB79DFDD8DC0 /* LoadState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AD0C341EABD3298204B4659 /* LoadState.swift */; };
@@ -94,16 +94,6 @@
 		F45990CE15ACCF08CAE3A1E9 /* Streak.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D2E2209CA2F9243743033EE /* Streak.swift */; };
 		F54B75AEE0C290EC78CB3F06 /* IBMPlexMono-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B72F882274A7C303BD2F109F /* IBMPlexMono-Medium.ttf */; };
 		FE2FC28894480BFC0E2123B8 /* EditDisplayNameSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B50F210382326560A360682 /* EditDisplayNameSheet.swift */; };
-		6B20F8D3A7C14E95F0D4B8C1 /* ChangeCrewSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C31A9E4B8D24F06A1E5C9D2 /* ChangeCrewSheet.swift */; };
-		4918D6B1E5A92C73D8B296AF /* CrewSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A19E7C2F6B03D84E9C3A7B0 /* CrewSwitch.swift */; };
-		C0DE00000000000000000011 /* VenuePingPlanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE00000000000000000001 /* VenuePingPlanner.swift */; };
-		C0DE00000000000000000012 /* VenuePlaceStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE00000000000000000002 /* VenuePlaceStore.swift */; };
-		C0DE00000000000000000013 /* VenuePlaceClassifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE00000000000000000003 /* VenuePlaceClassifier.swift */; };
-		C0DE00000000000000000014 /* VenuePingScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE00000000000000000004 /* VenuePingScheduler.swift */; };
-		C0DE00000000000000000015 /* VenueVisitMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE00000000000000000005 /* VenueVisitMonitor.swift */; };
-		C0DE00000000000000000016 /* VenuePingCopy.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE00000000000000000006 /* VenuePingCopy.swift */; };
-		C0DE00000000000000000017 /* VenuePingSettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE00000000000000000007 /* VenuePingSettingsSection.swift */; };
-		C0DE00000000000000000018 /* VenuePingPlannerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE00000000000000000008 /* VenuePingPlannerTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -118,6 +108,7 @@
 
 /* Begin PBXFileReference section */
 		0161265B8818923E829382EB /* Beer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Beer.swift; sourceTree = "<group>"; };
+		0A54DF7DB3C3FCCA42DE8DBB /* CrewSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrewSwitch.swift; sourceTree = "<group>"; };
 		0B0CE8B2DCB4BEE364BC4010 /* Radius.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Radius.swift; sourceTree = "<group>"; };
 		0C4B9D1152FEB69DACBA90B5 /* StravaService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StravaService.swift; sourceTree = "<group>"; };
 		0C778A4243B5D6CF039CBE0E /* CameraPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPicker.swift; sourceTree = "<group>"; };
@@ -133,8 +124,6 @@
 		1801B024FF3988C1A9AB6A40 /* Leaderboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Leaderboard.swift; sourceTree = "<group>"; };
 		19ECD8717D5734574FF84422 /* IBMPlexSans-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "IBMPlexSans-Medium.ttf"; sourceTree = "<group>"; };
 		1B50F210382326560A360682 /* EditDisplayNameSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDisplayNameSheet.swift; sourceTree = "<group>"; };
-		5A19E7C2F6B03D84E9C3A7B0 /* CrewSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrewSwitch.swift; sourceTree = "<group>"; };
-		7C31A9E4B8D24F06A1E5C9D2 /* ChangeCrewSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeCrewSheet.swift; sourceTree = "<group>"; };
 		1EE7B7F1701B9BDAA78ABB3D /* CrewPintRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrewPintRowView.swift; sourceTree = "<group>"; };
 		23A0DA57412E0CD4B971FA1C /* IBMPlexSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "IBMPlexSans-Regular.ttf"; sourceTree = "<group>"; };
 		23D0E1312B0717D72997ABD7 /* BarlowCondensed-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BarlowCondensed-ExtraBold.ttf"; sourceTree = "<group>"; };
@@ -142,22 +131,21 @@
 		26FD736A73D294D70AFC5B60 /* SportKind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportKind.swift; sourceTree = "<group>"; };
 		2AF5F86EE2104BA25271D32A /* StateViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateViews.swift; sourceTree = "<group>"; };
 		2D2E2209CA2F9243743033EE /* Streak.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Streak.swift; sourceTree = "<group>"; };
+		2D543720E6B70209CBCC8817 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		341B08D261287A5CF6BB523B /* BeerPhotoCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeerPhotoCache.swift; sourceTree = "<group>"; };
 		38715438007CA11646217FBF /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		3897F93F483C091E34E76570 /* ChangeCrewSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeCrewSheet.swift; sourceTree = "<group>"; };
 		3A041A4CF46E2AE22FEFF219 /* BrickAndBrew.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BrickAndBrew.entitlements; sourceTree = "<group>"; };
 		3A660B58F839C19C0D9BB622 /* InviteCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteCode.swift; sourceTree = "<group>"; };
 		3AF9F55E8B0F3B58C50C14D1 /* IBMPlexMono-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "IBMPlexMono-Regular.ttf"; sourceTree = "<group>"; };
-		3C8E17A94B2D61F0E8A4C519 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		3DB08807539B38BC5440CFD5 /* MeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeViewModel.swift; sourceTree = "<group>"; };
 		4103667047C68EE715C45AE4 /* AppSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSession.swift; sourceTree = "<group>"; };
-		470E3E9A099EB1D62E210064 /* PintReminderScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PintReminderScheduler.swift; sourceTree = "<group>"; };
 		48424ACA259D26F27E396730 /* BrickError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrickError.swift; sourceTree = "<group>"; };
 		4AD0C341EABD3298204B4659 /* LoadState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadState.swift; sourceTree = "<group>"; };
 		4B97AD429451871644A7AFDE /* ConnectStravaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectStravaView.swift; sourceTree = "<group>"; };
 		4E2F3E7AEC7E70CCD5C2A476 /* LocalCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalCache.swift; sourceTree = "<group>"; };
 		4E935AA77FF0BEE59ECCBFA5 /* MetricView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricView.swift; sourceTree = "<group>"; };
 		51D6A617AE3327EDC12D6CDA /* CelebrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CelebrationView.swift; sourceTree = "<group>"; };
-		588ACA0F7174779C93948B9A /* PintReminderPlanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PintReminderPlanner.swift; sourceTree = "<group>"; };
 		59FA86769D451FD129E893D8 /* AppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
 		5A9311672746C5C464080BC4 /* CrewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrewView.swift; sourceTree = "<group>"; };
 		5B16721A4C03E76E56822295 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
@@ -189,7 +177,7 @@
 		B53DCFB1A467F4A2D29887AC /* OFL-Barlow.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "OFL-Barlow.txt"; sourceTree = "<group>"; };
 		B72F882274A7C303BD2F109F /* IBMPlexMono-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "IBMPlexMono-Medium.ttf"; sourceTree = "<group>"; };
 		B9734F65635040C3DDA78303 /* ActivityMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityMapper.swift; sourceTree = "<group>"; };
-		C86C8E7CA564490531582340 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		C86C8E7CA564490531582340 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		D2EFBC78E7C9AD1F95FA7935 /* Spacing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spacing.swift; sourceTree = "<group>"; };
 		D3DFECE5A2B31B1A4974AE62 /* BrandChrome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandChrome.swift; sourceTree = "<group>"; };
 		DA9B8C48E4958C4CE0B632E5 /* Scoring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scoring.swift; sourceTree = "<group>"; };
@@ -201,7 +189,7 @@
 		E1C18585E08F3F4966990A09 /* BarlowCondensed-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BarlowCondensed-BoldItalic.ttf"; sourceTree = "<group>"; };
 		E36ADEE30FF86916B6772F42 /* CloudKitKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitKey.swift; sourceTree = "<group>"; };
 		E50832BD4332201312788BB7 /* IBMPlexMono-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "IBMPlexMono-Bold.ttf"; sourceTree = "<group>"; };
-		EADF2F6A20DE4307A72B0892 /* BrickAndBrew.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BrickAndBrew.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		EADF2F6A20DE4307A72B0892 /* BrickAndBrew.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = BrickAndBrew.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EAF6737883C6B0C1D7754359 /* LaunchEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchEnvironment.swift; sourceTree = "<group>"; };
 		EE403F61D143D8C5964D1545 /* ScoringAndMappingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoringAndMappingTests.swift; sourceTree = "<group>"; };
 		F093A363E39425AF6FA609E4 /* StreakBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakBadgeView.swift; sourceTree = "<group>"; };
@@ -210,14 +198,6 @@
 		F7B56104E874A3B70DBA90F9 /* AvatarTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarTests.swift; sourceTree = "<group>"; };
 		FD3BC54AAE51DF9DEB198025 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		FF6BBFBBEC1780A5C9716388 /* MeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeView.swift; sourceTree = "<group>"; };
-		C0DE00000000000000000001 /* VenuePingPlanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenuePingPlanner.swift; sourceTree = "<group>"; };
-		C0DE00000000000000000002 /* VenuePlaceStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenuePlaceStore.swift; sourceTree = "<group>"; };
-		C0DE00000000000000000003 /* VenuePlaceClassifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenuePlaceClassifier.swift; sourceTree = "<group>"; };
-		C0DE00000000000000000004 /* VenuePingScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenuePingScheduler.swift; sourceTree = "<group>"; };
-		C0DE00000000000000000005 /* VenueVisitMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenueVisitMonitor.swift; sourceTree = "<group>"; };
-		C0DE00000000000000000006 /* VenuePingCopy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenuePingCopy.swift; sourceTree = "<group>"; };
-		C0DE00000000000000000007 /* VenuePingSettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenuePingSettingsSection.swift; sourceTree = "<group>"; };
-		C0DE00000000000000000008 /* VenuePingPlannerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenuePingPlannerTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -226,7 +206,6 @@
 			children = (
 				F7B56104E874A3B70DBA90F9 /* AvatarTests.swift */,
 				EE403F61D143D8C5964D1545 /* ScoringAndMappingTests.swift */,
-				C0DE00000000000000000008 /* VenuePingPlannerTests.swift */,
 			);
 			path = BrickAndBrewTests;
 			sourceTree = "<group>";
@@ -263,7 +242,6 @@
 				0B0CE8B2DCB4BEE364BC4010 /* Radius.swift */,
 				D2EFBC78E7C9AD1F95FA7935 /* Spacing.swift */,
 				AE1161FD6F3E112E8D7DC93D /* StreakCopy.swift */,
-				C0DE00000000000000000006 /* VenuePingCopy.swift */,
 				8764D94CD8DA9BA77BB65DA7 /* Typography.swift */,
 			);
 			path = Theme;
@@ -317,11 +295,6 @@
 				5DAB64D740BF140720C8F4F4 /* Haptics.swift */,
 				17CBB348F47D17E5C46926BF /* KeychainStore.swift */,
 				4E2F3E7AEC7E70CCD5C2A476 /* LocalCache.swift */,
-				470E3E9A099EB1D62E210064 /* PintReminderScheduler.swift */,
-				C0DE00000000000000000003 /* VenuePlaceClassifier.swift */,
-				C0DE00000000000000000002 /* VenuePlaceStore.swift */,
-				C0DE00000000000000000004 /* VenuePingScheduler.swift */,
-				C0DE00000000000000000005 /* VenueVisitMonitor.swift */,
 				0C4B9D1152FEB69DACBA90B5 /* StravaService.swift */,
 			);
 			path = Services;
@@ -391,14 +364,12 @@
 				5D0FA5989EB711A99A258507 /* BeerPhoto.swift */,
 				48424ACA259D26F27E396730 /* BrickError.swift */,
 				E36ADEE30FF86916B6772F42 /* CloudKitKey.swift */,
-				5A19E7C2F6B03D84E9C3A7B0 /* CrewSwitch.swift */,
+				0A54DF7DB3C3FCCA42DE8DBB /* CrewSwitch.swift */,
 				84192FD3051FC4DB0E966C5E /* DisplayName.swift */,
 				F1607564A6BB37A4FC39375C /* ImageJPEGProcessor.swift */,
 				3A660B58F839C19C0D9BB622 /* InviteCode.swift */,
 				1801B024FF3988C1A9AB6A40 /* Leaderboard.swift */,
 				4AD0C341EABD3298204B4659 /* LoadState.swift */,
-				588ACA0F7174779C93948B9A /* PintReminderPlanner.swift */,
-				C0DE00000000000000000001 /* VenuePingPlanner.swift */,
 				A257A121611FD3C8D1938DF1 /* Profile.swift */,
 				A9DA36036DF15190365CAAAE /* ScoreBreakdown.swift */,
 				DA9B8C48E4958C4CE0B632E5 /* Scoring.swift */,
@@ -413,10 +384,9 @@
 		AF29954709772F6A337A0C50 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				7C31A9E4B8D24F06A1E5C9D2 /* ChangeCrewSheet.swift */,
+				3897F93F483C091E34E76570 /* ChangeCrewSheet.swift */,
 				1B50F210382326560A360682 /* EditDisplayNameSheet.swift */,
 				FF6BBFBBEC1780A5C9716388 /* MeView.swift */,
-				C0DE00000000000000000007 /* VenuePingSettingsSection.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -427,7 +397,7 @@
 				4B97AD429451871644A7AFDE /* ConnectStravaView.swift */,
 				87484693F47BC3D18E16A346 /* DisplayNameView.swift */,
 				799324DE9E35F0ECFF9D0A74 /* JoinCrewView.swift */,
-				3C8E17A94B2D61F0E8A4C519 /* SplashView.swift */,
+				2D543720E6B70209CBCC8817 /* SplashView.swift */,
 				5B16721A4C03E76E56822295 /* WelcomeView.swift */,
 			);
 			path = Onboarding;
@@ -581,14 +551,14 @@
 				258F7A72B84091AD569E3932 /* BrickError.swift in Sources */,
 				9921113BD01F4BC1C12A4DC4 /* CameraPicker.swift in Sources */,
 				9F2671835D3FFF2A5EA4DEE0 /* CelebrationView.swift in Sources */,
-				6B20F8D3A7C14E95F0D4B8C1 /* ChangeCrewSheet.swift in Sources */,
+				14279580D0CCA8A00F3ADF0C /* ChangeCrewSheet.swift in Sources */,
 				6864D97F781558246AF54950 /* CloudKitKey.swift in Sources */,
 				DEA437B5ED7EE209AEA83076 /* CloudKitService.swift in Sources */,
 				D3E997919C71E17A4C5EED2D /* ConnectStravaView.swift in Sources */,
 				660E9E8C5950701ECF13630A /* CrewPintRowView.swift in Sources */,
+				DA6CE057B366607D3AFB693A /* CrewSwitch.swift in Sources */,
 				8195A977B45AED00FB51120C /* CrewView.swift in Sources */,
 				F21820811E3067C30BC02763 /* CrewViewModel.swift in Sources */,
-				4918D6B1E5A92C73D8B296AF /* CrewSwitch.swift in Sources */,
 				322FDCF3091DA62DBE345F40 /* DisplayName.swift in Sources */,
 				D838F89CB298C5BC24E484B0 /* DisplayNameView.swift in Sources */,
 				FE2FC28894480BFC0E2123B8 /* EditDisplayNameSheet.swift in Sources */,
@@ -611,8 +581,6 @@
 				E90A2171579A1C718425B426 /* Motion.swift in Sources */,
 				AB48B069A52A0A3ADECB8A5E /* Palette.swift in Sources */,
 				38BA47A362C015BA0C2EA6FF /* PhotoPreviewView.swift in Sources */,
-				80C8606F4363F4394CA4C6D3 /* PintReminderPlanner.swift in Sources */,
-				4502C74B31865B915540CB6A /* PintReminderScheduler.swift in Sources */,
 				5A805A27AE1A3B33AB620086 /* Profile.swift in Sources */,
 				640D3EDDE786EBE1C70777AC /* Radius.swift in Sources */,
 				4C386F4CC11760658EE779ED /* RankRowView.swift in Sources */,
@@ -623,7 +591,7 @@
 				6E3AC34B879F2D85F909510C /* ScoringGuideView.swift in Sources */,
 				509AFC7B930F2799C0639B85 /* SectionHeader.swift in Sources */,
 				E4FFE262A7DE68BF034208AF /* Spacing.swift in Sources */,
-				7A1F9D2E6C4B80A31D5E47B8 /* SplashView.swift in Sources */,
+				AAA515F7F6861ECC09335E90 /* SplashView.swift in Sources */,
 				4E100A9CE2B88FEDBE21E3F8 /* SportKind.swift in Sources */,
 				C24A94D98A0E1E505D7BB562 /* StateViews.swift in Sources */,
 				5DFA723DEF63AECA5955A328 /* StravaModels.swift in Sources */,
@@ -632,13 +600,6 @@
 				40614E2A7168196A648953CE /* StreakBadgeView.swift in Sources */,
 				22F773941AF8487A9A3D1491 /* StreakCardView.swift in Sources */,
 				18F1151782016672309EEEFA /* StreakCopy.swift in Sources */,
-				C0DE00000000000000000016 /* VenuePingCopy.swift in Sources */,
-				C0DE00000000000000000011 /* VenuePingPlanner.swift in Sources */,
-				C0DE00000000000000000014 /* VenuePingScheduler.swift in Sources */,
-				C0DE00000000000000000017 /* VenuePingSettingsSection.swift in Sources */,
-				C0DE00000000000000000013 /* VenuePlaceClassifier.swift in Sources */,
-				C0DE00000000000000000012 /* VenuePlaceStore.swift in Sources */,
-				C0DE00000000000000000015 /* VenueVisitMonitor.swift in Sources */,
 				78A867C803CEC5B4D4DF53A4 /* Team.swift in Sources */,
 				F381804A45C1064C454D62C7 /* Typography.swift in Sources */,
 				EF447A3256E019E04CE48A62 /* WelcomeView.swift in Sources */,
@@ -651,7 +612,6 @@
 			files = (
 				5E5805AA6C5451683E09636B /* AvatarTests.swift in Sources */,
 				5A234EA80C18A041BCC96D2E /* ScoringAndMappingTests.swift in Sources */,
-				C0DE00000000000000000018 /* VenuePingPlannerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -674,7 +634,7 @@
 				CODE_SIGN_ENTITLEMENTS = BrickAndBrew/BrickAndBrew.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_TEAM = DTF4NR87GG;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -796,7 +756,7 @@
 				CODE_SIGN_ENTITLEMENTS = BrickAndBrew/BrickAndBrew.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_TEAM = DTF4NR87GG;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_TESTABILITY = YES;

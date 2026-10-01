@@ -1,8 +1,8 @@
 # Brick & Brew
 
-iPhone app for a private triathlon crew: Sign in with Apple, sync swim / bike / run from Strava, log beers, and rank everyone on one board.
+iPhone app for a private triathlon crew: Sign in with Apple, sync swim / bike / run from Strava, optionally log one pint, and rank training on one board.
 
-**Total Index** = training + beers × 12 − grind tax. Each beer covers 20 training points; uncovered swim / bike / run is stripped and taxed at 25%.
+**Total Index** = training + at most 12 points for one pint on a day that also has a qualifying swim, bike, or run. Extra pints that day add nothing. Skipping a pint does not lower the score.
 
 There is no paid backend. CloudKit holds the crew board. Cloudflare Workers cover Strava OAuth (so the client secret never ships in the iOS app) and the public waitlist.
 
@@ -15,7 +15,6 @@ Views → ViewModels → Services → CloudKit / Strava / Keychain
 - Identity: Sign in with Apple (Strava is a data source, not the account).
 - Shared data: CloudKit public database, always filtered by `teamId`.
 - Tokens: Keychain (`AfterFirstUnlockThisDeviceOnly`).
-- Nearby pint: on-device visit monitoring + MapKit. Home/work pins stay in UserDefaults; they never go to CloudKit.
 - Leaderboards: computed on-device from CloudKit records. Each phone syncs **its own** Strava activities, so teammates do not share one API quota.
 
 ## Repo layout
@@ -104,19 +103,17 @@ The public site is GitHub Pages from the `docs/` folder:
 
 Weights live in `Scoring` so you can tweak them in one file.
 
-Sport boards (swim / bike / run / beers) still rank raw volume:
+Sport boards rank distance:
 
-- Swim: 10 points / km
-- Run: 3 points / km
+- Swim: 26 points / km
+- Run: 4 points / km
 - Bike: 1 point / km
-- Beer: 12 points each
 
-The overall **Total Index** is the pub rule, not a sum of those boards:
+The **Total Index** is that training, plus one optional pint:
 
 1. Add training the same way as the sport boards.
-2. Add beers at 12 points each.
-3. Each beer covers 20 training points at full value.
-4. Uncovered training is removed from the Index, then taxed another 25% (grind tax). Train past your pints and the number drops — even below zero.
+2. On a calendar day that has a qualifying brick and at least one logged pint, add 12 points, once.
+3. Further pints that day add nothing. A day with no pint does not reduce the Index.
 
 Season start is the date the crew is created. Activities and beers before that date do not score.
 
@@ -143,12 +140,12 @@ xcodebuild -scheme BrickAndBrew -destination 'platform=iOS Simulator,name=iPhone
 - [ ] Sign in with Apple enabled on the App ID
 - [ ] `STRAVA_CLIENT_ID` and `STRAVA_OAUTH_WORKER_URL` are real values, not placeholders
 - [ ] Worker secrets set; `/token` smoke-tested
-- [ ] Privacy policy live; App Privacy filled in App Store Connect (fitness, health/heart rate from Strava, name, user id, photos/camera, **precise and coarse location** for optional Nearby pint — not used for tracking, not linked for tracking, purpose App Functionality)
+- [ ] Privacy policy live; App Privacy filled in App Store Connect (fitness, health/heart rate from Strava, name, user id, photos/camera — not used for tracking, not linked for tracking, purpose App Functionality). Location is not collected.
 - [ ] Export compliance: `ITSAppUsesNonExemptEncryption` is already `false`
 - [ ] Archive → Distribute App → TestFlight
-- [ ] External testers / App Review notes: login is Sign in with Apple; Strava is optional; beers are logged in-app; Nearby pint is opt-in in Me → grant **Always** and **Precise Location** → optionally set home/work. Background location is only used to notice lingering at a bar, brewery, or restaurant between 6:00 pm and 2:00 am. Location never leaves the device except Apple Maps POI lookup. App Review cannot simulate a `CLVisit`; the toggle, permission prompts, and home/work pins are the reviewable surface.
+- [ ] External testers / App Review notes: login is Sign in with Apple; Strava is optional; a pint is an optional log capped at one scored drink per training day. There is no beers volume board, no drink streak, and no notification prompting a drink. Age rating 17+.
 - [ ] Share one invite code with the crew (4–20 letters/numbers). First person to use a new code creates the crew.
 
 ## What v1 does not include
 
-Remote push notifications, multiple crews, Android, HealthKit, Strava webhooks, chat. Local pint reminders and the optional Nearby pint ping are in.
+Remote push notifications, multiple crews, Android, HealthKit, Strava webhooks, chat, location, and drink reminders.

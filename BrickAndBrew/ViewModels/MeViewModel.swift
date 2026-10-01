@@ -15,17 +15,6 @@ final class MeViewModel {
     var lastSyncText: String
     var bannerMessage: String?
     var streakState: LoadState<StreakSet> = .loading
-    var isPintReminderEnabled: Bool = PintReminderSettings.isEnabled
-    var isVenuePingEnabled: Bool = VenuePingSettings.isEnabled
-    var isRequestingVenuePing = false
-    var isSavingHome = false
-    var isSavingWork = false
-    var homeLabel: String?
-    var workLabel: String?
-    var homeError: String?
-    var workError: String?
-    var venueAuthorization: VenueAuthorization = .notDetermined
-    var showsOpenSettings = false
 
     private let session: AppSession
     private var streakLoadGeneration = 0
@@ -37,9 +26,6 @@ final class MeViewModel {
         } else {
             lastSyncText = "No Strava sync yet"
         }
-        homeLabel = VenuePlaceStore.home?.label
-        workLabel = VenuePlaceStore.work?.label
-        venueAuthorization = VenueVisitMonitor.shared.authorization
     }
 
     var displayName: String {
@@ -90,11 +76,10 @@ final class MeViewModel {
                 beers: seasonBeers,
                 seasonStart: team.seasonStart
             )
-            // Empty is "never logged this season." Zeros after a gap still get the three cards.
+            // Empty is "never logged this season." A gap still shows the training streak.
             let hasHistory = seasonBeers.isEmpty == false || mine.isEmpty == false
             guard generation == streakLoadGeneration else { return }
             streakState = hasHistory ? .loaded(set) : .empty
-            await PintReminderScheduler.refresh(pint: set.pint)
         } catch {
             guard generation == streakLoadGeneration else { return }
             let message = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
@@ -243,156 +228,6 @@ final class MeViewModel {
             Haptics.warning()
             return false
         }
-    }
-
-    func setPintReminderEnabled(_ enabled: Bool) async {
-        if enabled {
-            let allowed = await PintReminderScheduler.requestAuthorization()
-            if allowed == false {
-                PintReminderSettings.isEnabled = false
-                isPintReminderEnabled = false
-                showsOpenSettings = true
-                bannerMessage = StreakCopy.pintReminderDenied
-                return
-            }
-            PintReminderSettings.isEnabled = true
-            isPintReminderEnabled = true
-            await PintReminderScheduler.refresh(pint: currentPint)
-        } else {
-            PintReminderSettings.isEnabled = false
-            isPintReminderEnabled = false
-            PintReminderScheduler.cancel()
-        }
-    }
-
-    var venuePingStatusMessage: String? {
-        guard isVenuePingEnabled else { return nil }
-        switch venueAuthorization {
-        case .ready, .notDetermined:
-            return nil
-        case .denied, .whenInUse:
-            return VenuePingCopy.pausedAlways
-        case .alwaysReduced:
-            return VenuePingCopy.pausedPrecise
-        }
-    }
-
-    func refreshVenueAuthorization() {
-        venueAuthorization = VenueVisitMonitor.shared.authorization
-        isVenuePingEnabled = VenuePingSettings.isEnabled
-        homeLabel = VenuePlaceStore.home?.label
-        workLabel = VenuePlaceStore.work?.label
-        VenueVisitMonitor.shared.refreshMonitoring()
-    }
-
-    func setVenuePingEnabled(_ enabled: Bool) async {
-        guard isRequestingVenuePing == false else { return }
-        isRequestingVenuePing = true
-        defer { isRequestingVenuePing = false }
-
-        if enabled == false {
-            VenuePingSettings.isEnabled = false
-            isVenuePingEnabled = false
-            VenueVisitMonitor.shared.refreshMonitoring()
-            VenuePingScheduler.cancel()
-            return
-        }
-
-        isVenuePingEnabled = true
-        let notificationsAllowed = await VenuePingScheduler.requestAuthorization()
-        if notificationsAllowed == false {
-            denyVenuePing(message: VenuePingCopy.denied)
-            return
-        }
-
-        let authorization = await VenueVisitMonitor.shared.requestAlwaysPrecise()
-        venueAuthorization = authorization
-        switch authorization {
-        case .ready:
-            VenuePingSettings.isEnabled = true
-            isVenuePingEnabled = true
-            VenueVisitMonitor.shared.refreshMonitoring()
-        case .alwaysReduced:
-            denyVenuePing(message: VenuePingCopy.needsPrecise)
-        case .whenInUse, .notDetermined:
-            denyVenuePing(message: VenuePingCopy.needsAlways)
-        case .denied:
-            denyVenuePing(message: VenuePingCopy.denied)
-        }
-    }
-
-    func savePlace(_ kind: VenuePlaceKind) async {
-        setSaving(true, kind: kind)
-        setPlaceError(nil, kind: kind)
-        defer { setSaving(false, kind: kind) }
-
-        let authorization = await VenueVisitMonitor.shared.requestWhenInUse()
-        venueAuthorization = authorization
-        switch authorization {
-        case .denied, .notDetermined:
-            setPlaceError(VenuePingCopy.denied, kind: kind)
-            showsOpenSettings = true
-            bannerMessage = VenuePingCopy.denied
-            return
-        case .whenInUse, .alwaysReduced, .ready:
-            break
-        }
-
-        do {
-            let location = try await VenueVisitMonitor.shared.currentFix()
-            let address = await VenuePlaceClassifier.addressLabel(for: location)
-            let place = SavedPlace(
-                latitude: location.coordinate.latitude,
-                longitude: location.coordinate.longitude,
-                label: address
-            )
-            VenuePlaceStore.setPlace(place, kind: kind)
-            setPlaceLabel(address, kind: kind)
-        } catch {
-            setPlaceError(VenuePingCopy.fixFailed, kind: kind)
-        }
-    }
-
-    func clearPlace(_ kind: VenuePlaceKind) {
-        VenuePlaceStore.setPlace(nil, kind: kind)
-        setPlaceLabel(nil, kind: kind)
-        setPlaceError(nil, kind: kind)
-    }
-
-    private func denyVenuePing(message: String) {
-        VenuePingSettings.isEnabled = false
-        isVenuePingEnabled = false
-        VenueVisitMonitor.shared.refreshMonitoring()
-        showsOpenSettings = true
-        bannerMessage = message
-    }
-
-    private func setSaving(_ saving: Bool, kind: VenuePlaceKind) {
-        switch kind {
-        case .home: isSavingHome = saving
-        case .work: isSavingWork = saving
-        }
-    }
-
-    private func setPlaceLabel(_ label: String?, kind: VenuePlaceKind) {
-        switch kind {
-        case .home: homeLabel = label
-        case .work: workLabel = label
-        }
-    }
-
-    private func setPlaceError(_ message: String?, kind: VenuePlaceKind) {
-        switch kind {
-        case .home: homeError = message
-        case .work: workError = message
-        }
-    }
-
-    private var currentPint: Streak {
-        if case .loaded(let set) = streakState {
-            return set.pint
-        }
-        return .empty
     }
 
     private var currentBrickCount: Int {

@@ -7,6 +7,8 @@ struct LeaderboardEntry: Identifiable, Sendable, Codable, Hashable {
     var runMeters: Double
     var rideMeters: Double
     var beerCount: Int
+    /// Days with both a qualifying brick and at least one pint. Not raw drink volume.
+    var scoredPintDays: Int = 0
     var streaks: StreakSet = .empty
 
     var id: String { userId }
@@ -24,15 +26,11 @@ struct LeaderboardEntry: Identifiable, Sendable, Codable, Hashable {
     }
 
     var beerPoints: Double {
-        Scoring.beerPoints(count: beerCount)
+        Scoring.beerPoints(scoredPintDays: scoredPintDays)
     }
 
     var trainingLoad: Double {
         swimPoints + runPoints + ridePoints
-    }
-
-    var grindTax: Double {
-        Scoring.grindTax(trainingPoints: trainingLoad, beerCount: beerCount)
     }
 
     var totalIndex: Double {
@@ -40,7 +38,7 @@ struct LeaderboardEntry: Identifiable, Sendable, Codable, Hashable {
             swimMeters: swimMeters,
             runMeters: runMeters,
             rideMeters: rideMeters,
-            beerCount: beerCount
+            scoredPintDays: scoredPintDays
         )
     }
 
@@ -50,7 +48,6 @@ struct LeaderboardEntry: Identifiable, Sendable, Codable, Hashable {
         case .swim: swimPoints
         case .run: runPoints
         case .ride: ridePoints
-        case .beers: beerPoints
         }
     }
 
@@ -64,8 +61,6 @@ struct LeaderboardEntry: Identifiable, Sendable, Codable, Hashable {
             Formatters.kilometers(runMeters)
         case .ride:
             Formatters.kilometers(rideMeters)
-        case .beers:
-            Formatters.beerCount(beerCount)
         }
     }
 
@@ -74,7 +69,7 @@ struct LeaderboardEntry: Identifiable, Sendable, Codable, Hashable {
             swimMeters: swimMeters,
             runMeters: runMeters,
             rideMeters: rideMeters,
-            beerCount: beerCount,
+            scoredPintDays: scoredPintDays,
             board: board
         )
     }
@@ -85,7 +80,6 @@ enum LeaderboardBoard: String, CaseIterable, Identifiable, Hashable, Sendable {
     case swim
     case ride
     case run
-    case beers
 
     var id: String { rawValue }
 
@@ -95,16 +89,12 @@ enum LeaderboardBoard: String, CaseIterable, Identifiable, Hashable, Sendable {
         case .swim: "Swim"
         case .ride: "Bike"
         case .run: "Run"
-        case .beers: "Beers"
         }
     }
 
-    /// Pint photos belong with Index and Beers, not the sport-only boards.
+    /// Optional pint photos sit with the Index, not the sport-only boards.
     var showsCrewPints: Bool {
-        switch self {
-        case .overall, .beers: true
-        case .swim, .ride, .run: false
-        }
+        self == .overall
     }
 
     /// Sport boards show that activity's glyph on the brick streak badge.
@@ -113,7 +103,7 @@ enum LeaderboardBoard: String, CaseIterable, Identifiable, Hashable, Sendable {
         case .swim: .swim
         case .run: .run
         case .ride: .ride
-        case .overall, .beers: nil
+        case .overall: nil
         }
     }
 }
@@ -146,6 +136,12 @@ enum LeaderboardBuilder {
                 runMeters: mine.filter { $0.sport == .run }.reduce(0) { $0 + $1.distanceMeters },
                 rideMeters: mine.filter { $0.sport == .ride }.reduce(0) { $0 + $1.distanceMeters },
                 beerCount: myBeers.reduce(0) { $0 + $1.count },
+                scoredPintDays: StreakCalculator.scoredPintDayCount(
+                    activities: mine,
+                    beers: myBeers,
+                    seasonStart: seasonStart,
+                    calendar: calendar
+                ),
                 streaks: StreakCalculator.summarize(
                     activities: mine,
                     beers: myBeers,
@@ -183,6 +179,7 @@ extension LeaderboardEntry {
         case runMeters
         case rideMeters
         case beerCount
+        case scoredPintDays
         case streaks
     }
 
@@ -194,7 +191,9 @@ extension LeaderboardEntry {
         runMeters = try container.decode(Double.self, forKey: .runMeters)
         rideMeters = try container.decode(Double.self, forKey: .rideMeters)
         beerCount = try container.decode(Int.self, forKey: .beerCount)
-        // Older crew snapshots predate streaks; treat them as cold.
+        // Snapshots saved before the cap have no scored-day count. Leave the bonus at zero
+        // until the next crew refresh rather than treating raw volume as points.
+        scoredPintDays = try container.decodeIfPresent(Int.self, forKey: .scoredPintDays) ?? 0
         streaks = try container.decodeIfPresent(StreakSet.self, forKey: .streaks) ?? .empty
     }
 
@@ -206,6 +205,7 @@ extension LeaderboardEntry {
         try container.encode(runMeters, forKey: .runMeters)
         try container.encode(rideMeters, forKey: .rideMeters)
         try container.encode(beerCount, forKey: .beerCount)
+        try container.encode(scoredPintDays, forKey: .scoredPintDays)
         try container.encode(streaks, forKey: .streaks)
     }
 }

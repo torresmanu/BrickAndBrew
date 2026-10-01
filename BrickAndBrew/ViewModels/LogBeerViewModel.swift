@@ -4,14 +4,12 @@ import UIKit
 @MainActor
 @Observable
 final class LogBeerViewModel {
-    var count: Int = 1
     var note: String = ""
     var state: LoadState<[Beer]> = .loading
     var isSaving = false
     var bannerMessage: String?
     var cheerMessage: String?
-    var lastLoggedCount: Int = 0
-    var pintStreak: Streak = .empty
+    var didScoreThisLog = false
     var pendingPhotoJPEG: Data?
     var isCameraPresented = false
     var showsOpenSettings = false
@@ -23,10 +21,6 @@ final class LogBeerViewModel {
 
     init(session: AppSession) {
         self.session = session
-    }
-
-    var showsPintNudge: Bool {
-        cheerMessage == nil && pintStreak.isAtRisk()
     }
 
     var pendingPhotoImage: UIImage? {
@@ -71,14 +65,6 @@ final class LogBeerViewModel {
                 state = .failed(message)
             }
         }
-    }
-
-    func incrementCount() {
-        count = min(count + 1, 12)
-    }
-
-    func decrementCount() {
-        count = max(count - 1, 1)
     }
 
     func requestCamera() async {
@@ -128,19 +114,16 @@ final class LogBeerViewModel {
                 throw BrickError.missingProfile
             }
             let jpeg = pendingPhotoJPEG
-            lastLoggedCount = count
             let beer = Beer(
                 id: UUID().uuidString,
                 userId: profile.id,
                 teamId: team.id,
-                count: count,
+                count: 1,
                 loggedAt: Date(),
                 note: note.trimmingCharacters(in: .whitespacesAndNewlines)
             )
             _ = try await session.cloudKit.saveBeer(beer)
-            VenuePlaceStore.markBeerLogged(at: beer.loggedAt)
             note = ""
-            count = 1
             pendingPhotoJPEG = nil
             Haptics.success()
 
@@ -154,14 +137,26 @@ final class LogBeerViewModel {
                 }
             }
 
-            // The pour is on the board even if the list refresh fails.
             do {
                 let beers = try await session.cloudKit.fetchBeers(userId: profile.id, teamId: team.id)
                 applyBeers(beers, seasonStart: team.seasonStart)
+                didScoreThisLog = await pintScoresOnIndex(
+                    beers: beers,
+                    team: team,
+                    userId: profile.id
+                )
             } catch {
-                applyBeers(optimisticBeers(including: beer), seasonStart: team.seasonStart)
+                let optimistic = optimisticBeers(including: beer)
+                applyBeers(optimistic, seasonStart: team.seasonStart)
+                didScoreThisLog = await pintScoresOnIndex(
+                    beers: optimistic,
+                    team: team,
+                    userId: profile.id
+                )
             }
-            cheerMessage = StreakCopy.cheerAfterPint(days: pintStreak.current)
+            cheerMessage = didScoreThisLog
+                ? "On the Index. One pint on a training day adds \(Formatters.compactNumber(Scoring.pointsPerScoredPint)) points. Another today would not."
+                : "Saved. It counts on the Index only once, and only on a day you also swim, bike, or run."
         } catch {
             Haptics.warning()
             bannerMessage = (error as? LocalizedError)?.errorDescription
@@ -179,18 +174,29 @@ final class LogBeerViewModel {
 
     private func applyBeers(_ beers: [Beer], seasonStart: Date) {
         state = beers.isEmpty ? .empty : .loaded(beers)
-        pintStreak = StreakCalculator.summarize(
-            activities: [],
-            beers: beers,
-            seasonStart: seasonStart
-        ).pint
-        if let latestToday = beers.filter({ Calendar.current.isDateInToday($0.loggedAt) })
-            .max(by: { $0.loggedAt < $1.loggedAt }) {
-            VenuePlaceStore.markBeerLogged(at: latestToday.loggedAt)
+    }
+
+    /// True only for the first pint today on a day that already has a qualifying brick.
+    private func pintScoresOnIndex(beers: [Beer], team: Team, userId: String) async -> Bool {
+        let activities: [Activity]
+        do {
+            activities = try await session.cloudKit.fetchActivities(teamId: team.id, since: team.seasonStart)
+        } catch {
+            return false
         }
-        Task {
-            await PintReminderScheduler.refresh(pint: pintStreak)
+        let calendar = Calendar.current
+        let today = Date()
+        let trainedToday = activities.contains { activity in
+            activity.userId == userId
+                && activity.startDate >= team.seasonStart
+                && calendar.isDate(activity.startDate, inSameDayAs: today)
+                && StreakCalculator.qualifies(activity)
         }
+        guard trainedToday else { return false }
+        let pintsToday = beers.filter { beer in
+            beer.count >= 1 && calendar.isDate(beer.loggedAt, inSameDayAs: today)
+        }
+        return pintsToday.count == 1
     }
 
     private func optimisticBeers(including beer: Beer) -> [Beer] {

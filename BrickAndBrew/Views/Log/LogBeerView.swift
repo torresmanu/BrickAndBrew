@@ -73,10 +73,12 @@ private struct LogBeerLoadedView: View {
         }
         .fullScreenCover(isPresented: cheerBinding) {
             CelebrationView(
-                kicker: "THE PUB RULE",
-                title: "BEER\nEARNED.",
-                value: "+\(Formatters.pointsValue(Scoring.beerPoints(count: viewModel.lastLoggedCount)))",
-                unit: "PTS",
+                kicker: "LOGGED",
+                title: viewModel.didScoreThisLog ? "ON THE\nINDEX." : "SAVED.",
+                value: viewModel.didScoreThisLog
+                    ? "+\(Formatters.pointsValue(Scoring.pointsPerScoredPint))"
+                    : "1",
+                unit: viewModel.didScoreThisLog ? "PTS" : "PINT",
                 detail: viewModel.cheerMessage,
                 dismiss: viewModel.dismissCheer
             )
@@ -85,54 +87,16 @@ private struct LogBeerLoadedView: View {
 
     private var composer: some View {
         VStack(alignment: .leading, spacing: Spacing.md) {
-            Text("BEER")
+            Text("PINT")
                 .font(Typography.displayM)
                 .foregroundStyle(Palette.text)
 
-            if viewModel.showsPintNudge {
-                Text(StreakCopy.atRiskNudge(kind: .pint))
-                    .font(Typography.body)
-                    .foregroundStyle(Palette.secondaryText)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .accessibilityLabel(StreakCopy.atRiskNudge(kind: .pint))
-            }
+            Text(ScoringCopy.logHint)
+                .font(Typography.body)
+                .foregroundStyle(Palette.secondaryText)
+                .fixedSize(horizontal: false, vertical: true)
 
-            HStack(alignment: .bottom, spacing: Spacing.lg) {
-                Button(action: viewModel.decrementCount) {
-                    Image(systemName: "minus")
-                        .font(.system(size: 22, weight: .semibold))
-                        .foregroundStyle(Palette.secondaryText)
-                        .frame(width: 44, height: 44)
-                        .overlay {
-                            RoundedRectangle(cornerRadius: Radius.control, style: .continuous)
-                                .stroke(Palette.hairline, lineWidth: 1)
-                        }
-                }
-                .accessibilityLabel("Fewer beers")
-
-                MetricView(
-                    value: Formatters.rank(viewModel.count),
-                    unit: Formatters.beerUnit(viewModel.count),
-                    valueFont: Typography.displayXL,
-                    valueColor: Palette.accent
-                )
-                .frame(maxWidth: .infinity)
-
-                Button(action: viewModel.incrementCount) {
-                    Image(systemName: "plus")
-                        .font(.system(size: 22, weight: .semibold))
-                        .foregroundStyle(Palette.accent)
-                        .frame(width: 44, height: 44)
-                        .overlay {
-                            RoundedRectangle(cornerRadius: Radius.control, style: .continuous)
-                                .stroke(Palette.accent, lineWidth: 1)
-                        }
-                }
-                .accessibilityLabel("More beers")
-            }
-            .accessibilityElement(children: .contain)
-
-            TextField("Optional note (IPA, finish-line pint…)", text: $viewModel.note)
+            TextField("Optional note", text: $viewModel.note)
                 .brandField()
 
             photoComposer
@@ -141,7 +105,7 @@ private struct LogBeerLoadedView: View {
                 LoadingView(message: "Pouring it onto the board…")
                     .frame(height: 80)
             } else {
-                Button("Add beer", action: log)
+                Button("Log pint", action: log)
                     .buttonStyle(PrimaryButtonStyle())
             }
         }
@@ -181,7 +145,7 @@ private struct LogBeerLoadedView: View {
             case .empty:
                 EmptyStateView(
                     title: "No beers yet",
-                    message: "When you log a pint, it shows up here and on the crew board.",
+                    message: "When you log a pint, it shows up here. It adds Index points only once, on a day you also train.",
                     icon: PintSymbol()
                 )
                 .frame(minHeight: 220)
@@ -290,10 +254,6 @@ private struct BeerRowView: View {
                     .foregroundStyle(Palette.secondaryText)
                     .tracking(1.2)
             }
-            Text("+\(Formatters.pointsValue(Scoring.beerPoints(count: beer.count))) PTS")
-                .font(Typography.metadata)
-                .foregroundStyle(Palette.accent)
-                .tracking(1.4)
             if let note = beer.note, note.isEmpty == false {
                 Text(note)
                     .font(Typography.body)

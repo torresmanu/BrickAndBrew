@@ -87,6 +87,19 @@ enum StreakCalculator: Sendable {
         )
     }
 
+    /// Calendar days that have both a qualifying brick and at least one logged pint.
+    /// A second pint the same day does not add another day.
+    static func scoredPintDayCount(
+        activities: [Activity],
+        beers: [Beer],
+        seasonStart: Date,
+        calendar: Calendar = .current
+    ) -> Int {
+        let pintDays = qualifyingDays(beers: beers, seasonStart: seasonStart, calendar: calendar)
+        let brickDays = qualifyingDays(activities: activities, seasonStart: seasonStart, calendar: calendar)
+        return pintDays.intersection(brickDays).count
+    }
+
     static func qualifies(_ activity: Activity) -> Bool {
         switch activity.sport {
         case .other:
@@ -193,12 +206,6 @@ enum StreakCalculator: Sendable {
 }
 
 extension LeaderboardBoard {
-    /// Which streak the crew-row badge should show for this board.
-    var streakKind: StreakKind {
-        switch self {
-        case .overall: .brickAndBrew
-        case .beers: .pint
-        case .swim, .ride, .run: .brick
-        }
-    }
+    /// Crew-row badges show training streaks only. Drink streaks are not a scoreboard.
+    var streakKind: StreakKind { .brick }
 }

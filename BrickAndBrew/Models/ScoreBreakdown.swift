@@ -1,13 +1,11 @@
 import Foundation
 
-/// Receipt for one board score: where the points came from, and what the grind tax took.
+/// Receipt for one board score.
 struct ScoreBreakdown: Sendable, Hashable {
     struct Line: Identifiable, Sendable, Hashable {
         enum Kind: Sendable, Hashable {
             case training
             case beers
-            case uncovered
-            case tax
         }
 
         let id: String
@@ -29,15 +27,13 @@ struct ScoreBreakdown: Sendable, Hashable {
     var emptyMessage: String {
         switch board {
         case .overall:
-            "No swim, bike, run, or beers this season yet. The Index stays at zero until a brick or a pint lands."
+            "No swim, bike, or run this season yet. The Index stays at zero until a session lands."
         case .swim:
             "No swim volume this season yet."
         case .run:
             "No run volume this season yet."
         case .ride:
             "No bike volume this season yet."
-        case .beers:
-            "No beers logged this season yet."
         }
     }
 
@@ -45,7 +41,7 @@ struct ScoreBreakdown: Sendable, Hashable {
         swimMeters: Double,
         runMeters: Double,
         rideMeters: Double,
-        beerCount: Int,
+        scoredPintDays: Int,
         board: LeaderboardBoard
     ) -> ScoreBreakdown {
         switch board {
@@ -54,7 +50,7 @@ struct ScoreBreakdown: Sendable, Hashable {
                 swimMeters: swimMeters,
                 runMeters: runMeters,
                 rideMeters: rideMeters,
-                beerCount: beerCount
+                scoredPintDays: scoredPintDays
             )
         case .swim:
             sport(meters: swimMeters, sport: .swim, board: .swim)
@@ -62,8 +58,6 @@ struct ScoreBreakdown: Sendable, Hashable {
             sport(meters: runMeters, sport: .run, board: .run)
         case .ride:
             sport(meters: rideMeters, sport: .ride, board: .ride)
-        case .beers:
-            beers(count: beerCount)
         }
     }
 }
@@ -73,51 +67,26 @@ private extension ScoreBreakdown {
         swimMeters: Double,
         runMeters: Double,
         rideMeters: Double,
-        beerCount: Int
+        scoredPintDays: Int
     ) -> ScoreBreakdown {
         let swim = Scoring.trainingPoints(meters: swimMeters, sport: .swim)
         let run = Scoring.trainingPoints(meters: runMeters, sport: .run)
         let ride = Scoring.trainingPoints(meters: rideMeters, sport: .ride)
         let training = swim + run + ride
-        let beerPoints = Scoring.beerPoints(count: beerCount)
-        let uncovered = Scoring.uncoveredTrainingPoints(trainingPoints: training, beerCount: beerCount)
-        let tax = Scoring.grindTaxSurcharge(trainingPoints: training, beerCount: beerCount)
+        let pintPoints = Scoring.beerPoints(scoredPintDays: scoredPintDays)
 
         var lines: [Line] = []
         appendTraining(&lines, title: "Swim", meters: swimMeters, points: swim, id: "swim")
         appendTraining(&lines, title: "Bike", meters: rideMeters, points: ride, id: "ride")
         appendTraining(&lines, title: "Run", meters: runMeters, points: run, id: "run")
-        if beerCount > 0 {
+        if scoredPintDays > 0 {
             lines.append(
                 Line(
-                    id: "beers",
-                    title: "Beers",
-                    detail: Formatters.beerCount(beerCount),
-                    points: beerPoints,
+                    id: "pints",
+                    title: "Pint after training",
+                    detail: scoredPintDays == 1 ? "1 day" : "\(scoredPintDays) days",
+                    points: pintPoints,
                     kind: .beers
-                )
-            )
-        }
-        // Uncovered volume is dropped first, then the 25% surcharge lands as grind tax.
-        if uncovered > 0 {
-            lines.append(
-                Line(
-                    id: "uncovered",
-                    title: "Uncovered training",
-                    detail: "Beyond pint coverage",
-                    points: -uncovered,
-                    kind: .uncovered
-                )
-            )
-        }
-        if tax > 0 {
-            lines.append(
-                Line(
-                    id: "tax",
-                    title: "Grind tax",
-                    detail: "\(Scoring.uncoveredTrainingPenaltyPercent)% on uncovered points",
-                    points: -tax,
-                    kind: .tax
                 )
             )
         }
@@ -128,14 +97,10 @@ private extension ScoreBreakdown {
                 swimMeters: swimMeters,
                 runMeters: runMeters,
                 rideMeters: rideMeters,
-                beerCount: beerCount
+                scoredPintDays: scoredPintDays
             ),
             lines: lines,
-            footnote: overallFootnote(
-                training: training,
-                beerCount: beerCount,
-                uncovered: uncovered
-            )
+            footnote: overallFootnote(training: training, scoredPintDays: scoredPintDays)
         )
     }
 
@@ -160,31 +125,7 @@ private extension ScoreBreakdown {
             board: board,
             total: points,
             lines: lines,
-            footnote: "\(weight) points per km. The grind tax only hits the Index."
-        )
-    }
-
-    static func beers(count: Int) -> ScoreBreakdown {
-        let points = Scoring.beerPoints(count: count)
-        let lines: [Line]
-        if count > 0 {
-            lines = [
-                Line(
-                    id: "beers",
-                    title: "Beers",
-                    detail: Formatters.beerCount(count),
-                    points: points,
-                    kind: .beers
-                )
-            ]
-        } else {
-            lines = []
-        }
-        return ScoreBreakdown(
-            board: .beers,
-            total: points,
-            lines: lines,
-            footnote: "\(Formatters.compactNumber(Scoring.pointsPerBeer)) points each. The grind tax only hits the Index."
+            footnote: "\(weight) points per km."
         )
     }
 
@@ -207,24 +148,15 @@ private extension ScoreBreakdown {
         )
     }
 
-    static func overallFootnote(training: Double, beerCount: Int, uncovered: Double) -> String {
-        if training <= 0, beerCount <= 0 {
-            return "No swim, bike, run, or beers this season yet. The Index stays at zero until a brick or a pint lands."
+    static func overallFootnote(training: Double, scoredPintDays: Int) -> String {
+        let bonus = Formatters.compactNumber(Scoring.pointsPerScoredPint)
+        if training <= 0, scoredPintDays <= 0 {
+            return "No swim, bike, or run this season yet. The Index stays at zero until a session lands."
         }
-        if uncovered > 0 {
-            let dropped = Formatters.compactNumber(uncovered)
-            let tax = "\(Scoring.uncoveredTrainingPenaltyPercent)%"
-            if beerCount <= 0 {
-                return "No pints this season, so \(dropped) training points left the Index and took a \(tax) tax."
-            }
-            let covered = Formatters.compactNumber(Scoring.trainingPointsCoveredPerBeer)
-            let pints = Formatters.beerCount(beerCount)
-            return "Each pint covers \(covered) training points. \(dropped) went uncovered by \(pints), left the Index, and took a \(tax) tax."
+        if scoredPintDays > 0 {
+            return "Training always scores. One pint on a day you also train adds \(bonus) points. Extra pints that day add nothing, and skipping a pint does not lower the Index."
         }
-        if training > 0 {
-            return "Pints cover the training load. No grind tax."
-        }
-        return "No bricks this season, so nothing to tax."
+        return "Training always scores. A pint is optional: one on a day you also train adds \(bonus) points. Skipping it does not lower the Index."
     }
 
     static func weightPerKilometer(for sport: SportKind) -> Double {

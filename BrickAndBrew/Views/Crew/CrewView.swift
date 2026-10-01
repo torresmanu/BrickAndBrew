@@ -241,7 +241,7 @@ private struct CrewBoardPage: View {
     private var boardSection: some View {
         switch viewModel.state {
         case .loading:
-            LoadingView(message: "Crunching swim, bike, run, and beers…")
+            LoadingView(message: "Crunching the crew board…")
                 .frame(minHeight: 180)
                 .listRowInsets(listInsets)
                 .listRowBackground(Color.clear)
@@ -416,8 +416,6 @@ private struct CrewStandingHeader: View {
             return "\(boardTitle)  ·  \(volumeLine)  ·  THIS SEASON"
         case .swim, .run, .ride:
             return "\(boardTitle)  ·  THIS SEASON"
-        case .beers:
-            return "\(boardTitle)  ·  \(Formatters.beerCount(entry.beerCount).uppercased())  ·  THIS SEASON"
         }
     }
 
@@ -431,9 +429,6 @@ private struct CrewStandingHeader: View {
         }
         if entry.runMeters > 0 {
             parts.append("\(Formatters.distanceValue(meters: entry.runMeters)) KM RUN")
-        }
-        if entry.beerCount > 0 {
-            parts.append(Formatters.beerCount(entry.beerCount).uppercased())
         }
         return parts.isEmpty ? "NO VOLUME YET" : parts.joined(separator: "  ·  ")
     }
