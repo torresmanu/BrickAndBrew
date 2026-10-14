@@ -860,6 +860,7 @@ main,
 
 .footer-links {
   display: flex;
+  flex-wrap: wrap;
   gap: var(--space-4);
 }
 
@@ -870,6 +871,7 @@ main,
   font-size: var(--font-size-caption);
   letter-spacing: var(--tracking-caps);
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .footer-links a:hover {
