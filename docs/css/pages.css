@@ -18,17 +18,16 @@
 .photo-stage picture,
 .lost-media picture {
   display: block;
+  width: 100%;
 }
 
 .hero-media img,
 .photo-stage img {
   display: block;
-  /* Fit the full 3:2 still in the viewport so baked-in lockups are never cropped. */
-  width: calc((100svh - var(--header-height)) * 3 / 2);
-  max-width: 100%;
+  /* Full-bleed 3:2 still. The whole frame stays visible; wide screens scroll instead of letterboxing. */
+  width: 100%;
   height: auto;
   aspect-ratio: 3 / 2;
-  margin-inline: auto;
 }
 
 .section {
@@ -472,13 +471,6 @@
 
 .motion-note {
   margin-top: var(--space-5);
-}
-
-@media (min-width: 961px) {
-  .hero,
-  .photo-stage {
-    min-height: calc(100svh - var(--header-height));
-  }
 }
 
 @media (max-width: 960px) {
