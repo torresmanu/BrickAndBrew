@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Receipt sheet for one teammate's board score.
+/// Receipt sheet for one teammate's board score: sources, uncovered training, and grind tax.
 struct ScoreBreakdownView: View {
     let entry: LeaderboardEntry
     let board: LeaderboardBoard
@@ -168,6 +168,7 @@ private struct BreakdownLineView: View {
     private var lineColor: Color {
         switch line.kind {
         case .beers: Palette.accent
+        case .uncovered, .tax: Palette.danger
         case .training: Palette.text
         }
     }

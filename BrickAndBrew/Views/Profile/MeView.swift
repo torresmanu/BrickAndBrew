@@ -56,6 +56,8 @@ private struct MeLoadedView: View {
         List {
             profileSection
             streaksSection
+            PintReminderSettingsSection(viewModel: viewModel)
+            VenuePingSettingsSection(viewModel: viewModel)
             stravaSection
             sessionSection
         }
@@ -63,6 +65,12 @@ private struct MeLoadedView: View {
         .refreshable(action: refreshStreaks)
         .task {
             await viewModel.loadStreaks()
+        }
+        .onAppear {
+            viewModel.refreshVenueAuthorization()
+            Task {
+                await viewModel.loadStreaks()
+            }
         }
         .disabled(viewModel.isDeletingAccount)
         .overlay {
@@ -77,6 +85,9 @@ private struct MeLoadedView: View {
             "Heads up",
             isPresented: bannerBinding,
             actions: {
+                if viewModel.showsOpenSettings {
+                    Button("Open Settings", action: openSettings)
+                }
                 Button("OK", action: dismissBanner)
             },
             message: {
@@ -169,7 +180,7 @@ private struct MeLoadedView: View {
                 EmptyStateView(
                     title: StreakCopy.emptyTitle,
                     message: StreakCopy.emptyMessage,
-                    icon: Image(systemName: "figure.run")
+                    icon: PintSymbol()
                 )
                 .frame(maxWidth: .infinity, minHeight: 180)
                 .listRowInsets(streakRowInsets)
@@ -182,10 +193,12 @@ private struct MeLoadedView: View {
                     .listRowSeparator(.hidden)
                     .listRowBackground(Color.clear)
             case .loaded(let set):
-                StreakCardView(kind: .brick, streak: set.brick)
-                    .listRowInsets(streakRowInsets)
-                    .listRowSeparator(.hidden)
-                    .listRowBackground(Color.clear)
+                ForEach(StreakKind.allCases) { kind in
+                    StreakCardView(kind: kind, streak: set.streak(for: kind))
+                        .listRowInsets(streakRowInsets)
+                        .listRowSeparator(.hidden)
+                        .listRowBackground(Color.clear)
+                }
             }
         } header: {
             Text("Streaks")
@@ -276,6 +289,14 @@ private struct MeLoadedView: View {
 
     private func dismissBanner() {
         viewModel.bannerMessage = nil
+        viewModel.showsOpenSettings = false
+    }
+
+    private func openSettings() {
+        viewModel.showsOpenSettings = false
+        viewModel.bannerMessage = nil
+        guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+        UIApplication.shared.open(url)
     }
 
     private func connect() {

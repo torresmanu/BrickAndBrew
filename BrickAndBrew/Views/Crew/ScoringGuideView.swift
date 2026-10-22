@@ -10,10 +10,10 @@ struct ScoringGuideView: View {
                 VStack(alignment: .leading, spacing: Spacing.xl) {
                     intro
                     weights
-                    pint
+                    coverage
+                    tax
                     boards
                     streaks
-                    adults
                 }
                 .padding(Spacing.md)
                 .padding(.bottom, Spacing.lg)
@@ -34,11 +34,11 @@ struct ScoringGuideView: View {
 
     private var intro: some View {
         VStack(alignment: .leading, spacing: Spacing.sm) {
-            Text("THE INDEX IS TRAINING.")
+            Text("THE GOAL IS SIMPLE:\nFITTEST GUY AT THE BAR,\nSTRONGEST DRINKER AT THE GYM.")
                 .font(Typography.displayM)
                 .foregroundStyle(Palette.text)
                 .minimumScaleFactor(0.7)
-            Text("Swim, bike, and run score on their own. A pint is an optional log. One pint on a day you also train adds a flat bonus. More drinks do not raise the score, and skipping a pint does not lower it.")
+            Text("That's the Index, the pub rule. Beers score hard. Each pint covers a slice of training. Stack swim, bike, and run past your beers and the grind tax lands. Tap anyone on the board to see their receipt.")
                 .font(Typography.body)
                 .foregroundStyle(Palette.secondaryText)
                 .fixedSize(horizontal: false, vertical: true)
@@ -48,15 +48,25 @@ struct ScoringGuideView: View {
 
     private var weights: some View {
         VStack(alignment: .leading, spacing: Spacing.md) {
-            SectionHeader(title: "Training")
+            SectionHeader(title: "Weights")
             ForEach(Self.weightRows, content: WeightRowView.init)
         }
     }
 
-    private var pint: some View {
+    private var coverage: some View {
         VStack(alignment: .leading, spacing: Spacing.sm) {
-            SectionHeader(title: "Optional pint")
-            Text(pintCopy)
+            SectionHeader(title: "Pints cover bricks")
+            Text(coverageCopy)
+                .font(Typography.body)
+                .foregroundStyle(Palette.text)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+    }
+
+    private var tax: some View {
+        VStack(alignment: .leading, spacing: Spacing.sm) {
+            SectionHeader(title: "Grind tax")
+            Text(taxCopy)
                 .font(Typography.body)
                 .foregroundStyle(Palette.text)
                 .fixedSize(horizontal: false, vertical: true)
@@ -65,8 +75,8 @@ struct ScoringGuideView: View {
 
     private var boards: some View {
         VStack(alignment: .leading, spacing: Spacing.sm) {
-            SectionHeader(title: "Boards")
-            Text("Index, Swim, Bike, and Run. There is no board for who drank the most. Sport boards rank distance. The Index is training plus the optional pint bonus.")
+            SectionHeader(title: "Other boards")
+            Text("Swim, Bike, Run, and Beers still rank raw volume. The grind tax only hits the Index.")
                 .font(Typography.body)
                 .foregroundStyle(Palette.text)
                 .fixedSize(horizontal: false, vertical: true)
@@ -83,30 +93,25 @@ struct ScoringGuideView: View {
         }
     }
 
-    private var adults: some View {
-        Text(ScoringCopy.adultsNote)
-            .font(Typography.metadata)
-            .foregroundStyle(Palette.secondaryText)
-            .fixedSize(horizontal: false, vertical: true)
+    private var coverageCopy: String {
+        let covered = Formatters.compactNumber(Scoring.trainingPointsCoveredPerBeer)
+        let swimKm = Formatters.compactNumber(Scoring.trainingPointsCoveredPerBeer / Scoring.swimPointsPerKilometer)
+        let runKm = Formatters.compactNumber(Scoring.trainingPointsCoveredPerBeer / Scoring.runPointsPerKilometer)
+        let rideKm = Formatters.compactNumber(Scoring.trainingPointsCoveredPerBeer / Scoring.ridePointsPerKilometer)
+        return "Each beer covers \(covered) training points at full value — \(swimKm) km swim, \(runKm) km run, or \(rideKm) km bike."
     }
 
-    private var pintCopy: String {
-        let bonus = Formatters.compactNumber(Scoring.pointsPerScoredPint)
-        return "One pint on a day with a real swim, bike, or run adds \(bonus) points, once. A second pint that day is only a log. A rest day with a pint adds nothing. No pint, no penalty."
+    private var taxCopy: String {
+        "Training past that coverage is removed from the Index, then taxed another \(Scoring.uncoveredTrainingPenaltyPercent)%. Skip the pint and the number can go negative."
     }
 
     private var streaksCopy: String {
-        "Brick is consecutive days with a scored swim, bike, or run that actually happened — not a 90-second GPS hiccup. Yesterday still counts; the day before does not. Streaks don't add Index points. \(StreakCopy.brickSyncLag)"
+        "Pint is consecutive days with a logged beer. Brick is a scored swim, bike, or run that actually happened — not a 90-second GPS hiccup. Brick & Brew is both on the same calendar day. Yesterday still counts; the day before does not. Streaks don't score Index points. They just look good at the bar. \(StreakCopy.brickSyncLag)"
     }
 
     private func close() {
         dismiss()
     }
-}
-
-enum ScoringCopy {
-    static let adultsNote = "For adults. Logging a pint is optional and is not a prompt to drink."
-    static let logHint = "One pint on a day you also train can add points, once. More the same day does not. Skipping a pint does not lower your score."
 }
 
 private struct ScoringWeightRow: Identifiable {
@@ -137,10 +142,10 @@ private extension ScoringGuideView {
             detail: "per km"
         ),
         ScoringWeightRow(
-            id: "pint",
-            title: "Pint",
-            weight: "+\(Formatters.compactNumber(Scoring.pointsPerScoredPint))",
-            detail: "once a training day"
+            id: "beer",
+            title: "Beer",
+            weight: "×\(Formatters.compactNumber(Scoring.pointsPerBeer))",
+            detail: "each"
         ),
     ]
 }
@@ -156,11 +161,11 @@ private struct WeightRowView: View {
         HStack(alignment: .firstTextBaseline, spacing: Spacing.sm) {
             Text(row.title.uppercased())
                 .font(Typography.label)
-                .foregroundStyle(row.id == "pint" ? Palette.accent : Palette.text)
+                .foregroundStyle(row.id == "beer" ? Palette.accent : Palette.text)
             Spacer(minLength: Spacing.sm)
             Text(row.weight)
                 .font(Typography.displayM)
-                .foregroundStyle(row.id == "pint" ? Palette.accent : Palette.text)
+                .foregroundStyle(row.id == "beer" ? Palette.accent : Palette.text)
                 .monospacedDigit()
             Text(row.detail.uppercased())
                 .font(Typography.metadata)

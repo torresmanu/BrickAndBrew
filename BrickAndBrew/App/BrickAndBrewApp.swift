@@ -6,9 +6,11 @@ struct BrickAndBrewApp: App {
     @State private var session = AppSession()
 
     init() {
+        ReminderDefaults.prepareFirstRun()
         BrandChrome.apply()
         if LaunchEnvironment.isRunningUnitTests == false {
-            cancelRetiredDrinkNudges()
+            UNUserNotificationCenter.current().delegate = PintReminderCenterDelegate.shared
+            VenueVisitMonitor.shared.prepare()
         }
     }
 
@@ -24,12 +26,4 @@ struct BrickAndBrewApp: App {
                 }
         }
     }
-}
-
-/// Drops pint reminders and bar-location prompts scheduled by older builds.
-private func cancelRetiredDrinkNudges() {
-    let identifiers = ["pint.atRisk", "pint.venue"]
-    let center = UNUserNotificationCenter.current()
-    center.removePendingNotificationRequests(withIdentifiers: identifiers)
-    center.removeDeliveredNotifications(withIdentifiers: identifiers)
 }

@@ -37,6 +37,10 @@
 	<false/>
 	<key>NSCameraUsageDescription</key>
 	<string>Brick &amp; Brew uses the camera so you can snap a photo of a pint for the crew board.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Brick &amp; Brew uses your location so you can mark home and work, and so we can check nearby pubs before asking whether to log a pint.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>With Always on, Brick &amp; Brew can notice when you linger at a bar, brewery, or restaurant in the evening and ask if you want to log a pint — even if the app is closed. Location stays on this iPhone. We never send it to the crew board.</string>
 	<key>STRAVA_CLIENT_ID</key>
 	<string>280004</string>
 	<key>STRAVA_OAUTH_WORKER_URL</key>
@@ -59,5 +63,9 @@
 		<key>UIColorName</key>
 		<string>LaunchBackground</string>
 	</dict>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>location</string>
+	</array>
 </dict>
 </plist>

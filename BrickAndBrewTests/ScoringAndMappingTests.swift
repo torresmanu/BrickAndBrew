@@ -24,48 +24,58 @@ struct ScoringTests {
         #expect(points == 0)
     }
 
-    @Test func oneScoredPintAddsTwelvePoints() {
-        #expect(Scoring.beerPoints(scoredPintDays: 1) == 12)
-        #expect(Scoring.beerPoints(scoredPintDays: 3) == 36)
+    @Test func beerAddsTwelvePointsEach() {
+        #expect(Scoring.beerPoints(count: 3) == 36)
     }
 
-    @Test func negativeScoredDaysDoNotScore() {
-        #expect(Scoring.beerPoints(scoredPintDays: -2) == 0)
+    @Test func negativeBeersDoNotScore() {
+        #expect(Scoring.beerPoints(count: -2) == 0)
     }
 
-    @Test func totalIndexAddsTrainingAndOnePintBonus() {
+    @Test func coveredTrainingMatchesBeersTimesCoverage() {
+        #expect(Scoring.coveredTrainingPoints(beerCount: 2) == 40)
+        #expect(Scoring.coveredTrainingPoints(beerCount: -1) == 0)
+    }
+
+    @Test func totalIndexAddsTrainingAndBeersWhenPintsCoverTheLoad() {
         let entry = LeaderboardEntry(
             userId: "1",
             displayName: "Alex",
             swimMeters: 1000,
             runMeters: 1000,
             rideMeters: 1000,
-            beerCount: 2,
-            scoredPintDays: 1
+            beerCount: 2
         )
-        // Training 31, plus one scored pint. Raw beer count does not multiply.
-        #expect(entry.totalIndex == 43)
+        // Training 31 is inside 40 covered points, so no grind tax: 26 + 4 + 1 + 24.
+        #expect(entry.grindTax == 0)
+        #expect(entry.totalIndex == 55)
     }
 
-    @Test func trainingWithoutPintsStillScores() {
+    @Test func grindTaxHitsUncoveredTraining() {
+        let tax = Scoring.grindTax(trainingPoints: 100, beerCount: 2)
+        // 40 points covered; 60 uncovered; tax = 60 × 1.25.
+        #expect(tax == 75)
+    }
+
+    @Test func trainingWithoutBeersGoesNegative() {
         let index = Scoring.totalIndex(
             swimMeters: 10_000,
             runMeters: 0,
             rideMeters: 0,
-            scoredPintDays: 0
+            beerCount: 0
         )
-        #expect(index == 260)
+        // 260 training points, no coverage, tax 325 → −65.
+        #expect(index == -65)
     }
 
-    @Test func extraDrinksDoNotOutrankTraining() {
+    @Test func extraBeersBeatExtraKilometersOnTheIndex() {
         let grinder = LeaderboardEntry(
             userId: "g",
             displayName: "Grinder",
             swimMeters: 10_000,
             runMeters: 10_000,
             rideMeters: 80_000,
-            beerCount: 0,
-            scoredPintDays: 0
+            beerCount: 2
         )
         let drinker = LeaderboardEntry(
             userId: "d",
@@ -73,21 +83,30 @@ struct ScoringTests {
             swimMeters: 1_000,
             runMeters: 1_000,
             rideMeters: 8_000,
-            beerCount: 20,
-            scoredPintDays: 1
+            beerCount: 20
         )
-        #expect(grinder.totalIndex > drinker.totalIndex)
+        #expect(drinker.totalIndex > grinder.totalIndex)
+    }
+
+    @Test func uncoveredPenaltyPercentMatchesRate() {
+        #expect(Scoring.uncoveredTrainingPenaltyPercent == 25)
     }
 
     @Test func compactNumberKeepsGuideCopyReadable() {
         #expect(Formatters.compactNumber(12) == "12")
-        #expect(Formatters.compactNumber(Scoring.pointsPerScoredPint) == "12")
+        #expect(Formatters.compactNumber(Scoring.trainingPointsCoveredPerBeer / Scoring.runPointsPerKilometer) == "5")
     }
 
     @Test func signedPointsValueKeepsReceiptSigns() {
         #expect(Formatters.signedPointsValue(50) == "+\(Formatters.pointsValue(50))")
         #expect(Formatters.signedPointsValue(-2.5) == "−\(Formatters.pointsValue(2.5))")
         #expect(Formatters.signedPointsValue(0) == Formatters.pointsValue(0))
+    }
+
+    @Test func uncoveredTrainingIsLoadPastPintCoverage() {
+        #expect(Scoring.uncoveredTrainingPoints(trainingPoints: 50, beerCount: 2) == 10)
+        #expect(Scoring.grindTaxSurcharge(trainingPoints: 50, beerCount: 2) == 2.5)
+        #expect(Scoring.grindTax(trainingPoints: 50, beerCount: 2) == 12.5)
     }
 
     @Test func streakDaysUsesSingularForOne() {
@@ -98,39 +117,38 @@ struct ScoringTests {
 }
 
 struct ScoreBreakdownTests {
-    @Test func trainingAndOneScoredPintShowOnTheReceipt() {
+    @Test func coveredLoadShowsSportsAndBeersWithNoTax() {
         let entry = LeaderboardEntry(
             userId: "1",
             displayName: "Alex",
             swimMeters: 1_000,
             runMeters: 1_000,
             rideMeters: 1_000,
-            beerCount: 4,
-            scoredPintDays: 1
+            beerCount: 2
         )
         let breakdown = entry.scoreBreakdown(for: .overall)
-        #expect(breakdown.lines.map(\.id) == ["swim", "ride", "run", "pints"])
-        #expect(breakdown.lines.map(\.points) == [26, 1, 4, 12])
-        #expect(breakdown.total == 43)
+        #expect(breakdown.lines.map(\.id) == ["swim", "ride", "run", "beers"])
+        #expect(breakdown.lines.map(\.points) == [26, 1, 4, 24])
+        #expect(breakdown.total == 55)
         #expect(breakdown.lines.reduce(0) { $0 + $1.points } == breakdown.total)
-        #expect(breakdown.footnote.contains("Extra pints that day add nothing"))
+        #expect(breakdown.footnote == "Pints cover the training load. No grind tax.")
     }
 
-    @Test func rawBeerCountDoesNotChangeTheIndex() {
+    @Test func bikeAndBeersSplitUncoveredVolumeFromGrindTax() {
         let entry = LeaderboardEntry(
             userId: "1",
             displayName: "Alex",
             swimMeters: 0,
             runMeters: 0,
             rideMeters: 50_000,
-            beerCount: 12,
-            scoredPintDays: 1
+            beerCount: 2
         )
         let breakdown = entry.scoreBreakdown(for: .overall)
-        #expect(breakdown.lines.map(\.id) == ["ride", "pints"])
-        #expect(breakdown.lines.map(\.points) == [50, 12])
-        #expect(breakdown.total == 62)
+        #expect(breakdown.lines.map(\.id) == ["ride", "beers", "uncovered", "tax"])
+        #expect(breakdown.lines.map(\.points) == [50, 24, -10, -2.5])
+        #expect(breakdown.total == 61.5)
         #expect(breakdown.total == entry.totalIndex)
+        #expect(breakdown.footnote.contains("10 went uncovered"))
     }
 
     @Test func emptyIndexHasFriendlyCopyAndZeroTotal() {
@@ -148,7 +166,7 @@ struct ScoreBreakdownTests {
         #expect(breakdown.emptyMessage.contains("The Index stays at zero"))
     }
 
-    @Test func trainingWithoutPintsKeepsTheFullLoad() {
+    @Test func trainingWithoutBeersDropsTheLoadThenTaxesIt() {
         let entry = LeaderboardEntry(
             userId: "1",
             displayName: "Alex",
@@ -158,10 +176,10 @@ struct ScoreBreakdownTests {
             beerCount: 0
         )
         let breakdown = entry.scoreBreakdown(for: .overall)
-        #expect(breakdown.lines.map(\.points) == [260])
-        #expect(breakdown.total == 260)
+        #expect(breakdown.lines.map(\.points) == [260, -260, -65])
+        #expect(breakdown.total == -65)
         #expect(breakdown.total == entry.totalIndex)
-        #expect(breakdown.footnote.contains("does not lower the Index"))
+        #expect(breakdown.footnote.contains("No pints this season"))
     }
 
     @Test func sportBoardOnlyShowsThatSport() {
@@ -171,13 +189,26 @@ struct ScoreBreakdownTests {
             swimMeters: 0,
             runMeters: 0,
             rideMeters: 50_000,
-            beerCount: 2,
-            scoredPintDays: 1
+            beerCount: 2
         )
         let breakdown = entry.scoreBreakdown(for: .ride)
         #expect(breakdown.lines.map(\.points) == [50])
         #expect(breakdown.total == 50)
-        #expect(breakdown.footnote.contains("points per km"))
+        #expect(breakdown.footnote.contains("grind tax only hits the Index"))
+    }
+
+    @Test func beersBoardIgnoresTraining() {
+        let entry = LeaderboardEntry(
+            userId: "1",
+            displayName: "Alex",
+            swimMeters: 1_000,
+            runMeters: 0,
+            rideMeters: 0,
+            beerCount: 2
+        )
+        let breakdown = entry.scoreBreakdown(for: .beers)
+        #expect(breakdown.lines.map(\.points) == [24])
+        #expect(breakdown.total == 24)
     }
 }
 
@@ -299,20 +330,19 @@ struct LeaderboardBuilderTests {
         #expect(entries.count == 1)
         #expect(entries[0].runMeters == 1_000)
         #expect(entries[0].beerCount == 2)
-        #expect(entries[0].scoredPintDays == 1)
         #expect(entries[0].totalIndex == Scoring.totalIndex(
             swimMeters: 0,
             runMeters: 1_000,
             rideMeters: 0,
-            scoredPintDays: 1
+            beerCount: 2
         ))
     }
 
     @Test func ranksBySelectedBoard() {
         let low = LeaderboardEntry(userId: "a", displayName: "A", swimMeters: 0, runMeters: 0, rideMeters: 10_000, beerCount: 0)
-        let high = LeaderboardEntry(userId: "b", displayName: "B", swimMeters: 0, runMeters: 0, rideMeters: 1_000, beerCount: 20, scoredPintDays: 1)
-        let ranked = LeaderboardBuilder.ranked([low, high], board: .ride)
-        #expect(ranked.first?.userId == "a")
+        let high = LeaderboardEntry(userId: "b", displayName: "B", swimMeters: 0, runMeters: 0, rideMeters: 1_000, beerCount: 20)
+        let ranked = LeaderboardBuilder.ranked([low, high], board: .beers)
+        #expect(ranked.first?.userId == "b")
     }
 
     @Test func attachesSeasonStreaksToEachEntry() {
@@ -368,7 +398,6 @@ struct LeaderboardBuilderTests {
         """
         let entry = try JSONDecoder().decode(LeaderboardEntry.self, from: Data(json.utf8))
         #expect(entry.beerCount == 2)
-        #expect(entry.scoredPintDays == 0)
         #expect(entry.streaks == .empty)
     }
 }
@@ -644,22 +673,9 @@ struct StreakCalculatorTests {
         #expect(set.pint.isAtRisk(now: day(9), calendar: gmt) == false)
     }
 
-    @Test func manyPintsOnOneTrainingDayScoreOnce() {
-        let count = StreakCalculator.scoredPintDayCount(
-            activities: [activity(sport: .run, start: day(8), meters: 5_000, moving: 1_800)],
-            beers: [
-                beer(loggedAt: day(8, hour: 11), count: 4),
-                beer(loggedAt: day(8, hour: 20), count: 2),
-                beer(loggedAt: day(9), count: 1)
-            ],
-            seasonStart: day(1),
-            calendar: gmt
-        )
-        #expect(count == 1)
-    }
-
-    @Test func boardPicksTheTrainingStreakForTheBadge() {
-        #expect(LeaderboardBoard.overall.streakKind == .brick)
+    @Test func boardPicksTheStreakKindForTheBadge() {
+        #expect(LeaderboardBoard.overall.streakKind == .brickAndBrew)
+        #expect(LeaderboardBoard.beers.streakKind == .pint)
         #expect(LeaderboardBoard.swim.streakKind == .brick)
         #expect(LeaderboardBoard.run.streakKind == .brick)
         #expect(LeaderboardBoard.ride.streakKind == .brick)
@@ -668,6 +684,7 @@ struct StreakCalculatorTests {
         #expect(LeaderboardBoard.ride.sport == .ride)
         #expect(LeaderboardBoard.ride.sport?.systemImage == "figure.outdoor.cycle")
         #expect(LeaderboardBoard.overall.sport == nil)
+        #expect(LeaderboardBoard.beers.sport == nil)
     }
 
     private func calendarDaysApart(_ last: Date?, _ expected: Date) -> Bool {
@@ -694,5 +711,100 @@ struct StreakCalculatorTests {
             maxHeartrate: nil,
             elevationGain: nil
         )
+    }
+}
+
+struct PintReminderPlannerTests {
+    private var gmt: Calendar {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(secondsFromGMT: 0)!
+        return calendar
+    }
+
+    @Test func disabledNeverFires() {
+        let fire = PintReminderPlanner.nextFire(
+            streak: atRiskStreak(now: day(9, hour: 15)),
+            now: day(9, hour: 15),
+            calendar: gmt,
+            enabled: false
+        )
+        #expect(fire == nil)
+    }
+
+    @Test func zeroStreakNeverFires() {
+        let fire = PintReminderPlanner.nextFire(
+            streak: .empty,
+            now: day(9, hour: 15),
+            calendar: gmt,
+            enabled: true
+        )
+        #expect(fire == nil)
+    }
+
+    @Test func atRiskBeforeSevenSchedulesToday() throws {
+        let now = day(9, hour: 15)
+        let fire = try #require(
+            PintReminderPlanner.nextFire(
+                streak: atRiskStreak(now: now),
+                now: now,
+                calendar: gmt,
+                enabled: true
+            )
+        )
+        #expect(gmt.component(.hour, from: fire) == 19)
+        #expect(gmt.isDate(fire, inSameDayAs: now))
+    }
+
+    @Test func atRiskAfterSevenDoesNotFireLate() {
+        let now = day(9, hour: 20)
+        let fire = PintReminderPlanner.nextFire(
+            streak: atRiskStreak(now: now),
+            now: now,
+            calendar: gmt,
+            enabled: true
+        )
+        #expect(fire == nil)
+    }
+
+    @Test func loggedTodaySchedulesTomorrow() throws {
+        let now = day(9, hour: 15)
+        let fire = try #require(
+            PintReminderPlanner.nextFire(
+                streak: lockedInStreak(now: now),
+                now: now,
+                calendar: gmt,
+                enabled: true
+            )
+        )
+        let tomorrow = gmt.date(byAdding: .day, value: 1, to: gmt.startOfDay(for: now))!
+        #expect(gmt.isDate(fire, inSameDayAs: tomorrow))
+        #expect(gmt.component(.hour, from: fire) == 19)
+    }
+
+    @Test func midnightStillUsesStartOfDayForAtRisk() throws {
+        let now = day(9, hour: 0)
+        let fire = try #require(
+            PintReminderPlanner.nextFire(
+                streak: atRiskStreak(now: now),
+                now: now,
+                calendar: gmt,
+                enabled: true
+            )
+        )
+        #expect(gmt.isDate(fire, inSameDayAs: now))
+        #expect(gmt.component(.hour, from: fire) == 19)
+    }
+
+    private func day(_ day: Int, hour: Int) -> Date {
+        gmt.date(from: DateComponents(year: 2026, month: 1, day: day, hour: hour))!
+    }
+
+    private func atRiskStreak(now: Date) -> Streak {
+        let yesterday = gmt.date(byAdding: .day, value: -1, to: gmt.startOfDay(for: now))!
+        return Streak(current: 2, longest: 2, lastQualifyingDay: yesterday)
+    }
+
+    private func lockedInStreak(now: Date) -> Streak {
+        Streak(current: 3, longest: 3, lastQualifyingDay: now)
     }
 }
