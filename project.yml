@@ -29,7 +29,7 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.brickandbrew.app
         PRODUCT_NAME: BrickAndBrew
         MARKETING_VERSION: "2.0.0"
-        CURRENT_PROJECT_VERSION: "6"
+        CURRENT_PROJECT_VERSION: "11"
         DEVELOPMENT_TEAM: DTF4NR87GG
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_FILE: BrickAndBrew/Info.plist
@@ -98,6 +98,7 @@ targets:
     scheme:
       testTargets:
         - BrickAndBrewTests
+        - BrickAndBrewUITests
       gatherCoverageData: true
 
   BrickAndBrewTests:
@@ -116,12 +117,30 @@ targets:
         CODE_SIGN_STYLE: Automatic
     dependencies:
       - target: BrickAndBrew
+
+  BrickAndBrewUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - BrickAndBrewUITests
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.brickandbrew.app.uitests
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_TARGET_NAME: BrickAndBrew
+        IPHONEOS_DEPLOYMENT_TARGET: "18.0"
+        SWIFT_STRICT_CONCURRENCY: complete
+        CODE_SIGN_STYLE: Automatic
+    dependencies:
+      - target: BrickAndBrew
+
 schemes:
   BrickAndBrew:
     build:
       targets:
         BrickAndBrew: all
         BrickAndBrewTests: [test]
+        BrickAndBrewUITests: [test]
     run:
       config: Debug
     test:
@@ -129,3 +148,4 @@ schemes:
       gatherCoverageData: true
       targets:
         - BrickAndBrewTests
+        - BrickAndBrewUITests

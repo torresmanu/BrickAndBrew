@@ -125,9 +125,6 @@ struct MainTabView: View {
         guard phase == .active else { return }
         openLogTabIfRequested()
         VenueVisitMonitor.shared.refreshMonitoring()
-        Task {
-            await session.refreshPintReminderFromCloud()
-        }
     }
 
     /// Original-color circular photo so the tab bar does not flatten it to a template glyph.

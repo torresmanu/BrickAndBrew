@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="phone.css">
+</head>
+<body>
+<div class="device">
+  <div class="status"><span>19:42</span><span class="right"><svg class="loc on" viewBox="0 0 24 24"><path d="M12 2l7 18-7-4-7 4z"/></svg><span>5G</span><span class="battery"><i></i></span></span></div>
+  <h1 class="large-title">Log</h1>
+  <div class="composer">
+    <p class="beer-word">BEER</p>
+    <div class="stepper">
+      <div class="step">−</div>
+      <div class="count"><strong>1</strong><span>BEER</span></div>
+      <div class="step plus">+</div>
+    </div>
+    <div class="field">The Half Mile</div>
+    <div class="btn secondary">TAKE PHOTO</div>
+    <div class="btn primary">ADD BEER</div>
+  </div>
+  <div class="tabbar">
+    <div class="tab"><svg viewBox="0 0 24 24"><path d="M8 21h8v-2H8zm2-3h4v2h-4zM6 3h12v6a6 6 0 0 1-12 0zm-2 1h2v2a2 2 0 0 1-2-2zm14 0h2a2 2 0 0 1-2 2V4z"/></svg>Crew</div>
+    <div class="tab on"><svg viewBox="0 0 24 24"><path d="M6 2h8v4h3a3 3 0 0 1 0 6h-3v6a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3V2zm8 6v2h2a1 1 0 0 0 0-2z"/></svg>Log</div>
+    <div class="tab"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4zm-7 8a7 7 0 0 1 14 0z"/></svg>Me</div>
+  </div>
+</div>
+<script type="module">
+  const field = document.querySelector(".field");
+  window.film = {
+    duration: 5,
+    ready: document.fonts.ready,
+    frame(t) {
+      field.style.color = t > 0.2 ? "#f2efe7" : "#8c8882";
+    }
+  };
+</script>
+</body>
+</html>

@@ -95,6 +95,7 @@ final class CloudKitService {
     }
 
     func fetchProfiles(teamId: String) async throws -> [Profile] {
+        if ReviewRecording.isEnabled { return ReviewRecording.profiles }
         let predicate = NSPredicate(format: "%K == %@", CloudKitKey.Profile.teamId, teamId)
         let records = try await query(recordType: CloudKitKey.RecordType.profile, predicate: predicate)
         for record in records {
@@ -104,6 +105,7 @@ final class CloudKitService {
     }
 
     func fetchActivities(teamId: String, since: Date) async throws -> [Activity] {
+        if ReviewRecording.isEnabled { return ReviewRecording.activities }
         let predicate = NSPredicate(
             format: "%K == %@ AND %K >= %@",
             CloudKitKey.Activity.teamId,
@@ -122,6 +124,7 @@ final class CloudKitService {
     }
 
     func fetchBeers(teamId: String, since: Date) async throws -> [Beer] {
+        if ReviewRecording.isEnabled { return ReviewRecording.beers }
         let predicate = NSPredicate(
             format: "%K == %@ AND %K >= %@",
             CloudKitKey.Beer.teamId,
@@ -134,6 +137,7 @@ final class CloudKitService {
     }
 
     func fetchBeers(userId: String, teamId: String) async throws -> [Beer] {
+        if ReviewRecording.isEnabled { return ReviewRecording.beers(for: userId) }
         let predicate = NSPredicate(
             format: "%K == %@ AND %K == %@",
             CloudKitKey.Beer.userId,
@@ -169,6 +173,7 @@ final class CloudKitService {
     }
 
     func fetchBeerPhotos(teamId: String, since: Date) async throws -> [BeerPhoto] {
+        if ReviewRecording.isEnabled { return [] }
         let predicate = NSPredicate(
             format: "%K == %@ AND %K >= %@",
             CloudKitKey.BeerPhoto.teamId,
@@ -189,6 +194,7 @@ final class CloudKitService {
     }
 
     func fetchBeerPhotos(userId: String, teamId: String) async throws -> [BeerPhoto] {
+        if ReviewRecording.isEnabled { return [] }
         let predicate = NSPredicate(
             format: "%K == %@ AND %K == %@",
             CloudKitKey.BeerPhoto.userId,

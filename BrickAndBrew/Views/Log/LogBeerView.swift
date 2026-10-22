@@ -89,14 +89,6 @@ private struct LogBeerLoadedView: View {
                 .font(Typography.displayM)
                 .foregroundStyle(Palette.text)
 
-            if viewModel.showsPintNudge {
-                Text(StreakCopy.atRiskNudge(kind: .pint))
-                    .font(Typography.body)
-                    .foregroundStyle(Palette.secondaryText)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .accessibilityLabel(StreakCopy.atRiskNudge(kind: .pint))
-            }
-
             HStack(alignment: .bottom, spacing: Spacing.lg) {
                 Button(action: viewModel.decrementCount) {
                     Image(systemName: "minus")

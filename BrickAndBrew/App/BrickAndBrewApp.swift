@@ -9,8 +9,9 @@ struct BrickAndBrewApp: App {
         ReminderDefaults.prepareFirstRun()
         BrandChrome.apply()
         if LaunchEnvironment.isRunningUnitTests == false {
-            UNUserNotificationCenter.current().delegate = PintReminderCenterDelegate.shared
+            UNUserNotificationCenter.current().delegate = VenueNotificationCenterDelegate.shared
             VenueVisitMonitor.shared.prepare()
+            cancelRetiredPintReminder()
         }
     }
 
@@ -26,4 +27,11 @@ struct BrickAndBrewApp: App {
                 }
         }
     }
+}
+
+/// Drops the 7:00 pm pint reminder scheduled by older builds. Nearby pint uses a different identifier.
+private func cancelRetiredPintReminder() {
+    let center = UNUserNotificationCenter.current()
+    center.removePendingNotificationRequests(withIdentifiers: ["pint.atRisk"])
+    center.removeDeliveredNotifications(withIdentifiers: ["pint.atRisk"])
 }

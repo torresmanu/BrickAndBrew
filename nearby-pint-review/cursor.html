@@ -1,0 +1,119 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  html, body {
+    margin: 0;
+    width: 1206px;
+    height: 2622px;
+    overflow: hidden;
+    background: transparent;
+  }
+  .finger, .ring {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .finger {
+    width: 78px;
+    height: 78px;
+    margin: -39px 0 0 -39px;
+    background: rgba(255, 255, 255, 0.92);
+    border: 6px solid #ff4b24;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+  }
+  .ring {
+    width: 78px;
+    height: 78px;
+    margin: -39px 0 0 -39px;
+    border: 6px solid #ff4b24;
+    background: transparent;
+  }
+</style>
+</head>
+<body>
+  <div class="ring" id="ring"></div>
+  <div class="finger" id="finger"></div>
+  <script type="module">
+    const finger = document.getElementById("finger");
+    const ring = document.getElementById("ring");
+
+    // Times match the simulator recording. Coordinates are pixels in the 1206×2622 frame.
+    const taps = [
+      { t: 13.45, x: 603, y: 1560 },
+      { t: 21.35, x: 876, y: 2436 }
+    ];
+    const drags = [
+      { t: 25.9, dur: 0.7, x: 603, y: 1760, y2: 1080 },
+      { t: 29.5, dur: 0.75, x: 603, y: 1980, y2: 1120 }
+    ];
+
+    function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+    function ease(u) {
+      return u < 0.5 ? 2 * u * u : 1 - ((-2 * u + 2) ** 2) / 2;
+    }
+
+    function place(el, x, y, opacity, scale) {
+      el.style.left = `${x}px`;
+      el.style.top = `${y}px`;
+      el.style.opacity = String(opacity);
+      el.style.transform = `scale(${scale})`;
+    }
+
+    window.film = {
+      duration: 34.61,
+      frame(t) {
+        let x = taps[0].x;
+        let y = taps[0].y;
+        let opacity = 0;
+        let scale = 1;
+        let ringOpacity = 0;
+        let ringScale = 1;
+
+        const firstShow = taps[0].t - 0.85;
+        if (t >= firstShow) {
+          opacity = clamp((t - firstShow) / 0.2, 0, 1);
+        }
+
+        const points = [
+          { t: taps[0].t - 0.7, x: taps[0].x, y: taps[0].y + 180 },
+          { t: taps[0].t, x: taps[0].x, y: taps[0].y },
+          { t: taps[1].t - 0.7, x: taps[1].x, y: taps[1].y + 80 },
+          { t: taps[1].t, x: taps[1].x, y: taps[1].y },
+          { t: drags[0].t, x: drags[0].x, y: drags[0].y },
+          { t: drags[0].t + drags[0].dur, x: drags[0].x, y: drags[0].y2 },
+          { t: drags[1].t, x: drags[1].x, y: drags[1].y },
+          { t: drags[1].t + drags[1].dur, x: drags[1].x, y: drags[1].y2 }
+        ];
+
+        let i = 0;
+        while (i < points.length - 1 && t > points[i + 1].t) i += 1;
+        const a = points[i];
+        const b = points[Math.min(i + 1, points.length - 1)];
+        const span = Math.max(0.001, b.t - a.t);
+        const u = ease(clamp((t - a.t) / span, 0, 1));
+        x = a.x + (b.x - a.x) * u;
+        y = a.y + (b.y - a.y) * u;
+
+        for (const tap of taps) {
+          const age = t - tap.t;
+          if (age >= 0 && age < 0.12) scale = 0.82;
+          if (age >= 0 && age < 0.45) {
+            const p = age / 0.45;
+            ringOpacity = 1 - p;
+            ringScale = 1 + p * 1.8;
+          }
+        }
+
+        if (t > drags[1].t + drags[1].dur + 0.35) {
+          opacity *= clamp(1 - (t - (drags[1].t + drags[1].dur + 0.35)) / 0.25, 0, 1);
+        }
+
+        place(finger, x, y, opacity, scale);
+        place(ring, x, y, ringOpacity * opacity, ringScale);
+      }
+    };
+  </script>
+</body>
+</html>

@@ -51,6 +51,17 @@
                ReferencedContainer = "container:BrickAndBrew.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "38484358161513B40C950B42"
+               BuildableName = "BrickAndBrewUITests.xctest"
+               BlueprintName = "BrickAndBrewUITests"
+               ReferencedContainer = "container:BrickAndBrew.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <CommandLineArguments>
       </CommandLineArguments>

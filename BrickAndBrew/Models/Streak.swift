@@ -193,12 +193,6 @@ enum StreakCalculator: Sendable {
 }
 
 extension LeaderboardBoard {
-    /// Which streak the crew-row badge should show for this board.
-    var streakKind: StreakKind {
-        switch self {
-        case .overall: .brickAndBrew
-        case .beers: .pint
-        case .swim, .ride, .run: .brick
-        }
-    }
+    /// Crew-row badges show training days. Pint and brick-and-brew streaks stay off the board.
+    var streakKind: StreakKind { .brick }
 }

@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="phone.css">
+</head>
+<body>
+<div class="device">
+  <div class="status"><span>19:42</span><span class="right"><svg class="loc on" viewBox="0 0 24 24"><path d="M12 2l7 18-7-4-7 4z"/></svg><span>5G</span><span class="battery"><i></i></span></span></div>
+  <div class="live" id="live">Brick &amp; Brew is using your location</div>
+  <div class="banner" id="banner">
+    <img src="assets/app-icon.png" alt="">
+    <div>
+      <div class="app">BRICK &amp; BREW</div>
+      <h3>Logging a pint?</h3>
+      <p>Looks like you’re at The Half Mile.</p>
+    </div>
+    <div class="when">now</div>
+  </div>
+  <p class="lock-time">19:42</p>
+  <p class="lock-date">Thursday 22 October</p>
+</div>
+<script type="module">
+  const live = document.getElementById("live");
+  const banner = document.getElementById("banner");
+  window.film = {
+    duration: 8,
+    ready: document.fonts.ready,
+    frame(t) {
+      const liveU = Math.max(0, Math.min(1, (t - 0.35) / 0.3));
+      const noteU = Math.max(0, Math.min(1, (t - 2.2) / 0.35));
+      live.style.opacity = String(liveU);
+      banner.style.opacity = String(noteU);
+      banner.style.transform = `translateY(${(1 - noteU) * -16}px)`;
+    }
+  };
+</script>
+</body>
+</html>

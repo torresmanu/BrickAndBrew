@@ -674,8 +674,8 @@ struct StreakCalculatorTests {
     }
 
     @Test func boardPicksTheStreakKindForTheBadge() {
-        #expect(LeaderboardBoard.overall.streakKind == .brickAndBrew)
-        #expect(LeaderboardBoard.beers.streakKind == .pint)
+        #expect(LeaderboardBoard.overall.streakKind == .brick)
+        #expect(LeaderboardBoard.beers.streakKind == .brick)
         #expect(LeaderboardBoard.swim.streakKind == .brick)
         #expect(LeaderboardBoard.run.streakKind == .brick)
         #expect(LeaderboardBoard.ride.streakKind == .brick)
@@ -711,100 +711,5 @@ struct StreakCalculatorTests {
             maxHeartrate: nil,
             elevationGain: nil
         )
-    }
-}
-
-struct PintReminderPlannerTests {
-    private var gmt: Calendar {
-        var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = TimeZone(secondsFromGMT: 0)!
-        return calendar
-    }
-
-    @Test func disabledNeverFires() {
-        let fire = PintReminderPlanner.nextFire(
-            streak: atRiskStreak(now: day(9, hour: 15)),
-            now: day(9, hour: 15),
-            calendar: gmt,
-            enabled: false
-        )
-        #expect(fire == nil)
-    }
-
-    @Test func zeroStreakNeverFires() {
-        let fire = PintReminderPlanner.nextFire(
-            streak: .empty,
-            now: day(9, hour: 15),
-            calendar: gmt,
-            enabled: true
-        )
-        #expect(fire == nil)
-    }
-
-    @Test func atRiskBeforeSevenSchedulesToday() throws {
-        let now = day(9, hour: 15)
-        let fire = try #require(
-            PintReminderPlanner.nextFire(
-                streak: atRiskStreak(now: now),
-                now: now,
-                calendar: gmt,
-                enabled: true
-            )
-        )
-        #expect(gmt.component(.hour, from: fire) == 19)
-        #expect(gmt.isDate(fire, inSameDayAs: now))
-    }
-
-    @Test func atRiskAfterSevenDoesNotFireLate() {
-        let now = day(9, hour: 20)
-        let fire = PintReminderPlanner.nextFire(
-            streak: atRiskStreak(now: now),
-            now: now,
-            calendar: gmt,
-            enabled: true
-        )
-        #expect(fire == nil)
-    }
-
-    @Test func loggedTodaySchedulesTomorrow() throws {
-        let now = day(9, hour: 15)
-        let fire = try #require(
-            PintReminderPlanner.nextFire(
-                streak: lockedInStreak(now: now),
-                now: now,
-                calendar: gmt,
-                enabled: true
-            )
-        )
-        let tomorrow = gmt.date(byAdding: .day, value: 1, to: gmt.startOfDay(for: now))!
-        #expect(gmt.isDate(fire, inSameDayAs: tomorrow))
-        #expect(gmt.component(.hour, from: fire) == 19)
-    }
-
-    @Test func midnightStillUsesStartOfDayForAtRisk() throws {
-        let now = day(9, hour: 0)
-        let fire = try #require(
-            PintReminderPlanner.nextFire(
-                streak: atRiskStreak(now: now),
-                now: now,
-                calendar: gmt,
-                enabled: true
-            )
-        )
-        #expect(gmt.isDate(fire, inSameDayAs: now))
-        #expect(gmt.component(.hour, from: fire) == 19)
-    }
-
-    private func day(_ day: Int, hour: Int) -> Date {
-        gmt.date(from: DateComponents(year: 2026, month: 1, day: day, hour: hour))!
-    }
-
-    private func atRiskStreak(now: Date) -> Streak {
-        let yesterday = gmt.date(byAdding: .day, value: -1, to: gmt.startOfDay(for: now))!
-        return Streak(current: 2, longest: 2, lastQualifyingDay: yesterday)
-    }
-
-    private func lockedInStreak(now: Date) -> Streak {
-        Streak(current: 3, longest: 3, lastQualifyingDay: now)
     }
 }

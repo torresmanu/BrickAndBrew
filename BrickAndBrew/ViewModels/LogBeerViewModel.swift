@@ -11,7 +11,6 @@ final class LogBeerViewModel {
     var bannerMessage: String?
     var cheerMessage: String?
     var lastLoggedCount: Int = 0
-    var pintStreak: Streak = .empty
     var pendingPhotoJPEG: Data?
     var isCameraPresented = false
     var showsOpenSettings = false
@@ -23,10 +22,6 @@ final class LogBeerViewModel {
 
     init(session: AppSession) {
         self.session = session
-    }
-
-    var showsPintNudge: Bool {
-        cheerMessage == nil && pintStreak.isAtRisk()
     }
 
     var pendingPhotoImage: UIImage? {
@@ -60,7 +55,7 @@ final class LogBeerViewModel {
             guard generation == loadGeneration else { return }
             loadedTeamId = team.id
             photoBeerIds = Set(photos.map(\.beerId))
-            applyBeers(beers, seasonStart: team.seasonStart)
+            applyBeers(beers)
         } catch {
             guard generation == loadGeneration else { return }
             let message = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
@@ -157,11 +152,11 @@ final class LogBeerViewModel {
             // The pour is on the board even if the list refresh fails.
             do {
                 let beers = try await session.cloudKit.fetchBeers(userId: profile.id, teamId: team.id)
-                applyBeers(beers, seasonStart: team.seasonStart)
+                applyBeers(beers)
             } catch {
-                applyBeers(optimisticBeers(including: beer), seasonStart: team.seasonStart)
+                applyBeers(optimisticBeers(including: beer))
             }
-            cheerMessage = StreakCopy.cheerAfterPint(days: pintStreak.current)
+            cheerMessage = "On the board."
         } catch {
             Haptics.warning()
             bannerMessage = (error as? LocalizedError)?.errorDescription
@@ -177,19 +172,11 @@ final class LogBeerViewModel {
         await load()
     }
 
-    private func applyBeers(_ beers: [Beer], seasonStart: Date) {
+    private func applyBeers(_ beers: [Beer]) {
         state = beers.isEmpty ? .empty : .loaded(beers)
-        pintStreak = StreakCalculator.summarize(
-            activities: [],
-            beers: beers,
-            seasonStart: seasonStart
-        ).pint
         if let latestToday = beers.filter({ Calendar.current.isDateInToday($0.loggedAt) })
             .max(by: { $0.loggedAt < $1.loggedAt }) {
             VenuePlaceStore.markBeerLogged(at: latestToday.loggedAt)
-        }
-        Task {
-            await PintReminderScheduler.refresh(pint: pintStreak)
         }
     }
 

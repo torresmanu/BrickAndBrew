@@ -47,6 +47,10 @@ final class AppSession {
     }
 
     func bootstrap() async {
+        if ReviewRecording.isEnabled {
+            ReviewRecording.install(into: self)
+            return
+        }
         if LaunchEnvironment.isRunningUnitTests {
             phase = .needsAppleSignIn
             return
@@ -297,7 +301,6 @@ final class AppSession {
     }
 
     func signOut() {
-        PintReminderScheduler.cancel()
         VenueVisitMonitor.shared.stopAndClear()
         ReminderDefaults.resetForSignOut()
         try? auth.signOut()
@@ -315,40 +318,22 @@ final class AppSession {
     }
 
     /// Notifications + Always location, once, the first time the crew tabs appear.
+    /// Nearby pint needs both. A denied notification permission turns the feature off.
     func requestFirstRunReminderPermissions() async {
         guard LaunchEnvironment.isRunningUnitTests == false else { return }
         guard ReminderDefaults.didPromptFirstRun == false else { return }
         ReminderDefaults.didPromptFirstRun = true
+        guard VenuePingSettings.isEnabled else { return }
 
-        if PintReminderSettings.isEnabled {
-            let allowed = await PintReminderScheduler.requestAuthorization()
-            if allowed == false {
-                PintReminderSettings.isEnabled = false
-            } else {
-                await refreshPintReminderFromCloud()
-            }
-        }
-
-        if VenuePingSettings.isEnabled {
-            _ = await VenueVisitMonitor.shared.requestAlwaysPrecise()
-            VenueVisitMonitor.shared.refreshMonitoring()
-        }
-    }
-
-    /// Recomputes the pint ping from CloudKit. Fetch failure leaves a pending request in place.
-    func refreshPintReminderFromCloud() async {
-        guard PintReminderSettings.isEnabled else { return }
-        guard let profile, let team else { return }
-        do {
-            let beers = try await cloudKit.fetchBeers(userId: profile.id, teamId: team.id)
-            let pint = StreakCalculator.summarize(
-                activities: [],
-                beers: beers,
-                seasonStart: team.seasonStart
-            ).pint
-            await PintReminderScheduler.refresh(pint: pint)
-        } catch {
+        let allowed = await VenuePingScheduler.requestAuthorization()
+        guard allowed else {
+            VenuePingSettings.isEnabled = false
             return
+        }
+        _ = await VenueVisitMonitor.shared.requestAlwaysPrecise()
+        VenueVisitMonitor.shared.refreshMonitoring()
+        if ReviewRecording.isEnabled {
+            await ReviewRecording.schedulePing(after: 18)
         }
     }
 

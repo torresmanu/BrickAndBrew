@@ -106,7 +106,7 @@ struct ScoringGuideView: View {
     }
 
     private var streaksCopy: String {
-        "Pint is consecutive days with a logged beer. Brick is a scored swim, bike, or run that actually happened — not a 90-second GPS hiccup. Brick & Brew is both on the same calendar day. Yesterday still counts; the day before does not. Streaks don't score Index points. They just look good at the bar. \(StreakCopy.brickSyncLag)"
+        "Brick is consecutive days with a scored swim, bike, or run that actually happened — not a 90-second GPS hiccup. Yesterday still counts; the day before does not. Streaks don't score Index points. \(StreakCopy.brickSyncLag)"
     }
 
     private func close() {

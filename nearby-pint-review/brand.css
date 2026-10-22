@@ -1,0 +1,308 @@
+@import url("https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,700;0,800;1,800&family=IBM+Plex+Sans:wght@400;500;600&display=swap");
+
+:root {
+  --ink: #0a0a0a;
+  --paper: #f2efe7;
+  --muted: #8c8882;
+  --signal: #ff4b24;
+  --elev: #161616;
+  --hair: rgba(242, 239, 231, 0.14);
+  --blue: #0a84ff;
+  --sheet: rgba(44, 44, 46, 0.94);
+  --ok: #32c759;
+  color: var(--paper);
+  background: var(--ink);
+  font-family: "IBM Plex Sans", sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  width: 1080px;
+  height: 1920px;
+  overflow: hidden;
+  background: var(--ink);
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+.screen {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  padding: 0 48px;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 132px;
+  padding: 48px 56px 0;
+  font-size: 42px;
+  font-weight: 600;
+}
+
+.status .right {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.loc {
+  width: 36px;
+  height: 36px;
+  fill: var(--paper);
+  opacity: 0;
+}
+
+.loc.on { opacity: 1; }
+
+.nav-title {
+  margin: 12px 0 28px;
+  font-family: "Barlow Condensed", sans-serif;
+  font-style: italic;
+  font-weight: 800;
+  font-size: 108px;
+  letter-spacing: -1px;
+  line-height: 0.9;
+}
+
+.kicker {
+  margin: 0 0 8px;
+  color: var(--signal);
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: 700;
+  font-size: 36px;
+  letter-spacing: 3px;
+}
+
+.caption {
+  padding: 36px 56px 56px;
+  border-top: 1px solid var(--hair);
+}
+
+.caption p {
+  margin: 0;
+  font-size: 40px;
+  line-height: 1.25;
+}
+
+.row, .place {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 36px 0;
+  border-bottom: 1px solid var(--hair);
+  font-size: 44px;
+}
+
+.place {
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.place small, .muted {
+  color: var(--muted);
+  font-size: 34px;
+  line-height: 1.3;
+}
+
+.toggle {
+  width: 132px;
+  height: 76px;
+  border-radius: 38px;
+  background: #3a3a3c;
+  position: relative;
+  flex: none;
+}
+
+.toggle i {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.toggle.on { background: var(--signal); }
+.toggle.on i { left: 62px; }
+
+.board-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 28px 0;
+  border-bottom: 1px solid var(--hair);
+  font-size: 48px;
+}
+
+.board-row b { font-weight: 600; }
+.pts {
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: 800;
+  font-size: 64px;
+  color: var(--signal);
+}
+
+.dim {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.72);
+  opacity: 0;
+}
+
+.alert {
+  position: absolute;
+  left: 64px;
+  right: 64px;
+  top: 280px;
+  background: #2c2c2e;
+  border-radius: 36px;
+  overflow: hidden;
+  opacity: 0;
+}
+
+.alert h2 {
+  margin: 0;
+  padding: 40px 40px 12px;
+  font-size: 44px;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.alert .body {
+  margin: 0;
+  padding: 0 36px 28px;
+  color: var(--paper);
+  font-size: 32px;
+  line-height: 1.3;
+  text-align: center;
+}
+
+.alert .actions {
+  display: flex;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.alert button {
+  flex: none;
+  width: 100%;
+  min-height: 108px;
+  padding: 28px 24px;
+  border: 0;
+  background: transparent;
+  color: var(--blue);
+  font: 600 36px/1.2 "IBM Plex Sans", sans-serif;
+  white-space: nowrap;
+}
+
+.alert button + button { border-left: 1px solid rgba(255, 255, 255, 0.12); }
+.alert button.stack {
+  display: block;
+  width: 100%;
+  border-left: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+.alert .actions.col { flex-direction: column; }
+.hit { background: rgba(10, 132, 255, 0.18); }
+
+.pill {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 24px 8px 0;
+  padding: 22px 28px;
+  border-radius: 28px;
+  background: rgba(10, 132, 255, 0.18);
+  color: #8ec5ff;
+  font-size: 34px;
+  font-weight: 600;
+  opacity: 0;
+}
+
+.pill i {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--blue);
+}
+
+.lock-time {
+  margin: 48px 0 0;
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: 700;
+  font-size: 200px;
+  line-height: 0.8;
+  letter-spacing: -4px;
+}
+
+.lock-date {
+  margin: 12px 0 0;
+  font-size: 48px;
+  color: var(--paper);
+}
+
+.note {
+  margin-top: 12px;
+  padding: 32px 36px;
+  border-radius: 32px;
+  background: #1c1c1e;
+  opacity: 0;
+}
+
+.note .app {
+  color: var(--muted);
+  font-size: 30px;
+  letter-spacing: 2px;
+  font-weight: 600;
+}
+
+.note h3 {
+  margin: 8px 0 4px;
+  font-size: 46px;
+}
+
+.note p {
+  margin: 0;
+  font-size: 38px;
+  line-height: 1.3;
+}
+
+.beer {
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: 800;
+  font-size: 200px;
+  line-height: 0.85;
+  color: var(--signal);
+}
+
+.unit {
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: 700;
+  letter-spacing: 4px;
+  font-size: 42px;
+  color: var(--muted);
+}
+
+.log-btn {
+  margin-top: 48px;
+  height: 132px;
+  border: 0;
+  border-radius: 28px;
+  background: var(--signal);
+  color: var(--ink);
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: 800;
+  font-size: 56px;
+  letter-spacing: 1px;
+}

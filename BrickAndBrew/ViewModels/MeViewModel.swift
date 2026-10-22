@@ -15,7 +15,6 @@ final class MeViewModel {
     var lastSyncText: String
     var bannerMessage: String?
     var streakState: LoadState<StreakSet> = .loading
-    var isPintReminderEnabled: Bool = PintReminderSettings.isEnabled
     var isVenuePingEnabled: Bool = VenuePingSettings.isEnabled
     var isRequestingVenuePing = false
     var isSavingHome = false
@@ -90,11 +89,10 @@ final class MeViewModel {
                 beers: seasonBeers,
                 seasonStart: team.seasonStart
             )
-            // Empty is "never logged this season." Zeros after a gap still get the three cards.
+            // Empty is "never logged this season." A gap still shows the training streak.
             let hasHistory = seasonBeers.isEmpty == false || mine.isEmpty == false
             guard generation == streakLoadGeneration else { return }
             streakState = hasHistory ? .loaded(set) : .empty
-            await PintReminderScheduler.refresh(pint: set.pint)
         } catch {
             guard generation == streakLoadGeneration else { return }
             let message = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
@@ -245,26 +243,6 @@ final class MeViewModel {
         }
     }
 
-    func setPintReminderEnabled(_ enabled: Bool) async {
-        if enabled {
-            let allowed = await PintReminderScheduler.requestAuthorization()
-            if allowed == false {
-                PintReminderSettings.isEnabled = false
-                isPintReminderEnabled = false
-                showsOpenSettings = true
-                bannerMessage = StreakCopy.pintReminderDenied
-                return
-            }
-            PintReminderSettings.isEnabled = true
-            isPintReminderEnabled = true
-            await PintReminderScheduler.refresh(pint: currentPint)
-        } else {
-            PintReminderSettings.isEnabled = false
-            isPintReminderEnabled = false
-            PintReminderScheduler.cancel()
-        }
-    }
-
     var venuePingStatusMessage: String? {
         guard isVenuePingEnabled else { return nil }
         switch venueAuthorization {
@@ -386,13 +364,6 @@ final class MeViewModel {
         case .home: homeError = message
         case .work: workError = message
         }
-    }
-
-    private var currentPint: Streak {
-        if case .loaded(let set) = streakState {
-            return set.pint
-        }
-        return .empty
     }
 
     private var currentBrickCount: Int {

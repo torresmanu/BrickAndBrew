@@ -146,9 +146,9 @@ xcodebuild -scheme BrickAndBrew -destination 'platform=iOS Simulator,name=iPhone
 - [ ] Privacy policy live; App Privacy filled in App Store Connect (fitness, health/heart rate from Strava, name, user id, photos/camera, **precise and coarse location** for optional Nearby pint — not used for tracking, not linked for tracking, purpose App Functionality)
 - [ ] Export compliance: `ITSAppUsesNonExemptEncryption` is already `false`
 - [ ] Archive → Distribute App → TestFlight
-- [ ] External testers / App Review notes: login is Sign in with Apple; Strava is optional; beers are logged in-app; Nearby pint is opt-in in Me → grant **Always** and **Precise Location** → optionally set home/work. Background location is only used to notice lingering at a bar, brewery, or restaurant between 6:00 pm and 2:00 am. Location never leaves the device except Apple Maps POI lookup. App Review cannot simulate a `CLVisit`; the toggle, permission prompts, and home/work pins are the reviewable surface.
+- [ ] External testers / App Review notes: login is Sign in with Apple; Strava is optional; beers are logged in-app. There is no drink streak and no 7:00 pm drink reminder. Nearby pint is opt-in in Me → grant **Always** and **Precise Location** → optionally set home/work. Background location is only used to notice lingering at a bar, brewery, or restaurant between 6:00 pm and 2:00 am. Location never leaves the device except Apple Maps POI lookup. App Review cannot simulate a `CLVisit`; the toggle, permission prompts, and home/work pins are the reviewable surface.
 - [ ] Share one invite code with the crew (4–20 letters/numbers). First person to use a new code creates the crew.
 
 ## What v1 does not include
 
-Remote push notifications, multiple crews, Android, HealthKit, Strava webhooks, chat. Local pint reminders and the optional Nearby pint ping are in.
+Remote push notifications, multiple crews, Android, HealthKit, Strava webhooks, chat, drink streaks, and the 7:00 pm pint reminder. The optional Nearby pint ping is in.

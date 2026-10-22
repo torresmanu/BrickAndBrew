@@ -1,34 +1,5 @@
 import SwiftUI
 
-struct PintReminderSettingsSection: View {
-    @Bindable var viewModel: MeViewModel
-
-    var body: some View {
-        Section {
-            Toggle("Pint reminder", isOn: reminderBinding)
-                .tint(Palette.accent)
-                .foregroundStyle(Palette.text)
-        } header: {
-            Text("Reminders")
-        } footer: {
-            Text(StreakCopy.pintReminderFooter)
-                .foregroundStyle(Palette.secondaryText)
-        }
-        .listRowBackground(Palette.surface)
-    }
-
-    private var reminderBinding: Binding<Bool> {
-        Binding(
-            get: { viewModel.isPintReminderEnabled },
-            set: { enabled in
-                Task {
-                    await viewModel.setPintReminderEnabled(enabled)
-                }
-            }
-        )
-    }
-}
-
 /// Nearby pint toggle, home/work pins, and permission pauses. Lives outside MeView for size.
 struct VenuePingSettingsSection: View {
     @Bindable var viewModel: MeViewModel

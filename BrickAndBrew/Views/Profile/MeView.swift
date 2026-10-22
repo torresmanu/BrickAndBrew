@@ -56,7 +56,6 @@ private struct MeLoadedView: View {
         List {
             profileSection
             streaksSection
-            PintReminderSettingsSection(viewModel: viewModel)
             VenuePingSettingsSection(viewModel: viewModel)
             stravaSection
             sessionSection
@@ -180,7 +179,7 @@ private struct MeLoadedView: View {
                 EmptyStateView(
                     title: StreakCopy.emptyTitle,
                     message: StreakCopy.emptyMessage,
-                    icon: PintSymbol()
+                    systemImage: "figure.run"
                 )
                 .frame(maxWidth: .infinity, minHeight: 180)
                 .listRowInsets(streakRowInsets)
@@ -193,15 +192,13 @@ private struct MeLoadedView: View {
                     .listRowSeparator(.hidden)
                     .listRowBackground(Color.clear)
             case .loaded(let set):
-                ForEach(StreakKind.allCases) { kind in
-                    StreakCardView(kind: kind, streak: set.streak(for: kind))
-                        .listRowInsets(streakRowInsets)
-                        .listRowSeparator(.hidden)
-                        .listRowBackground(Color.clear)
-                }
+                StreakCardView(kind: .brick, streak: set.brick)
+                    .listRowInsets(streakRowInsets)
+                    .listRowSeparator(.hidden)
+                    .listRowBackground(Color.clear)
             }
         } header: {
-            Text("Streaks")
+            Text("Training streak")
         } footer: {
             if case .loaded = viewModel.streakState {
                 Text(StreakCopy.brickSyncLag)
