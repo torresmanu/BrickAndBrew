@@ -137,9 +137,9 @@ enum ReviewRecording {
         userId: String,
         sport: SportKind,
         daysAgo: Int,
-        meters: Double,
         hour: Int = 12,
         minute: Int = 0,
+        meters: Double,
         moving: Int = 3_600,
         polyline: String? = nil
     ) -> Activity {

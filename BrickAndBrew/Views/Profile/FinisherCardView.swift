@@ -53,7 +53,7 @@ struct FinisherCardView: View {
         }
         .rotation3DEffect(
             .degrees(5.2),
-            axis: (x: 0.18, y: 1, z: 0.05),
+            axis: (x: 0.18, y: 1.0, z: 0.05),
             anchor: .center,
             perspective: 0.52
         )

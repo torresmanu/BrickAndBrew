@@ -101,8 +101,8 @@ enum PolylineCodec: Sendable {
 
         let latSpan = max(maxLat - minLat, 1e-9)
         let lngSpan = max(maxLng - minLng, 1e-9)
-        let dataAspect = lngSpan / latSpan
-        let rectAspect = rect.width / max(rect.height, 1)
+        let dataAspect = CGFloat(lngSpan / latSpan)
+        let rectAspect = rect.width / max(rect.height, CGFloat(1))
         var draw = rect
         if dataAspect > rectAspect {
             let height = rect.width / dataAspect
@@ -142,11 +142,10 @@ enum PolylineCodec: Sendable {
         var output = ""
         while chunk >= 0x20 {
             let ascii = UInt8((0x20 | (chunk & 0x1F)) + 63)
-            output.append(Character(UnicodeScalar(ascii)))
+            output.unicodeScalars.append(Unicode.Scalar(ascii))
             chunk >>= 5
         }
-        let ascii = UInt8(chunk + 63)
-        output.append(Character(UnicodeScalar(ascii)))
+        output.unicodeScalars.append(Unicode.Scalar(UInt8(chunk + 63)))
         return output
     }
 }

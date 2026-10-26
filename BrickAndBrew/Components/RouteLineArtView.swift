@@ -62,7 +62,8 @@ struct RouteLineArtView: View {
             ends.addLine(to: CGPoint(x: rect.maxX - 4, y: rect.maxY))
             context.stroke(ends, with: ink, style: hair)
         case .ride:
-            for inset in [0.0, 0.22, 0.44] {
+            let insets: [CGFloat] = [0, 0.22, 0.44]
+            for inset in insets {
                 let ring = rect.insetBy(dx: rect.width * inset, dy: rect.height * inset)
                 context.stroke(
                     Path(roundedRect: ring, cornerRadius: min(ring.width, ring.height) * 0.45),
@@ -74,7 +75,7 @@ struct RouteLineArtView: View {
             context.stroke(
                 Path(ellipseIn: rect.insetBy(dx: 3, dy: 6)),
                 with: ink,
-                style: StrokeStyle(lineWidth: 1.2, dash: [4, 3])
+                style: StrokeStyle(lineWidth: 1.2, dash: [CGFloat(4), 3])
             )
         }
     }

@@ -1,4 +1,5 @@
 import CloudKit
+import CoreGraphics
 import Foundation
 import Testing
 @testable import BrickAndBrew
