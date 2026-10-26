@@ -12,12 +12,12 @@ Brick & Brew is provided by the app developer who invited you to TestFlight. Con
 
 - **Account.** Sign in with Apple gives us an opaque user identifier and, if you share it, your name. We store a display name you choose, and an optional profile photo, so teammates can recognize you on the leaderboard.
 - **Crew membership.** Invite code and team name so you can share one private board.
-- **Training.** When you connect Strava, we read your activity summaries (sport, start time, distance, moving time, elevation, average and max heart rate). We do not request permission to post to Strava and we do not download heart-rate streams.
+- **Training.** When you connect Strava, we read your activity summaries (sport, start time, distance, moving time, elevation, average and max heart rate, and the encoded map polyline when Strava provides one). We do not request permission to post to Strava and we do not download heart-rate streams. The polyline is stored so your finisher card can draw the swim, bike, and run routes; it is not used for tracking.
 - **Beers.** Counts, timestamps, optional notes, and optional photos you take with the camera. Teammates on your crew can see those photos on the crew board. The app does not send a reminder to drink.
 - **Location (optional).** Nearby pint starts on. The first time you open the crew tabs we ask iOS for notifications, Always, and Precise Location. If you allow it, the app reads your location on this iPhone to mark home and work (so we do not ping you on the couch) and to ask Apple Maps whether you are lingering at a bar, brewery, or restaurant between 6:00 pm and 2:00 am. Location is never stored in CloudKit, never shown to teammates, and never used for ads or tracking. Turn the toggle off or clear home/work in Me at any time.
 - **Technical.** Tokens needed to talk to Strava are stored in the iOS Keychain on your device. Crew records are stored in Apple CloudKit.
 - **Waitlist.** If you join from the website, we store the email you submit so we can send a TestFlight invite. We do not use it for a newsletter or ads.
-- **Photos (optional).** If you tap Save to Photos on a triathlon finisher card, iOS writes that image to your library. We do not read your photo library. The card is generated on device from your display name and Strava swim / bike / run summaries.
+- **Photos (optional).** If you tap Save to Photos on a triathlon finisher card, iOS writes that image to your library. We do not read your photo library. The card is generated on device from your display name, Strava swim / bike / run summaries, and each activity’s encoded route polyline when it exists.
 
 ## Why we collect it
 

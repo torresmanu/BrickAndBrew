@@ -275,6 +275,58 @@ struct ActivityMappingTests {
         #expect(activity.maxHeartrate == 171)
         #expect(activity.elevationGain == 80)
         #expect(activity.id == "activity-user-1-42")
+        #expect(activity.summaryPolyline == nil)
+    }
+
+    @Test func mapsSummaryPolylineFromTheStravaListPayload() throws {
+        let json = Data("""
+        {"id":42,"name":"Threshold","type":"Run","sport_type":"TrailRun","distance":5000,"moving_time":1500,"elapsed_time":1560,"start_date":"2023-11-14T22:13:20Z","map":{"id":"a42","summary_polyline":"_p~iF~ps|U_ulLnnqC_mqNvxq`@"}}
+        """.utf8)
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        decoder.dateDecodingStrategy = .iso8601
+        let dto = try decoder.decode(StravaActivityDTO.self, from: json)
+        let activity = try #require(ActivityMapper.map(dto, userId: "user-1", teamId: "team-1"))
+        #expect(activity.summaryPolyline == PolylineCodec.googleSample)
+    }
+
+    @Test func fallsBackToDetailPolylineWhenSummaryIsMissing() throws {
+        let dto = StravaActivityDTO(
+            id: 7,
+            name: "Indoor",
+            type: "Ride",
+            sportType: "VirtualRide",
+            distance: 20_000,
+            movingTime: 3_600,
+            elapsedTime: 3_600,
+            totalElevationGain: 0,
+            startDate: Date(timeIntervalSince1970: 1_700_000_000),
+            averageHeartrate: nil,
+            maxHeartrate: nil,
+            map: StravaMapDTO(summaryPolyline: nil, polyline: PolylineCodec.googleSample)
+        )
+        let activity = try #require(ActivityMapper.map(dto, userId: "u", teamId: "t"))
+        #expect(activity.summaryPolyline == PolylineCodec.googleSample)
+        #expect(activity.sport == .ride)
+    }
+
+    @Test func emptyMapLeavesThePolylineOffTheActivity() throws {
+        let dto = StravaActivityDTO(
+            id: 8,
+            name: "Pool",
+            type: "Swim",
+            sportType: "Swim",
+            distance: 1_500,
+            movingTime: 1_800,
+            elapsedTime: 1_800,
+            totalElevationGain: 0,
+            startDate: Date(timeIntervalSince1970: 1_700_000_000),
+            averageHeartrate: nil,
+            maxHeartrate: nil,
+            map: StravaMapDTO(summaryPolyline: "  ", polyline: "")
+        )
+        let activity = try #require(ActivityMapper.map(dto, userId: "u", teamId: "t"))
+        #expect(activity.summaryPolyline == nil)
     }
 }
 

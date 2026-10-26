@@ -1,3 +1,4 @@
+import CloudKit
 import Foundation
 import Testing
 @testable import BrickAndBrew
@@ -222,6 +223,115 @@ struct TriathlonFinishTests {
         #expect(FinisherCardFormat.square.pixelSize.height == 1080)
         #expect(FinisherCardFormat.story.pixelSize.width == 1080)
         #expect(FinisherCardFormat.story.pixelSize.height == 1920)
+    }
+
+    @Test func decodesTheGooglePolylineSample() {
+        let points = PolylineCodec.decode(PolylineCodec.googleSample)
+        #expect(points.count == 3)
+        #expect(abs(points[0].latitude - 38.5) < 0.00001)
+        #expect(abs(points[0].longitude - (-120.2)) < 0.00001)
+        #expect(abs(points[1].latitude - 40.7) < 0.00001)
+        #expect(abs(points[2].longitude - (-126.453)) < 0.00001)
+    }
+
+    @Test func encodeRoundTripsDecodedPoints() {
+        let original = PolylineCodec.decode(PolylineCodec.sampleBike)
+        let again = PolylineCodec.decode(PolylineCodec.encode(original))
+        #expect(again.count == original.count)
+        if let first = original.first, let restored = again.first {
+            #expect(abs(first.latitude - restored.latitude) < 0.00002)
+            #expect(abs(first.longitude - restored.longitude) < 0.00002)
+        }
+    }
+
+    @Test func emptyAndTruncatedPolylinesDoNotCrash() {
+        #expect(PolylineCodec.decode("") == [])
+        #expect(PolylineCodec.decode("   ") == [])
+        _ = PolylineCodec.decode("!")
+        _ = PolylineCodec.decode("%%%%")
+        #expect(PolylineCodec.usesFallback(nil))
+        #expect(PolylineCodec.usesFallback(""))
+    }
+
+    @Test func aSinglePingIsNotADrawableRoute() {
+        let ping = [GeoPoint(latitude: 41.38, longitude: 2.17)]
+        #expect(PolylineCodec.isDrawable(ping) == false)
+        let stuck = [
+            GeoPoint(latitude: 41.38, longitude: 2.17),
+            GeoPoint(latitude: 41.38, longitude: 2.17)
+        ]
+        #expect(PolylineCodec.isDrawable(stuck) == false)
+        #expect(PolylineCodec.points(fitting: ping, in: CGRect(x: 0, y: 0, width: 100, height: 60)).isEmpty)
+    }
+
+    @Test func sampleRacePolylinesFitInsideAPlate() {
+        let rect = CGRect(x: 0, y: 0, width: 120, height: 64)
+        let swim = PolylineCodec.points(fitting: PolylineCodec.decode(PolylineCodec.sampleSwim), in: rect)
+        let bike = PolylineCodec.points(fitting: PolylineCodec.decode(PolylineCodec.sampleBike), in: rect)
+        let run = PolylineCodec.points(fitting: PolylineCodec.decode(PolylineCodec.sampleRun), in: rect)
+        #expect(swim.count >= 8)
+        #expect(bike.count >= 8)
+        #expect(run.count >= 8)
+        #expect(PolylineCodec.usesFallback(PolylineCodec.sampleSwim) == false)
+        #expect(TriathlonFinish.preview.swim.summaryPolyline == PolylineCodec.sampleSwim)
+        #expect(PolylineCodec.usesFallback(TriathlonFinish.previewWithoutGPS.swim.summaryPolyline))
+        #expect(PolylineCodec.usesFallback(TriathlonFinish.previewWithoutGPS.ride.summaryPolyline))
+        #expect(PolylineCodec.usesFallback(TriathlonFinish.previewWithoutGPS.run.summaryPolyline))
+        for point in swim + bike + run {
+            #expect(point.x >= rect.minX - 0.01)
+            #expect(point.x <= rect.maxX + 0.01)
+            #expect(point.y >= rect.minY - 0.01)
+            #expect(point.y <= rect.maxY + 0.01)
+        }
+    }
+
+    @Test func poolSwimFallsBackWhileOutdoorLegsStayDrawn() {
+        let finish = TriathlonFinish.previewPoolSwim
+        #expect(PolylineCodec.usesFallback(finish.swim.summaryPolyline))
+        #expect(PolylineCodec.usesFallback(finish.ride.summaryPolyline) == false)
+        #expect(PolylineCodec.usesFallback(finish.run.summaryPolyline) == false)
+    }
+
+    @Test func cloudKitOmitsAnEmptyPolyline() {
+        let original = Activity(
+            id: "activity-p1-8",
+            stravaId: 8,
+            userId: "p1",
+            teamId: "t1",
+            type: "Swim",
+            sport: .swim,
+            startDate: Date(timeIntervalSince1970: 1_700_000_000),
+            distanceMeters: 1_500,
+            movingTimeSeconds: 1_800,
+            averageHeartrate: nil,
+            maxHeartrate: nil,
+            elevationGain: nil,
+            summaryPolyline: nil
+        )
+        let record = original.makeRecord()
+        #expect(record[CloudKitKey.Activity.summaryPolyline] == nil)
+        #expect(Activity(record: record)?.summaryPolyline == nil)
+    }
+
+    @Test func cloudKitRoundTripsAPolyline() {
+        let original = Activity(
+            id: "activity-p1-9",
+            stravaId: 9,
+            userId: "p1",
+            teamId: "t1",
+            type: "Run",
+            sport: .run,
+            startDate: Date(timeIntervalSince1970: 1_700_000_000),
+            distanceMeters: 5_000,
+            movingTimeSeconds: 1_500,
+            averageHeartrate: nil,
+            maxHeartrate: nil,
+            elevationGain: nil,
+            summaryPolyline: PolylineCodec.googleSample
+        )
+        let restored = Activity(record: original.makeRecord())
+        #expect(restored?.summaryPolyline == PolylineCodec.googleSample)
+        #expect(restored?.sport == .run)
     }
 
     private func instant(day: Int, hour: Int, minute: Int = 0) -> Date {

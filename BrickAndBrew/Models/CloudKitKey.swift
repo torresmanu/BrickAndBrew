@@ -37,6 +37,7 @@ enum CloudKitKey {
         static let averageHeartrate = "averageHeartrate"
         static let maxHeartrate = "maxHeartrate"
         static let elevationGain = "elevationGain"
+        static let summaryPolyline = "summaryPolyline"
     }
 
     enum Beer {

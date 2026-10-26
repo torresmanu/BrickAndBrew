@@ -89,7 +89,8 @@ enum ReviewRecording {
                 hour: 7,
                 minute: 5,
                 meters: 1_500,
-                moving: 28 * 60 + 12
+                moving: 28 * 60 + 12,
+                polyline: PolylineCodec.sampleSwim
             ),
             activity(
                 id: "tri-ride",
@@ -99,7 +100,8 @@ enum ReviewRecording {
                 hour: 7,
                 minute: 45,
                 meters: 40_200,
-                moving: 72 * 60 + 4
+                moving: 72 * 60 + 4,
+                polyline: PolylineCodec.sampleBike
             ),
             activity(
                 id: "tri-run",
@@ -109,7 +111,8 @@ enum ReviewRecording {
                 hour: 9,
                 minute: 10,
                 meters: 10_100,
-                moving: 48 * 60 + 33
+                moving: 48 * 60 + 33,
+                polyline: PolylineCodec.sampleRun
             ),
             activity(id: "a2", userId: currentUserId, sport: .ride, daysAgo: 0, meters: 42_000),
             activity(id: "a4", userId: "mara", sport: .swim, daysAgo: 0, meters: 3100),
@@ -137,7 +140,8 @@ enum ReviewRecording {
         meters: Double,
         hour: Int = 12,
         minute: Int = 0,
-        moving: Int = 3_600
+        moving: Int = 3_600,
+        polyline: String? = nil
     ) -> Activity {
         Activity(
             id: id,
@@ -151,7 +155,8 @@ enum ReviewRecording {
             movingTimeSeconds: moving,
             averageHeartrate: nil,
             maxHeartrate: nil,
-            elevationGain: nil
+            elevationGain: nil,
+            summaryPolyline: polyline
         )
     }
 

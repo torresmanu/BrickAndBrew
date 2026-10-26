@@ -38,6 +38,13 @@ enum Palette {
     static let medalGoldHighlight = Color(red: 246 / 255, green: 225 / 255, blue: 150 / 255)
     static let medalGoldShadow = Color(red: 138 / 255, green: 105 / 255, blue: 38 / 255)
 
+    /// Gallery wall + deep frame for the finisher shadow box. Not product chrome.
+    static let galleryWall = Color(red: 196 / 255, green: 196 / 255, blue: 194 / 255)
+    static let galleryWallDeep = Color(red: 168 / 255, green: 168 / 255, blue: 166 / 255)
+    static let frameMetal = Color(red: 32 / 255, green: 32 / 255, blue: 32 / 255)
+    static let frameEdge = Color(red: 12 / 255, green: 12 / 255, blue: 12 / 255)
+    static let mountBoard = Color(red: 16 / 255, green: 16 / 255, blue: 16 / 255)
+
     // MARK: Compatibility aliases — existing call sites keep compiling during the restyle.
 
     static let black = inkDeep

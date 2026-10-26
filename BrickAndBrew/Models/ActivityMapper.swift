@@ -12,6 +12,22 @@ struct StravaActivityDTO: Decodable, Sendable, Equatable {
     let startDate: Date?
     let averageHeartrate: Double?
     let maxHeartrate: Double?
+    var map: StravaMapDTO? = nil
+}
+
+struct StravaMapDTO: Decodable, Sendable, Equatable {
+    let summaryPolyline: String?
+    let polyline: String?
+
+    /// List payloads send `summary_polyline`; detail payloads may only send `polyline`.
+    var encoded: String? {
+        let summary = summaryPolyline?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        if summary.isEmpty == false {
+            return summary
+        }
+        let detailed = polyline?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        return detailed.isEmpty ? nil : detailed
+    }
 }
 
 enum ActivityMapper {
@@ -52,7 +68,8 @@ enum ActivityMapper {
             movingTimeSeconds: dto.movingTime ?? dto.elapsedTime ?? 0,
             averageHeartrate: dto.averageHeartrate,
             maxHeartrate: dto.maxHeartrate,
-            elevationGain: dto.totalElevationGain
+            elevationGain: dto.totalElevationGain,
+            summaryPolyline: dto.map?.encoded
         )
     }
 }

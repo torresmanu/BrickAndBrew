@@ -191,38 +191,67 @@ enum TriathlonDetector: Sendable {
 }
 
 extension TriathlonFinish {
-    /// Olympic-distance sample used by SwiftUI previews.
-    static let preview = TriathlonFinish(
-        swim: previewActivity(
-            sport: .swim,
-            type: "OpenWaterSwim",
-            stravaId: 11,
-            hour: 7,
-            minute: 2,
-            meters: 1_500,
-            moving: 28 * 60 + 12
-        ),
-        ride: previewActivity(
-            sport: .ride,
-            type: "Ride",
-            stravaId: 12,
-            hour: 7,
-            minute: 42,
-            meters: 40_200,
-            moving: 72 * 60 + 4
-        ),
-        run: previewActivity(
-            sport: .run,
-            type: "Run",
-            stravaId: 13,
-            hour: 9,
-            minute: 6,
-            meters: 10_100,
-            moving: 48 * 60 + 33
-        ),
-        athleteName: "Alex Rivera",
-        crewCode: "BRICK"
+    /// Olympic-distance sample used by SwiftUI previews, with GPS tracks.
+    static let preview = sample(
+        swimPolyline: PolylineCodec.sampleSwim,
+        ridePolyline: PolylineCodec.sampleBike,
+        runPolyline: PolylineCodec.sampleRun
     )
+
+    /// Pool swim + indoor bike + no run GPS — fallback art on the mount.
+    static let previewWithoutGPS = sample(
+        swimPolyline: nil,
+        ridePolyline: nil,
+        runPolyline: nil
+    )
+
+    /// Pool swim with outdoor bike and run — mixed fallback on one plate.
+    static let previewPoolSwim = sample(
+        swimPolyline: nil,
+        ridePolyline: PolylineCodec.sampleBike,
+        runPolyline: PolylineCodec.sampleRun
+    )
+
+    private static func sample(
+        swimPolyline: String?,
+        ridePolyline: String?,
+        runPolyline: String?
+    ) -> TriathlonFinish {
+        TriathlonFinish(
+            swim: previewActivity(
+                sport: .swim,
+                type: "OpenWaterSwim",
+                stravaId: 11,
+                hour: 7,
+                minute: 2,
+                meters: 1_500,
+                moving: 28 * 60 + 12,
+                polyline: swimPolyline
+            ),
+            ride: previewActivity(
+                sport: .ride,
+                type: "Ride",
+                stravaId: 12,
+                hour: 7,
+                minute: 42,
+                meters: 40_200,
+                moving: 72 * 60 + 4,
+                polyline: ridePolyline
+            ),
+            run: previewActivity(
+                sport: .run,
+                type: "Run",
+                stravaId: 13,
+                hour: 9,
+                minute: 6,
+                meters: 10_100,
+                moving: 48 * 60 + 33,
+                polyline: runPolyline
+            ),
+            athleteName: "Alex Rivera",
+            crewCode: "BRICK"
+        )
+    }
 
     private static func previewActivity(
         sport: SportKind,
@@ -231,7 +260,8 @@ extension TriathlonFinish {
         hour: Int,
         minute: Int,
         meters: Double,
-        moving: Int
+        moving: Int,
+        polyline: String?
     ) -> Activity {
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = TimeZone(secondsFromGMT: 0)!
@@ -250,7 +280,8 @@ extension TriathlonFinish {
             movingTimeSeconds: moving,
             averageHeartrate: nil,
             maxHeartrate: nil,
-            elevationGain: nil
+            elevationGain: nil,
+            summaryPolyline: polyline
         )
     }
 }
