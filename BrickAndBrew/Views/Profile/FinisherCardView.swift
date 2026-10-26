@@ -41,19 +41,21 @@ struct FinisherCardView: View {
     private var content: some View {
         VStack(alignment: .leading, spacing: 0) {
             header
-            Spacer(minLength: format.isStory ? 28 : 10)
+            Spacer(minLength: format.isStory ? 28 : 6)
             medal
-            Spacer(minLength: format.isStory ? 28 : 10)
+            Spacer(minLength: format.isStory ? 28 : 6)
             titleBlock
-            Spacer(minLength: format.isStory ? 22 : 8)
+            Spacer(minLength: format.isStory ? 22 : 6)
             legs
-            Spacer(minLength: format.isStory ? 18 : 8)
+            Spacer(minLength: format.isStory ? 18 : 6)
             totalRow
-            Spacer(minLength: format.isStory ? 16 : 6)
-            footer
+            if format.isStory {
+                Spacer(minLength: 16)
+                footer
+            }
         }
-        .padding(.horizontal, format.isStory ? 28 : 22)
-        .padding(.vertical, format.isStory ? 36 : 20)
+        .padding(.horizontal, format.isStory ? 28 : 20)
+        .padding(.vertical, format.isStory ? 36 : 16)
     }
 
     private var header: some View {
@@ -63,7 +65,7 @@ struct FinisherCardView: View {
                 .foregroundStyle(Palette.paper)
                 .tracking(2.2)
             Spacer(minLength: 8)
-            Text("RUN / RIDE / SWIM")
+            Text(format.isStory ? "RUN / RIDE / SWIM" : Formatters.raceDate(finish.startDate))
                 .font(Typography.metadata)
                 .foregroundStyle(Palette.secondaryText)
                 .tracking(1.2)
@@ -81,13 +83,13 @@ struct FinisherCardView: View {
     private var titleBlock: some View {
         VStack(alignment: .leading, spacing: 2) {
             Text(FinisherCopy.raceTitle)
-                .font(Typography.condensed(size: format.isStory ? 44 : 34, italic: true, relativeTo: .largeTitle))
+                .font(Typography.condensed(size: format.isStory ? 44 : 28, italic: true, relativeTo: .largeTitle))
                 .foregroundStyle(Palette.paper)
                 .tracking(-0.8)
                 .lineLimit(1)
                 .minimumScaleFactor(0.7)
             Text(FinisherCopy.raceSubtitle)
-                .font(Typography.condensed(size: format.isStory ? 44 : 34, italic: true, relativeTo: .largeTitle))
+                .font(Typography.condensed(size: format.isStory ? 44 : 28, italic: true, relativeTo: .largeTitle))
                 .foregroundStyle(Palette.paper)
                 .tracking(-0.8)
                 .lineLimit(1)
@@ -96,7 +98,7 @@ struct FinisherCardView: View {
                 .font(Typography.metadata)
                 .foregroundStyle(Palette.secondaryText)
                 .tracking(1.6)
-                .padding(.top, 8)
+                .padding(.top, format.isStory ? 8 : 4)
                 .lineLimit(1)
                 .minimumScaleFactor(0.7)
         }
@@ -104,7 +106,7 @@ struct FinisherCardView: View {
     }
 
     private var legs: some View {
-        VStack(spacing: 6) {
+        VStack(spacing: format.isStory ? 6 : 4) {
             ForEach(TriathlonDetector.raceOrder, id: \.self) { sport in
                 legRow(sport)
             }
@@ -138,7 +140,7 @@ struct FinisherCardView: View {
                 .tracking(2)
             Spacer(minLength: 8)
             Text(Formatters.raceTime(finish.elapsedSeconds))
-                .font(Typography.condensed(size: format.isStory ? 40 : 28, italic: false, relativeTo: .title))
+                .font(Typography.condensed(size: format.isStory ? 40 : 24, italic: false, relativeTo: .title))
                 .foregroundStyle(Palette.paper)
                 .monospacedDigit()
                 .lineLimit(1)
@@ -154,7 +156,7 @@ struct FinisherCardView: View {
     }
 
     private var medalSide: CGFloat {
-        format.isStory ? 196 : 128
+        format.isStory ? 196 : 108
     }
 
     private var accessibilityText: String {
