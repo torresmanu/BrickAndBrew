@@ -29,7 +29,9 @@ enum ReviewRecording {
             id: currentUserId,
             appleUserId: "review-nico",
             displayName: "Nico",
-            teamId: teamId
+            teamId: teamId,
+            stravaAthleteId: 9_001,
+            stravaAthleteName: "Nico"
         )
         session.team = team
         session.selectedTab = .crew
@@ -64,7 +66,14 @@ enum ReviewRecording {
 
     static var profiles: [Profile] {
         [
-            Profile(id: currentUserId, appleUserId: "review-nico", displayName: "Nico", teamId: teamId),
+            Profile(
+                id: currentUserId,
+                appleUserId: "review-nico",
+                displayName: "Nico",
+                teamId: teamId,
+                stravaAthleteId: 9_001,
+                stravaAthleteName: "Nico"
+            ),
             Profile(id: "mara", appleUserId: "review-mara", displayName: "Mara", teamId: teamId),
             Profile(id: "jules", appleUserId: "review-jules", displayName: "Jules", teamId: teamId)
         ]
@@ -72,9 +81,40 @@ enum ReviewRecording {
 
     static var activities: [Activity] {
         [
-            activity(id: "a1", userId: currentUserId, sport: .swim, daysAgo: 1, meters: 2400),
+            activity(
+                id: "tri-swim",
+                userId: currentUserId,
+                sport: .swim,
+                daysAgo: 1,
+                hour: 7,
+                minute: 5,
+                meters: 1_500,
+                moving: 28 * 60 + 12,
+                polyline: PolylineCodec.sampleSwim
+            ),
+            activity(
+                id: "tri-ride",
+                userId: currentUserId,
+                sport: .ride,
+                daysAgo: 1,
+                hour: 7,
+                minute: 45,
+                meters: 40_200,
+                moving: 72 * 60 + 4,
+                polyline: PolylineCodec.sampleBike
+            ),
+            activity(
+                id: "tri-run",
+                userId: currentUserId,
+                sport: .run,
+                daysAgo: 1,
+                hour: 9,
+                minute: 10,
+                meters: 10_100,
+                moving: 48 * 60 + 33,
+                polyline: PolylineCodec.sampleRun
+            ),
             activity(id: "a2", userId: currentUserId, sport: .ride, daysAgo: 0, meters: 42_000),
-            activity(id: "a3", userId: currentUserId, sport: .run, daysAgo: 2, meters: 10_000),
             activity(id: "a4", userId: "mara", sport: .swim, daysAgo: 0, meters: 3100),
             activity(id: "a5", userId: "jules", sport: .ride, daysAgo: 1, meters: 80_000)
         ]
@@ -97,22 +137,36 @@ enum ReviewRecording {
         userId: String,
         sport: SportKind,
         daysAgo: Int,
-        meters: Double
+        hour: Int = 12,
+        minute: Int = 0,
+        meters: Double,
+        moving: Int = 3_600,
+        polyline: String? = nil
     ) -> Activity {
         Activity(
             id: id,
-            stravaId: Int64(meters),
+            stravaId: Int64(abs(id.hashValue)),
             userId: userId,
             teamId: teamId,
             type: sport.rawValue,
             sport: sport,
-            startDate: Self.daysAgo(daysAgo),
+            startDate: date(daysAgo: daysAgo, hour: hour, minute: minute),
             distanceMeters: meters,
-            movingTimeSeconds: 3_600,
+            movingTimeSeconds: moving,
             averageHeartrate: nil,
             maxHeartrate: nil,
-            elevationGain: nil
+            elevationGain: nil,
+            summaryPolyline: polyline
         )
+    }
+
+    private static func date(daysAgo: Int, hour: Int, minute: Int) -> Date {
+        let calendar = Calendar.current
+        let day = calendar.date(byAdding: .day, value: -daysAgo, to: Date()) ?? Date()
+        var components = calendar.dateComponents([.year, .month, .day], from: day)
+        components.hour = hour
+        components.minute = minute
+        return calendar.date(from: components) ?? day
     }
 
     private static func daysAgo(_ days: Int) -> Date {

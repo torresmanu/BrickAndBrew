@@ -14,6 +14,8 @@ struct Activity: Identifiable, Sendable, Hashable {
     var averageHeartrate: Double?
     var maxHeartrate: Double?
     var elevationGain: Double?
+    /// Strava encoded `summary_polyline`. Nil for pool / indoor files with no GPS.
+    var summaryPolyline: String? = nil
 
     var recordID: CKRecord.ID {
         CKRecord.ID(recordName: id)
@@ -58,6 +60,12 @@ extension Activity {
         averageHeartrate = record[CloudKitKey.Activity.averageHeartrate] as? Double
         maxHeartrate = record[CloudKitKey.Activity.maxHeartrate] as? Double
         elevationGain = record[CloudKitKey.Activity.elevationGain] as? Double
+        if let polyline = record[CloudKitKey.Activity.summaryPolyline] as? String,
+           polyline.isEmpty == false {
+            summaryPolyline = polyline
+        } else {
+            summaryPolyline = nil
+        }
     }
 
     func makeRecord() -> CKRecord {
@@ -78,6 +86,9 @@ extension Activity {
         }
         if let elevationGain {
             record[CloudKitKey.Activity.elevationGain] = elevationGain as CKRecordValue
+        }
+        if let summaryPolyline, summaryPolyline.isEmpty == false {
+            record[CloudKitKey.Activity.summaryPolyline] = summaryPolyline as CKRecordValue
         }
         return record
     }

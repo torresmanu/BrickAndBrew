@@ -17,6 +17,7 @@ Views → ViewModels → Services → CloudKit / Strava / Keychain
 - Tokens: Keychain (`AfterFirstUnlockThisDeviceOnly`).
 - Nearby pint: on-device visit monitoring + MapKit. Home/work pins stay in UserDefaults; they never go to CloudKit.
 - Leaderboards: computed on-device from CloudKit records. Each phone syncs **its own** Strava activities, so teammates do not share one API quota.
+- Finisher card: Me detects a swim → bike → run triathlon from your Strava activities and renders a shareable 3D shadow-box medal (Instagram feed or story) with each leg’s Strava route as line art.
 
 ## Repo layout
 
@@ -50,7 +51,7 @@ After the first run on a signed-in device, open [CloudKit Dashboard](https://icl
 - `BeerPhoto`: `teamId`, `userId`, `beerId`, `loggedAt` (also mark `loggedAt` **Sortable**)
 - `Team`: `inviteCode`
 
-Record types: `Team`, `Profile`, `Activity`, `Beer`, `BeerPhoto`. `Profile.avatar` and `BeerPhoto.photo` are optional Assets (not queryable). They appear after the first photo save. Scoring queries never download `BeerPhoto`.
+Record types: `Team`, `Profile`, `Activity`, `Beer`, `BeerPhoto`. `Profile.avatar` and `BeerPhoto.photo` are optional Assets (not queryable). They appear after the first photo save. Scoring queries never download `BeerPhoto`. `Activity.summaryPolyline` is the Strava encoded route used on the finisher card; it is stored on the record but is **not** queryable.
 
 ### 3. Strava API application
 

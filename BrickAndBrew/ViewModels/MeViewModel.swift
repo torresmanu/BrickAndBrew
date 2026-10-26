@@ -15,6 +15,8 @@ final class MeViewModel {
     var lastSyncText: String
     var bannerMessage: String?
     var streakState: LoadState<StreakSet> = .loading
+    var finisherState: LoadState<[TriathlonFinish]> = .loading
+    var pendingNewFinish: TriathlonFinish?
     var isVenuePingEnabled: Bool = VenuePingSettings.isEnabled
     var isRequestingVenuePing = false
     var isSavingHome = false
@@ -28,6 +30,8 @@ final class MeViewModel {
 
     private let session: AppSession
     private var streakLoadGeneration = 0
+    /// Set when a fresh race is detected after sync; consumed when the celebration cover closes.
+    var celebratedFinish: TriathlonFinish?
 
     init(session: AppSession) {
         self.session = session
@@ -74,6 +78,12 @@ final class MeViewModel {
         default:
             streakState = .loading
         }
+        switch finisherState {
+        case .loaded, .empty:
+            break
+        default:
+            finisherState = .loading
+        }
 
         do {
             guard let profile = session.profile, let team = session.team else {
@@ -89,10 +99,16 @@ final class MeViewModel {
                 beers: seasonBeers,
                 seasonStart: team.seasonStart
             )
+            let finishes = TriathlonDetector.detect(
+                activities: mine,
+                athleteName: profile.displayName,
+                crewCode: team.inviteCode
+            )
             // Empty is "never logged this season." A gap still shows the training streak.
             let hasHistory = seasonBeers.isEmpty == false || mine.isEmpty == false
             guard generation == streakLoadGeneration else { return }
             streakState = hasHistory ? .loaded(set) : .empty
+            finisherState = finishes.isEmpty ? .empty : .loaded(finishes)
         } catch {
             guard generation == streakLoadGeneration else { return }
             let message = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
@@ -102,6 +118,12 @@ final class MeViewModel {
             default:
                 streakState = .failed(message)
             }
+            switch finisherState {
+            case .loaded, .empty:
+                break
+            default:
+                finisherState = .failed(message)
+            }
         }
     }
 
@@ -110,11 +132,15 @@ final class MeViewModel {
         isSyncing = true
         defer { isSyncing = false }
         let previousBrick = currentBrickCount
+        let previousFinishIds = currentFinishIds
         do {
             let count = try await session.syncStravaActivities()
             lastSyncText = "Last Strava sync \(Formatters.relative(Date()))"
             await loadStreaks()
-            bannerMessage = brickSyncBanner(syncedCount: count, previousBrick: previousBrick)
+            noteNewFinish(previousIds: previousFinishIds)
+            if pendingNewFinish == nil {
+                bannerMessage = brickSyncBanner(syncedCount: count, previousBrick: previousBrick)
+            }
         } catch {
             bannerMessage = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
         }
