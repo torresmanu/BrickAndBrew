@@ -20,6 +20,8 @@ enum BrickError: LocalizedError, Equatable {
     case accountDeletionFailed
     case cameraUnavailable
     case cameraDenied
+    case photosDenied
+    case finisherRenderFailed
 
     var errorDescription: String? {
         switch self {
@@ -61,6 +63,10 @@ enum BrickError: LocalizedError, Equatable {
             "Camera isn't available on this device. You can still log the pint without a photo."
         case .cameraDenied:
             "Camera access is off. Turn it on in iOS Settings if you want to snap a pint, or log without a photo."
+        case .photosDenied:
+            "Photos access is off. Turn on access in iOS Settings to save the finisher card, or share it instead."
+        case .finisherRenderFailed:
+            "We couldn't render your finisher card. Try again in a moment."
         }
     }
 }

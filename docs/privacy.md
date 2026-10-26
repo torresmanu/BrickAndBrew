@@ -1,6 +1,6 @@
 # Privacy Policy for Brick & Brew
 
-Last updated: 22 October 2026
+Last updated: 26 October 2026
 
 Brick & Brew is a private crew app for friends training for a triathlon. It is not a public social network.
 
@@ -17,6 +17,7 @@ Brick & Brew is provided by the app developer who invited you to TestFlight. Con
 - **Location (optional).** Nearby pint starts on. The first time you open the crew tabs we ask iOS for notifications, Always, and Precise Location. If you allow it, the app reads your location on this iPhone to mark home and work (so we do not ping you on the couch) and to ask Apple Maps whether you are lingering at a bar, brewery, or restaurant between 6:00 pm and 2:00 am. Location is never stored in CloudKit, never shown to teammates, and never used for ads or tracking. Turn the toggle off or clear home/work in Me at any time.
 - **Technical.** Tokens needed to talk to Strava are stored in the iOS Keychain on your device. Crew records are stored in Apple CloudKit.
 - **Waitlist.** If you join from the website, we store the email you submit so we can send a TestFlight invite. We do not use it for a newsletter or ads.
+- **Photos (optional).** If you tap Save to Photos on a triathlon finisher card, iOS writes that image to your library. We do not read your photo library. The card is generated on device from your display name and Strava swim / bike / run summaries.
 
 ## Why we collect it
 
@@ -55,6 +56,7 @@ To leave the waitlist, email the developer listed on the App Store Connect recor
 - Skip Strava and only log beers.
 - Skip a profile photo; the board shows your initials.
 - Skip a pint photo; you can still log beers without the camera.
+- Share a finisher card without saving it, or deny Photos access and use the share sheet instead.
 - Deny the first-run location prompt; Nearby pint stays off the device.
 - Turn Nearby pint off in Me; background location stops.
 - Skip or clear home and work pins.

@@ -17,6 +17,7 @@ Views → ViewModels → Services → CloudKit / Strava / Keychain
 - Tokens: Keychain (`AfterFirstUnlockThisDeviceOnly`).
 - Nearby pint: on-device visit monitoring + MapKit. Home/work pins stay in UserDefaults; they never go to CloudKit.
 - Leaderboards: computed on-device from CloudKit records. Each phone syncs **its own** Strava activities, so teammates do not share one API quota.
+- Finisher card: Me detects a swim → bike → run triathlon from your Strava activities and renders a shareable medal (Instagram feed or story).
 
 ## Repo layout
 

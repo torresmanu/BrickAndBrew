@@ -104,6 +104,16 @@
 		F45990CE15ACCF08CAE3A1E9 /* Streak.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D2E2209CA2F9243743033EE /* Streak.swift */; };
 		F54B75AEE0C290EC78CB3F06 /* IBMPlexMono-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B72F882274A7C303BD2F109F /* IBMPlexMono-Medium.ttf */; };
 		FE2FC28894480BFC0E2123B8 /* EditDisplayNameSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B50F210382326560A360682 /* EditDisplayNameSheet.swift */; };
+
+		A1B2C3D4E5F60718293A4B08 /* FinisherCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60718293A4B07 /* FinisherCardView.swift */; };
+		A1B2C3D4E5F60718293A4B04 /* FinisherCopy.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60718293A4B03 /* FinisherCopy.swift */; };
+		A1B2C3D4E5F60718293A4B0E /* FinisherImageExport.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60718293A4B0D /* FinisherImageExport.swift */; };
+		A1B2C3D4E5F60718293A4B06 /* FinisherMedalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60718293A4B05 /* FinisherMedalView.swift */; };
+		A1B2C3D4E5F60718293A4B0C /* FinisherSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60718293A4B0B /* FinisherSection.swift */; };
+		A1B2C3D4E5F60718293A4B0A /* FinisherShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60718293A4B09 /* FinisherShareSheet.swift */; };
+		A1B2C3D4E5F60718293A4B10 /* MeViewModel+Finisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60718293A4B0F /* MeViewModel+Finisher.swift */; };
+		A1B2C3D4E5F60718293A4B02 /* TriathlonFinish.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60718293A4B01 /* TriathlonFinish.swift */; };
+		A1B2C3D4E5F60718293A4B12 /* TriathlonFinishTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60718293A4B11 /* TriathlonFinishTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -226,6 +236,16 @@
 		FC087336DB0C9876F0FC51BC /* VenuePlaceClassifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenuePlaceClassifier.swift; sourceTree = "<group>"; };
 		FD3BC54AAE51DF9DEB198025 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		FF6BBFBBEC1780A5C9716388 /* MeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeView.swift; sourceTree = "<group>"; };
+
+		A1B2C3D4E5F60718293A4B01 /* TriathlonFinish.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriathlonFinish.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F60718293A4B03 /* FinisherCopy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinisherCopy.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F60718293A4B05 /* FinisherMedalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinisherMedalView.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F60718293A4B07 /* FinisherCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinisherCardView.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F60718293A4B09 /* FinisherShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinisherShareSheet.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F60718293A4B0B /* FinisherSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinisherSection.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F60718293A4B0D /* FinisherImageExport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinisherImageExport.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F60718293A4B0F /* MeViewModel+Finisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MeViewModel+Finisher.swift"; sourceTree = "<group>"; };
+		A1B2C3D4E5F60718293A4B11 /* TriathlonFinishTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriathlonFinishTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -234,6 +254,7 @@
 			children = (
 				F7B56104E874A3B70DBA90F9 /* AvatarTests.swift */,
 				EE403F61D143D8C5964D1545 /* ScoringAndMappingTests.swift */,
+				A1B2C3D4E5F60718293A4B11 /* TriathlonFinishTests.swift */,
 				BA6EFC8B0633EFA44437ECF4 /* VenuePingPlannerTests.swift */,
 			);
 			path = BrickAndBrewTests;
@@ -247,6 +268,7 @@
 				0C778A4243B5D6CF039CBE0E /* CameraPicker.swift */,
 				51D6A617AE3327EDC12D6CDA /* CelebrationView.swift */,
 				1EE7B7F1701B9BDAA78ABB3D /* CrewPintRowView.swift */,
+				A1B2C3D4E5F60718293A4B05 /* FinisherMedalView.swift */,
 				4E935AA77FF0BEE59ECCBFA5 /* MetricView.swift */,
 				13F12649FABD06B5E77FBE03 /* PhotoPreviewView.swift */,
 				98D6671B92FB677A3D788F7B /* RankRowView.swift */,
@@ -264,6 +286,7 @@
 				D3DFECE5A2B31B1A4974AE62 /* BrandChrome.swift */,
 				6E171A9D1DD175CDABFB7381 /* BrandMark.swift */,
 				78673F3000A5AA3F095E7BA1 /* BrandPhoto.swift */,
+				A1B2C3D4E5F60718293A4B03 /* FinisherCopy.swift */,
 				F2A7185DB2F4BC3CA83795AB /* Formatters.swift */,
 				A0F91A938C5AC5A39D54C5BA /* GreetingCopy.swift */,
 				241B25BD71CE28643474E76F /* Motion.swift */,
@@ -312,6 +335,7 @@
 				13A44AE3EC69BD259636FADF /* CrewViewModel.swift */,
 				B45D3AECB67528A84E384189 /* LogBeerViewModel.swift */,
 				3DB08807539B38BC5440CFD5 /* MeViewModel.swift */,
+				A1B2C3D4E5F60718293A4B0F /* MeViewModel+Finisher.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -326,6 +350,7 @@
 				5DAB64D740BF140720C8F4F4 /* Haptics.swift */,
 				17CBB348F47D17E5C46926BF /* KeychainStore.swift */,
 				4E2F3E7AEC7E70CCD5C2A476 /* LocalCache.swift */,
+				A1B2C3D4E5F60718293A4B0D /* FinisherImageExport.swift */,
 				0C4B9D1152FEB69DACBA90B5 /* StravaService.swift */,
 				AB65BD23CBE87FB9A45E851C /* VenuePingScheduler.swift */,
 				FC087336DB0C9876F0FC51BC /* VenuePlaceClassifier.swift */,
@@ -413,6 +438,7 @@
 				AC10980F8868435C54B133D8 /* StravaModels.swift */,
 				2D2E2209CA2F9243743033EE /* Streak.swift */,
 				0DB0F07DC830D22FDCD04E87 /* Team.swift */,
+				A1B2C3D4E5F60718293A4B01 /* TriathlonFinish.swift */,
 				171CE03F95A382620854F588 /* VenuePingPlanner.swift */,
 			);
 			path = Models;
@@ -423,6 +449,9 @@
 			children = (
 				3897F93F483C091E34E76570 /* ChangeCrewSheet.swift */,
 				1B50F210382326560A360682 /* EditDisplayNameSheet.swift */,
+				A1B2C3D4E5F60718293A4B07 /* FinisherCardView.swift */,
+				A1B2C3D4E5F60718293A4B0B /* FinisherSection.swift */,
+				A1B2C3D4E5F60718293A4B09 /* FinisherShareSheet.swift */,
 				FF6BBFBBEC1780A5C9716388 /* MeView.swift */,
 				2A0296F6280DB7E99444F8DB /* VenuePingSettingsSection.swift */,
 			);
@@ -640,6 +669,12 @@
 				322FDCF3091DA62DBE345F40 /* DisplayName.swift in Sources */,
 				D838F89CB298C5BC24E484B0 /* DisplayNameView.swift in Sources */,
 				FE2FC28894480BFC0E2123B8 /* EditDisplayNameSheet.swift in Sources */,
+				A1B2C3D4E5F60718293A4B08 /* FinisherCardView.swift in Sources */,
+				A1B2C3D4E5F60718293A4B04 /* FinisherCopy.swift in Sources */,
+				A1B2C3D4E5F60718293A4B0E /* FinisherImageExport.swift in Sources */,
+				A1B2C3D4E5F60718293A4B06 /* FinisherMedalView.swift in Sources */,
+				A1B2C3D4E5F60718293A4B0C /* FinisherSection.swift in Sources */,
+				A1B2C3D4E5F60718293A4B0A /* FinisherShareSheet.swift in Sources */,
 				E8B5C646F6C30750BA2A0203 /* Formatters.swift in Sources */,
 				DDC167A9DDE94BC90F9DF306 /* GreetingCopy.swift in Sources */,
 				8FF4F02F45CD66258569FFD8 /* Haptics.swift in Sources */,
@@ -655,6 +690,7 @@
 				6F23C195F85F100AB1DFD2C6 /* LogBeerViewModel.swift in Sources */,
 				CCB86A7481DB20B166AC2F3B /* MeView.swift in Sources */,
 				26F34EA41448A05FD14CBF69 /* MeViewModel.swift in Sources */,
+				A1B2C3D4E5F60718293A4B10 /* MeViewModel+Finisher.swift in Sources */,
 				5737B5ABDAD763880139C121 /* MetricView.swift in Sources */,
 				E90A2171579A1C718425B426 /* Motion.swift in Sources */,
 				AB48B069A52A0A3ADECB8A5E /* Palette.swift in Sources */,
@@ -680,6 +716,7 @@
 				22F773941AF8487A9A3D1491 /* StreakCardView.swift in Sources */,
 				18F1151782016672309EEEFA /* StreakCopy.swift in Sources */,
 				78A867C803CEC5B4D4DF53A4 /* Team.swift in Sources */,
+				A1B2C3D4E5F60718293A4B02 /* TriathlonFinish.swift in Sources */,
 				F381804A45C1064C454D62C7 /* Typography.swift in Sources */,
 				907C6E9BF16BD94589927DDF /* VenuePingCopy.swift in Sources */,
 				BAE7D2C3E1BBDFD9D2B10E73 /* VenuePingPlanner.swift in Sources */,
@@ -698,6 +735,7 @@
 			files = (
 				5E5805AA6C5451683E09636B /* AvatarTests.swift in Sources */,
 				5A234EA80C18A041BCC96D2E /* ScoringAndMappingTests.swift in Sources */,
+				A1B2C3D4E5F60718293A4B12 /* TriathlonFinishTests.swift in Sources */,
 				DFA357C8909C45057B45F1F7 /* VenuePingPlannerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

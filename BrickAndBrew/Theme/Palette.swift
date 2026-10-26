@@ -33,6 +33,11 @@ enum Palette {
     static let success = Color(red: 52 / 255, green: 199 / 255, blue: 89 / 255)
     static let stravaOrange = Color(red: 252 / 255, green: 76 / 255, blue: 2 / 255)
 
+    /// Medal metal for the triathlon finisher card. Not used as a product accent.
+    static let medalGold = Color(red: 212 / 255, green: 175 / 255, blue: 55 / 255)
+    static let medalGoldHighlight = Color(red: 246 / 255, green: 225 / 255, blue: 150 / 255)
+    static let medalGoldShadow = Color(red: 138 / 255, green: 105 / 255, blue: 38 / 255)
+
     // MARK: Compatibility aliases — existing call sites keep compiling during the restyle.
 
     static let black = inkDeep

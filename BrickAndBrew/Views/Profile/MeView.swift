@@ -51,11 +51,13 @@ private struct MeLoadedView: View {
     @Binding var isEditingName: Bool
     @State private var pickerItem: PhotosPickerItem?
     @State private var isChangingCrew = false
+    @State private var shareFinish: TriathlonFinish?
 
     var body: some View {
         List {
             profileSection
             streaksSection
+            FinisherSection(viewModel: viewModel, onShare: presentShare)
             VenuePingSettingsSection(viewModel: viewModel)
             stravaSection
             sessionSection
@@ -120,6 +122,19 @@ private struct MeLoadedView: View {
         }
         .sheet(isPresented: $isChangingCrew) {
             ChangeCrewSheet(viewModel: viewModel)
+        }
+        .sheet(item: $shareFinish) { finish in
+            FinisherShareSheet(finish: finish)
+        }
+        .fullScreenCover(item: $viewModel.pendingNewFinish, onDismiss: presentCelebratedShare) { finish in
+            CelebrationView(
+                kicker: FinisherCopy.celebrationKicker,
+                title: FinisherCopy.celebrationTitle,
+                value: Formatters.raceTime(finish.elapsedSeconds),
+                unit: FinisherCopy.totalLabel,
+                detail: FinisherCopy.celebrationDetail(finish),
+                dismiss: dismissCelebration
+            )
         }
     }
 
@@ -373,6 +388,23 @@ private struct MeLoadedView: View {
 
     private func refreshStreaks() async {
         await viewModel.loadStreaks()
+    }
+
+    private func presentShare(_ finish: TriathlonFinish) {
+        shareFinish = finish
+    }
+
+    private func dismissCelebration() {
+        viewModel.pendingNewFinish = nil
+    }
+
+    private func presentCelebratedShare() {
+        guard let finish = viewModel.consumeCelebratedFinish() else { return }
+        // Let the celebration cover finish dismissing before the share sheet rises.
+        Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(400))
+            shareFinish = finish
+        }
     }
 }
 
