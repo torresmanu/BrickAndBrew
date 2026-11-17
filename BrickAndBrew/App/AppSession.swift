@@ -247,7 +247,7 @@ final class AppSession {
         do {
             guard var current = profile, team != nil else { throw BrickError.missingProfile }
             let credentials = try await strava.connect()
-            current.stravaAthleteId = credentials.athleteId
+            current.stravaAthleteId = StravaObjectID.objectID(credentials.athleteId)
             current.stravaAthleteName = credentials.athleteName
             profile = try await cloudKit.saveProfile(current)
             _ = try await syncStravaActivities()

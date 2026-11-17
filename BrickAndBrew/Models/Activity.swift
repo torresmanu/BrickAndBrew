@@ -3,7 +3,8 @@ import Foundation
 
 struct Activity: Identifiable, Sendable, Hashable {
     let id: String
-    var stravaId: Int64
+    /// Decimal Strava activity id (`id_str`).
+    var stravaId: String
     var userId: String
     var teamId: String
     var type: String
@@ -19,7 +20,9 @@ struct Activity: Identifiable, Sendable, Hashable {
         CKRecord.ID(recordName: id)
     }
 
-    static func recordName(userId: String, stravaId: Int64) -> String {
+    /// Stable CloudKit name. `stravaId` is the decimal id, so activities saved
+    /// before the 64-bit change keep the same record.
+    static func recordName(userId: String, stravaId: String) -> String {
         "activity-\(userId)-\(stravaId)"
     }
 }
@@ -27,7 +30,11 @@ struct Activity: Identifiable, Sendable, Hashable {
 extension Activity {
     init?(record: CKRecord) {
         guard
-            let stravaId = int64(record[CloudKitKey.Activity.stravaId]),
+            let stravaId = StravaObjectID.read(
+                from: record,
+                integerField: CloudKitKey.Activity.stravaId,
+                stringField: CloudKitKey.Activity.stravaIdString
+            ),
             let userId = record[CloudKitKey.Activity.userId] as? String,
             let teamId = record[CloudKitKey.Activity.teamId] as? String,
             let type = record[CloudKitKey.Activity.type] as? String,
@@ -62,7 +69,12 @@ extension Activity {
 
     func makeRecord() -> CKRecord {
         let record = CKRecord(recordType: CloudKitKey.RecordType.activity, recordID: recordID)
-        record[CloudKitKey.Activity.stravaId] = stravaId as CKRecordValue
+        StravaObjectID.write(
+            stravaId,
+            to: record,
+            integerField: CloudKitKey.Activity.stravaId,
+            stringField: CloudKitKey.Activity.stravaIdString
+        )
         record[CloudKitKey.Activity.userId] = userId as CKRecordValue
         record[CloudKitKey.Activity.teamId] = teamId as CKRecordValue
         record[CloudKitKey.Activity.type] = type as CKRecordValue
@@ -81,11 +93,4 @@ extension Activity {
         }
         return record
     }
-}
-
-private func int64(_ value: Any?) -> Int64? {
-    if let number = value as? Int64 { return number }
-    if let number = value as? Int { return Int64(number) }
-    if let number = value as? Double { return Int64(number) }
-    return nil
 }
