@@ -235,7 +235,7 @@ struct ActivityMappingTests {
 
     @Test func dropsActivitiesWithoutAStartDate() {
         let dto = StravaActivityDTO(
-            id: 9,
+            id: "9",
             name: "Ghost",
             type: "Run",
             sportType: "Run",
@@ -253,7 +253,7 @@ struct ActivityMappingTests {
     @Test func mapsSummaryFieldsFromStrava() throws {
         let start = Date(timeIntervalSince1970: 1_700_000_000)
         let dto = StravaActivityDTO(
-            id: 42,
+            id: "42",
             name: "Threshold",
             type: "Run",
             sportType: "TrailRun",
@@ -266,7 +266,7 @@ struct ActivityMappingTests {
             maxHeartrate: 171
         )
         let activity = try #require(ActivityMapper.map(dto, userId: "user-1", teamId: "team-1"))
-        #expect(activity.stravaId == 42)
+        #expect(activity.stravaId == "42")
         #expect(activity.sport == .run)
         #expect(activity.type == "TrailRun")
         #expect(activity.distanceMeters == 5_000)
@@ -291,7 +291,7 @@ struct LeaderboardBuilderTests {
         )
         let oldRun = Activity(
             id: "old",
-            stravaId: 1,
+            stravaId: "1",
             userId: "p1",
             teamId: "t1",
             type: "Run",
@@ -305,7 +305,7 @@ struct LeaderboardBuilderTests {
         )
         let newRun = Activity(
             id: "new",
-            stravaId: 2,
+            stravaId: "2",
             userId: "p1",
             teamId: "t1",
             type: "Run",
@@ -361,7 +361,7 @@ struct LeaderboardBuilderTests {
         )
         let run = Activity(
             id: "r1",
-            stravaId: 2,
+            stravaId: "2",
             userId: "p1",
             teamId: "t1",
             type: "Run",
@@ -699,7 +699,7 @@ struct StreakCalculatorTests {
     private func activity(sport: SportKind, start: Date, meters: Double, moving: Int) -> Activity {
         Activity(
             id: UUID().uuidString,
-            stravaId: Int64(meters),
+            stravaId: String(Int64(meters)),
             userId: "p1",
             teamId: "t1",
             type: sport.rawValue,

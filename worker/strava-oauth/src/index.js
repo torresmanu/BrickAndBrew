@@ -64,6 +64,8 @@ export default {
       body: params,
     });
 
+    // Forward Strava's JSON unchanged. Parsing it here would round 64-bit
+    // activity and athlete ids through a JavaScript number.
     const text = await stravaResponse.text();
     return new Response(text, {
       status: stravaResponse.status,

@@ -6,12 +6,14 @@ struct Profile: Identifiable, Sendable, Hashable {
     var appleUserId: String
     var displayName: String
     var teamId: String
-    var stravaAthleteId: Int64?
+    /// Decimal Strava athlete id (`id_str`).
+    var stravaAthleteId: String?
     var stravaAthleteName: String?
     var hasAvatar: Bool = false
 
     var isStravaConnected: Bool {
-        stravaAthleteId != nil
+        guard let stravaAthleteId else { return false }
+        return StravaObjectID.objectID(stravaAthleteId) != nil
     }
 
     var recordID: CKRecord.ID {
@@ -38,13 +40,11 @@ extension Profile {
         self.appleUserId = appleUserId
         self.displayName = displayName
         teamId = record[CloudKitKey.Profile.teamId] as? String ?? ""
-        if let athleteId = record[CloudKitKey.Profile.stravaAthleteId] as? Int64 {
-            stravaAthleteId = athleteId
-        } else if let athleteId = record[CloudKitKey.Profile.stravaAthleteId] as? Int {
-            stravaAthleteId = Int64(athleteId)
-        } else {
-            stravaAthleteId = nil
-        }
+        stravaAthleteId = StravaObjectID.read(
+            from: record,
+            integerField: CloudKitKey.Profile.stravaAthleteId,
+            stringField: CloudKitKey.Profile.stravaAthleteIdString
+        )
         stravaAthleteName = record[CloudKitKey.Profile.stravaAthleteName] as? String
         hasAvatar = record[CloudKitKey.Profile.avatar] is CKAsset
     }
@@ -55,11 +55,12 @@ extension Profile {
         record[CloudKitKey.Profile.appleUserId] = appleUserId as CKRecordValue
         record[CloudKitKey.Profile.displayName] = displayName as CKRecordValue
         record[CloudKitKey.Profile.teamId] = teamId as CKRecordValue
-        if let stravaAthleteId {
-            record[CloudKitKey.Profile.stravaAthleteId] = stravaAthleteId as CKRecordValue
-        } else {
-            record[CloudKitKey.Profile.stravaAthleteId] = nil
-        }
+        StravaObjectID.write(
+            stravaAthleteId,
+            to: record,
+            integerField: CloudKitKey.Profile.stravaAthleteId,
+            stringField: CloudKitKey.Profile.stravaAthleteIdString
+        )
         if let stravaAthleteName, stravaAthleteName.isEmpty == false {
             record[CloudKitKey.Profile.stravaAthleteName] = stravaAthleteName as CKRecordValue
         } else {

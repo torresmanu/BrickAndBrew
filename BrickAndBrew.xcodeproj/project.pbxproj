@@ -41,6 +41,8 @@
 		5A234EA80C18A041BCC96D2E /* ScoringAndMappingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE403F61D143D8C5964D1545 /* ScoringAndMappingTests.swift */; };
 		5A805A27AE1A3B33AB620086 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A257A121611FD3C8D1938DF1 /* Profile.swift */; };
 		5DFA723DEF63AECA5955A328 /* StravaModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC10980F8868435C54B133D8 /* StravaModels.swift */; };
+		A11D57A0B1C24D5E6F708192 /* StravaObjectID.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11D57A0B1C24D5E6F708191 /* StravaObjectID.swift */; };
+		B22E68B1C2D35E6F708192A4 /* StravaIdentifierTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22E68B1C2D35E6F708192A3 /* StravaIdentifierTests.swift */; };
 		5E5805AA6C5451683E09636B /* AvatarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7B56104E874A3B70DBA90F9 /* AvatarTests.swift */; };
 		6243B345B55033EDEFD8C3E8 /* ScoreBreakdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9DA36036DF15190365CAAAE /* ScoreBreakdown.swift */; };
 		640D3EDDE786EBE1C70777AC /* Radius.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B0CE8B2DCB4BEE364BC4010 /* Radius.swift */; };
@@ -195,7 +197,9 @@
 		A991E7995A0F9FB5795BC795 /* Palette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Palette.swift; sourceTree = "<group>"; };
 		A9DA36036DF15190365CAAAE /* ScoreBreakdown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreBreakdown.swift; sourceTree = "<group>"; };
 		AB65BD23CBE87FB9A45E851C /* VenuePingScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenuePingScheduler.swift; sourceTree = "<group>"; };
+		A11D57A0B1C24D5E6F708191 /* StravaObjectID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StravaObjectID.swift; sourceTree = "<group>"; };
 		AC10980F8868435C54B133D8 /* StravaModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StravaModels.swift; sourceTree = "<group>"; };
+		B22E68B1C2D35E6F708192A3 /* StravaIdentifierTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StravaIdentifierTests.swift; sourceTree = "<group>"; };
 		AE1161FD6F3E112E8D7DC93D /* StreakCopy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakCopy.swift; sourceTree = "<group>"; };
 		B45D3AECB67528A84E384189 /* LogBeerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogBeerViewModel.swift; sourceTree = "<group>"; };
 		B53DCFB1A467F4A2D29887AC /* OFL-Barlow.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "OFL-Barlow.txt"; sourceTree = "<group>"; };
@@ -234,6 +238,7 @@
 			children = (
 				F7B56104E874A3B70DBA90F9 /* AvatarTests.swift */,
 				EE403F61D143D8C5964D1545 /* ScoringAndMappingTests.swift */,
+				B22E68B1C2D35E6F708192A3 /* StravaIdentifierTests.swift */,
 				BA6EFC8B0633EFA44437ECF4 /* VenuePingPlannerTests.swift */,
 			);
 			path = BrickAndBrewTests;
@@ -411,6 +416,7 @@
 				DA9B8C48E4958C4CE0B632E5 /* Scoring.swift */,
 				26FD736A73D294D70AFC5B60 /* SportKind.swift */,
 				AC10980F8868435C54B133D8 /* StravaModels.swift */,
+				A11D57A0B1C24D5E6F708191 /* StravaObjectID.swift */,
 				2D2E2209CA2F9243743033EE /* Streak.swift */,
 				0DB0F07DC830D22FDCD04E87 /* Team.swift */,
 				171CE03F95A382620854F588 /* VenuePingPlanner.swift */,
@@ -674,6 +680,7 @@
 				4E100A9CE2B88FEDBE21E3F8 /* SportKind.swift in Sources */,
 				C24A94D98A0E1E505D7BB562 /* StateViews.swift in Sources */,
 				5DFA723DEF63AECA5955A328 /* StravaModels.swift in Sources */,
+				A11D57A0B1C24D5E6F708192 /* StravaObjectID.swift in Sources */,
 				098426BE0EB93043C7356392 /* StravaService.swift in Sources */,
 				F45990CE15ACCF08CAE3A1E9 /* Streak.swift in Sources */,
 				40614E2A7168196A648953CE /* StreakBadgeView.swift in Sources */,
@@ -698,6 +705,7 @@
 			files = (
 				5E5805AA6C5451683E09636B /* AvatarTests.swift in Sources */,
 				5A234EA80C18A041BCC96D2E /* ScoringAndMappingTests.swift in Sources */,
+				B22E68B1C2D35E6F708192A4 /* StravaIdentifierTests.swift in Sources */,
 				DFA357C8909C45057B45F1F7 /* VenuePingPlannerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

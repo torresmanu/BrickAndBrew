@@ -1,7 +1,8 @@
 import Foundation
 
-struct StravaActivityDTO: Decodable, Sendable, Equatable {
-    let id: Int64
+struct StravaActivityDTO: Sendable, Equatable {
+    /// Decimal activity id, taken from `id_str` when Strava sends it.
+    let id: String
     let name: String?
     let type: String?
     let sportType: String?
@@ -35,14 +36,14 @@ enum ActivityMapper {
     }
 
     static func map(_ dto: StravaActivityDTO, userId: String, teamId: String) -> Activity? {
-        guard let startDate = dto.startDate else {
+        guard let stravaId = StravaObjectID.objectID(dto.id), let startDate = dto.startDate else {
             return nil
         }
 
         let type = dto.sportType ?? dto.type ?? "Workout"
         return Activity(
-            id: Activity.recordName(userId: userId, stravaId: dto.id),
-            stravaId: dto.id,
+            id: Activity.recordName(userId: userId, stravaId: stravaId),
+            stravaId: stravaId,
             userId: userId,
             teamId: teamId,
             type: type,
@@ -53,6 +54,38 @@ enum ActivityMapper {
             averageHeartrate: dto.averageHeartrate,
             maxHeartrate: dto.maxHeartrate,
             elevationGain: dto.totalElevationGain
+        )
+    }
+}
+
+extension StravaActivityDTO: Decodable {
+    private enum CodingKeys: String, CodingKey {
+        case name
+        case type
+        case sportType
+        case distance
+        case movingTime
+        case elapsedTime
+        case totalElevationGain
+        case startDate
+        case averageHeartrate
+        case maxHeartrate
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.init(
+            id: try StravaObjectID.decode(from: decoder),
+            name: try container.decodeIfPresent(String.self, forKey: .name),
+            type: try container.decodeIfPresent(String.self, forKey: .type),
+            sportType: try container.decodeIfPresent(String.self, forKey: .sportType),
+            distance: try container.decodeIfPresent(Double.self, forKey: .distance),
+            movingTime: try container.decodeIfPresent(Int.self, forKey: .movingTime),
+            elapsedTime: try container.decodeIfPresent(Int.self, forKey: .elapsedTime),
+            totalElevationGain: try container.decodeIfPresent(Double.self, forKey: .totalElevationGain),
+            startDate: try container.decodeIfPresent(Date.self, forKey: .startDate),
+            averageHeartrate: try container.decodeIfPresent(Double.self, forKey: .averageHeartrate),
+            maxHeartrate: try container.decodeIfPresent(Double.self, forKey: .maxHeartrate)
         )
     }
 }

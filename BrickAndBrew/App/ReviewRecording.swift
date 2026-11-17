@@ -101,7 +101,7 @@ enum ReviewRecording {
     ) -> Activity {
         Activity(
             id: id,
-            stravaId: Int64(meters),
+            stravaId: String(Int64(meters)),
             userId: userId,
             teamId: teamId,
             type: sport.rawValue,

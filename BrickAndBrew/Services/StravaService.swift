@@ -135,7 +135,8 @@ final class StravaService {
             body: ["refresh_token": credentials.refreshToken]
         )
         var updated = makeCredentials(from: tokens)
-        if updated.athleteId == 0 {
+        // A refresh token often omits the athlete. Keep the id we already stored.
+        if updated.athleteId.isEmpty {
             updated.athleteId = credentials.athleteId
             updated.athleteName = credentials.athleteName
         }
@@ -159,7 +160,7 @@ final class StravaService {
             accessToken: tokens.accessToken,
             refreshToken: tokens.refreshToken,
             expiresAt: Date(timeIntervalSince1970: TimeInterval(tokens.expiresAt)),
-            athleteId: tokens.athlete?.id ?? 0,
+            athleteId: tokens.athlete.flatMap { StravaObjectID.objectID($0.id) } ?? "",
             athleteName: tokens.athlete?.displayName ?? ""
         )
     }
